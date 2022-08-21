@@ -1,0 +1,174 @@
+@import "../Butler_Webfont/stylesheet.css";
+
+#logo {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 50px;
+    font-family: Butler, "Open Sans";
+    font-weight: 900;
+    color: white;
+}
+
+#title-section {
+    background: linear-gradient(to right, #1e5799 0%,#2ce0bf 19%,#76dd2c 40%,#dba62b 60%,#e02cbf 83%,#1e5799 100%);
+    background-size: 10000px 100%;
+    animation: bg 15s linear infinite ;
+}
+
+@keyframes bg{
+    0%{
+        background-position-x: 0;
+    }
+
+    100%{
+        background-position-x: 10000px;
+    }
+}
+
+#title-text-container {
+    margin: 4vh auto 0 auto;
+    max-width: 1300px;
+    width: 60%;
+}
+
+#title-text {
+    font-size: 6vw;
+    font-family: 'Open Sans', 'Open Sans', 'o';
+    font-weight: 1000;
+    color: white;
+    margin: 0;
+    padding-bottom: 20px;
+}
+
+
+#title-subtext {
+    font-family: 'Roboto';
+    font-weight: 100;
+    color: white;
+    font-size: 2vw;
+    opacity: 80%;
+}
+
+@media (max-width: 600px) {
+    #title-text {
+        font-size: 40px;
+    }
+
+    #title-subtext {
+        font-size: 14px;
+    }
+
+    #leading-text {
+        margin: 10vh auto;
+    }
+}
+
+#leading-text {
+    font-family: 'Roboto', "Open Sans";
+    margin: 20vh auto;
+    font-size: 30px;
+    text-align: center;
+    font-weight: 100;
+
+}
+
+#leading-section {
+    background-color: #FEFEFE;
+}
+
+#leading-text{
+    -webkit-animation: 3s ease 0s normal forwards 1 fadein;
+    animation: 3s ease 0s normal forwards 1 fadein;
+}
+
+@keyframes fadein{
+    0% { opacity:0; }
+    66% { opacity:0; }
+    100% { opacity:1; }
+}
+
+@-webkit-keyframes fadein{
+    0% { opacity:0; }
+    66% { opacity:0; }
+    100% { opacity:1; }
+}
+
+#product-card-section {
+}
+
+.product-card {
+    background-color: black;
+    height: 70vh;
+    width: 60vw;
+    margin: 50px auto;
+    border-radius: 45px;
+    display: flex;
+}
+
+.product-card-image {
+    position: relative;
+    top: 20px;
+    left: 20px;
+    max-width:500px;
+    max-height: 95%;
+    width: auto;
+    height: auto;
+    display: inline;
+
+    flex: 1 1 auto;
+}
+
+
+.product-card-text-container {
+    display: inline;
+    color: white;
+    margin-left: 30px;
+    margin-top: 10%;
+}
+
+.product-card-title {
+    display: block;
+    flex: 1 1 auto;
+    color: white;
+    font-family: "Roboto";
+    font-weight: 500;
+    font-size: 3vw;
+}
+
+.product-card-paragraph {
+    margin-top: -20px;
+    display: block;
+    flex: 1 1 auto;
+    color: white;
+    font-family: "Roboto";
+    font-weight: 300;
+    font-size: 2vw;
+}
+
+
+@media (max-width: 850px) {
+    .product-card {
+        flex-direction: column;
+        width: 80vw;
+        height: 100vh;
+        margin: 0 auto 20px auto;
+    }
+
+    .product-card-image {
+        display: block;
+        margin: 0 auto;
+        height: 400px;
+        position: relative;
+        left: 0px;
+        max-height: 400px;
+    }
+
+    .product-card-title {
+        font-size: 300%;
+    }
+
+    .product-card-paragraph {
+        font-size: 120%;
+        margin-bottom: 20px;
+    }
+}

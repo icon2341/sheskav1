@@ -1,0 +1,104 @@
+@import "../Butler_Webfont/stylesheet.css";
+#page {
+    background-color: #FDFBF6;
+    display: block;
+    height: 100vh;
+}
+
+h1 {
+    margin: 0;
+}
+h2 {
+    margin: 0;
+}
+
+#welcome-logo {
+    display: block;
+    text-align: center;
+    font-size: 12vw;
+    padding-top: 30vh;
+    line-height: 0.7;
+    color: #15171F;
+    font-family: Butler, "Open Sans";
+    font-weight: 900;
+}
+
+#sub-text {
+    font-family: Roboto;
+    text-align: center;
+    font-weight: lighter;
+    font-size: 2.8vw;
+    color: #C7C7C7;
+}
+
+#button-box {
+    text-align: center;
+    display: block;
+}
+.button {
+    margin: 4vw;
+    height: 7vw;
+    width: 24vw;
+    border: black;
+    border-radius: 20px;
+    background-color: #FFAEA3;
+    color: white;
+    font-size: 3vw;
+    font-weight: lighter;
+    font-family: Roboto;
+    display: inline;
+
+}
+
+.button:active {
+    transform: scale(0.98);
+    /* Scaling button to 0.98 to its original size */
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+#guest-info, #download {
+    text-align: center;
+    font-size: 2.7vw;
+    font-family: Roboto;
+    font-weight: 300;
+}
+
+#guest-info {
+    color: #CBCBCB;
+}
+#download {
+    color: #FFAEA3;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    #welcome-logo {
+        font-family: Butler, "Open Sans";
+        font-weight: 900;
+        font-size: 19vw;
+    }
+
+    #sub-text {
+        font-size: 4vw;
+        margin-bottom: 20vw;
+        margin-top: 4vw;
+    }
+
+    #button-box {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .button {
+        width: 60vw;
+        height: 15vw;
+        margin: 30px 4vw;
+        font-size: 8vw;
+    }
+}

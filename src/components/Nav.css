@@ -1,0 +1,123 @@
+@import "../Butler_Webfont/stylesheet.css";
+
+#nav-bar {
+    background-color: #FFAEA3;
+    width: 2vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: .1s ease-out;
+}
+
+#logo-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    font-family: Butler, "Open Sans";
+    font-weight: bold;
+    font-size: 1.8vw;
+    color: white;
+}
+
+#logo-short-hand {
+    margin: 0 auto -15px;
+    font-family: Butler, "Open Sans";
+    font-weight: 900;
+    border-bottom-style: solid;
+}
+
+#logo-long-hand {
+    display: none;
+    font-family: Butler, "Open Sans";
+    font-weight: 900;
+    border-bottom-style: solid;
+}
+
+#nav-signout-button-container {
+    flex: auto;
+
+    position: relative;
+    top: 59vh;
+}
+
+.navItemContainer:hover {
+    background: #ffcac2;
+    margin: 10px;
+    border-radius: 20px;
+}
+
+
+#nav-bar:hover #logo-long-hand{
+    display: block;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: -15px;
+    font-family: Butler, "Open Sans";
+    font-weight: 900;
+}
+
+#nav-bar:hover #logo-short-hand {
+    margin: 0;
+    margin-bottom: -15px;
+    font-family: Butler, "Open Sans";
+    font-weight: 900;
+}
+
+#nav-bar:hover #logo-container {
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.navItemContainer {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 10px 0;
+}
+
+#navIcon {
+    margin: 0;
+}
+
+#nav-bar:hover #navIcon {
+    size: 2vw;
+}
+
+#nav-bar:hover .navText {
+    display: block;
+    font-size: .8vw;
+    font-family: Roboto;
+    color: white;
+    min-width: 60%;
+    font-weight: bold;
+    overflow: visible;
+}
+
+#nav-bar:hover {
+    width: 10.2vw;
+}
+
+#nav-bar .navText {
+    display: none;
+}
+
+#nav-logo {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 50px;
+    font-family: Butler, "Times New Roman";
+    font-weight: 900;
+    color: white;
+}
+
+#nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 10vh 0 0 0;
+
+}
