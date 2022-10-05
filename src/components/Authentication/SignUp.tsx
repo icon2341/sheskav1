@@ -76,6 +76,7 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
             sessionStorage.setItem('Auth Token', cred.user.refreshToken)
 
             const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
+            console.log("adding to doc...")
             return (
                 setDoc(userRef, {email: email}, {merge: true})
             ).then(() => {
