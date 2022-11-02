@@ -10,6 +10,7 @@ import InProgress from "./components/InProgress";
 import SignUp from "./components/Authentication/SignUp";
 import Nav from "./components/Nav";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Listeditor from "./components/Listeditor/Listeditor";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path={"/about"} element={<><InProgress /></>}></Route>
               <Route path={"/signup"} element={<SignUp/>}></Route>
               <Route path={"/dashboard"} element={<><Nav/> <Dashboard/></>}></Route>
+              <Route path={"/listeditor"} element={<><Nav/> <Listeditor/></>}></Route>
           </Routes>
       </Router>
   );

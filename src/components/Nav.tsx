@@ -1,7 +1,11 @@
 import "./Nav.css"
+import {useNavigate} from "react-router-dom";
 
 
 export function Nav() {
+
+    const navigate = useNavigate();
+
     return (
         <div>
             <nav id={"nav-bar"}>
@@ -12,11 +16,11 @@ export function Nav() {
 
                 <ul id={"nav-list"}>
                     <li>
-                        <div className={"navItemContainer"}>
+                        <div className={"navItemContainer"} onClick={() => navigate('/dashboard')}>
                             <svg viewBox="0 0 49 49" className={"navIcon"}><path fill="#FFFFFF" d="M8 42V18L24.1 6 40 18v24H28.3V27.75h-8.65V42Zm3-3h5.65V24.75H31.3V39H37V19.5L24.1 9.75 11 19.5Zm13-14.65Z"/></svg>
                             <a className={"navText"}> Event Dashboard </a>
                         </div>
-                        <div className={"navItemContainer"}>
+                        <div className={"navItemContainer"} onClick={() => navigate('/listeditor')}>
                             <svg viewBox="0 0 48 48" className={"navIcon"}><path fill="#FFFFFF" d="M9 47.4q-1.2 0-2.1-.9-.9-.9-.9-2.1v-30q0-1.2.9-2.1.9-.9 2.1-.9h20.25l-3 3H9v30h30V27l3-3v20.4q0 1.2-.9 2.1-.9.9-2.1.9Zm15-18Zm9.1-17.6 2.15 2.1L21 28.1v4.3h4.25l14.3-14.3 2.1 2.1L26.5 35.4H18v-8.5Zm8.55 8.4-8.55-8.4 5-5q.85-.85 2.125-.85t2.125.9l4.2 4.25q.85.9.85 2.125t-.9 2.075Z"/></svg>
                             <a className={"navText"}> List Editor </a>
                         </div>
