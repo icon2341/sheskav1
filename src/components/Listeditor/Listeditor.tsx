@@ -12,8 +12,14 @@ export function Listeditor(){
     if(user) {
         return(
             <div>
-                <a id={"email-display"}>{user?.email} shits null </a>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+                <a id={"email-display"}>{user?.email} List Editor </a>
+                <a className={`pane-title`}> List Editor</a>
+                <div id={"list-cards"}>
+                    <span className="material-symbols-outlined">add</span>
+                </div>
             </div>
+
 
         )
     } else if(loading) {
@@ -34,3 +40,6 @@ export function Listeditor(){
 }
 export default Listeditor
 
+//TODO card creation system, firestore logic
+//TODO card creation UI
+// brainstorm how cards should be created and the ideal workflow for cards

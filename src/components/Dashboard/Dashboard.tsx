@@ -12,9 +12,8 @@ export function Dashboard(){
     if(user) {
         return(
             <div>
-                <a id={"email-display"}>{user?.email} shits null </a>
+                <a id={"email-display"}>{user?.email} Dashboard </a>
             </div>
-
         )
     } else if(loading) {
         return(
