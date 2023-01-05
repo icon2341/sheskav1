@@ -1,0 +1,104 @@
+
+body {
+    background: #F9F9F9;
+}
+.mymasonrygrid {
+    display: -webkit-box; /* Not needed if autoprefixing */
+    display: -ms-flexbox; /* Not needed if autoprefixing */
+    display: flex;
+    margin: 0 auto; /* gutter size offset */
+    width: 1200px;
+}
+.mymasonrygrid_column {
+    padding-left: 1px; /* gutter size */
+    background-clip: padding-box;
+}
+
+/* Style your items */
+.mymasonrygrid_column > div { /* change div to reference your elements you put in <Masonry> */
+    margin-bottom: 30px;
+    border-radius: 10px;
+    background: #FDFDFD;
+    border: solid #E2E2E2 1px;
+    width: 530px;
+}
+
+#email-display {
+    font-size: 2vw;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+}
+
+
+.sheskalistcard {
+
+    height: 550px;
+    display: block;
+    margin: 10px;
+    position: relative;
+}
+
+.sheskalistcard > img {
+    width: 80%;
+    height: 60%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border: #E2E2E2 solid 1px;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 100px;
+}
+
+.eventInformationCard {
+    width: 300px;
+    height: 600px;
+    display: block;
+    margin: 10px;
+}
+
+.guestListCard {
+    width: 300px;
+    height: 300px;
+    display: block;
+    margin: 10px;
+}
+
+.eventPreferencesCard {
+    width: 300px;
+    height: 600px;
+    display: block;
+    color: black;
+    margin: 10px;
+
+}
+.cardTitle {
+    display: block;
+    font-family: Pavanam;
+    margin-left: 50px;
+    font-size: 40px;
+    margin-top: 20px;
+}
+
+.cardSubTitle {
+    display: block;
+    font-family: Pavanam;
+    font-size: 25px;
+    margin-left: 50px;
+}
+
+
+/* Optional, different gutter size on mobile */
+@media (max-width: 1400px) {
+    .mymasonrygrid { /* gutter size offset */
+        margin: 0 auto; /* gutter size offset */
+        margin-left: 30%;
+
+    }
+    .mymasonrygrid_column {
+    }
+    .mymasonrygrid_column > div {
+        margin-bottom: 15px; /* space between items */
+        width: 50vw;
+    }
+}
