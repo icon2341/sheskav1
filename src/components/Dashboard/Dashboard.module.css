@@ -2,26 +2,6 @@
 body {
     background: #F9F9F9;
 }
-.mymasonrygrid {
-    display: -webkit-box; /* Not needed if autoprefixing */
-    display: -ms-flexbox; /* Not needed if autoprefixing */
-    display: flex;
-    margin: 0 auto; /* gutter size offset */
-    width: 1200px;
-}
-.mymasonrygrid_column {
-    padding-left: 1px; /* gutter size */
-    background-clip: padding-box;
-}
-
-/* Style your items */
-.mymasonrygrid_column > div { /* change div to reference your elements you put in <Masonry> */
-    margin-bottom: 30px;
-    border-radius: 10px;
-    background: #FDFDFD;
-    border: solid #E2E2E2 1px;
-    width: 530px;
-}
 
 #email-display {
     font-size: 2vw;
@@ -30,75 +10,224 @@ body {
     display: block;
 }
 
+/*#features-grid {*/
+/*    display: grid;*/
+/*    grid-template-columns: 1fr 1fr;*/
+/*    gap: 20px;*/
+/*    max-width: 50vw;*/
+/*    margin: 0 auto;*/
+/*}*/
 
-.sheskalistcard {
-
-    height: 550px;
-    display: block;
-    margin: 10px;
-    position: relative;
+#features-grid > div{
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
-.sheskalistcard > img {
-    width: 80%;
-    height: 60%;
+.welcomeSpace {
+    display: block;
+    margin: 0 auto;
+    max-width: 550px;
+    margin-bottom: 20px;
+}
+
+.welcomeSpace > *{
+    margin-left: 15px;
+}
+
+#hello-message {
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    font-size: 55px;
+}
+
+#start-here-message {
+    font-family: Inter, sans-serif;
+    font-size: 35px;
+    font-weight: 300;
+    margin-top: 10px;
+}
+
+.largeFeatureCard {
+    background: #FDFDFD;
+    border-radius: 10px;
+    border: #E2E2E2 solid 1px;
+    max-width: 550px;
+    position: relative;
+    margin: 0 auto;
+    width: 30%;
+    min-width: 300px;
+    padding-bottom: 20%;
+}
+
+.largeFeatureCard > a{
+    font-family: Pavanam, serif;
+    font-size: 2.9vw;
+    padding-left: 7%;
+    padding-top:3%;
+    margin: 0;
+    display: block;
+}
+
+.largeFeatureCard > p {
+    font-family: Pavanam, serif;
+    font-size: 1.4vw;
+    margin: 0;
+    padding-left: 7%;
+}
+
+#feature-card-image-sheska {
+    width: auto;
+    height: 65%;
+    border: #E2E2E2 solid 1px;
+    border-radius: 100px 0px 10px 0px;
     position: absolute;
     right: 0;
     bottom: 0;
+}
+
+#feature-card-image-guest {
+    width: 70%;
+    height: auto;
     border: #E2E2E2 solid 1px;
-    border-bottom-right-radius: 10px;
-    border-top-left-radius: 100px;
+    border-radius: 10px 100px 10px 10px;
+    margin-top: 10%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
-.eventInformationCard {
-    width: 300px;
-    height: 600px;
+.smallFeatureCard {
+    background-color: #24475B;
+    border-radius: 10px;
+    border: #E2E2E2 solid 1px;
+    max-width: 550px;
+    margin: 0 auto;
+    padding-bottom: 5vh;
+    min-height: 125px;
+    position: relative;
+    width: 30%;
+    min-width: 300px;
+}
+
+.smallFeatureCard:hover {
+    background-color: #2F5D7A;
+}
+
+.smallFeatureCard > * {
+    margin-left: 7%;
+    font-family: Pavanam, sans-serif;
+    color: white;
+}
+
+.smallFeatureCard > a {
+    font-size: 2.9vw;
     display: block;
-    margin: 10px;
+    padding-top: 3%;
 }
 
-.guestListCard {
-    width: 300px;
-    height: 300px;
+.smallFeatureCard > p {
+    font-size: 1.4vw;
+    margin-top: 1%;
+}
+
+.simpleFeatureCard {
+    background-color: #FDFDFD;
+    border-radius: 10px;
+    border: #E2E2E2 solid 1px;
+    max-width: 550px;
+    margin: 0 auto;
+    padding-bottom: 5vh;
+    min-height: 100px;
+    position: relative;
+    width: 30%;
+    min-width: 300px;
+}
+
+.simpleFeatureCard > * {
+    margin-left: 7%;
+    font-family: Pavanam, sans-serif;
+    max-width: 85%;
+}
+
+.simpleFeatureCard > a {
+    font-size: 2.9vw;
     display: block;
-    margin: 10px;
+    padding-top: 3%;
 }
 
-.eventPreferencesCard {
-    width: 300px;
-    height: 600px;
-    display: block;
-    color: black;
-    margin: 10px;
-
-}
-.cardTitle {
-    display: block;
-    font-family: Pavanam;
-    margin-left: 50px;
-    font-size: 40px;
-    margin-top: 20px;
+.simpleFeatureCard > p {
+    font-size: 1.4vw;
+    margin-top: 1%;
 }
 
-.cardSubTitle {
-    display: block;
-    font-family: Pavanam;
-    font-size: 25px;
-    margin-left: 50px;
+.arrow {
+    color: white;
+    position: absolute;
+    bottom: 3px;
+    right: 10px;
 }
 
 
-/* Optional, different gutter size on mobile */
-@media (max-width: 1400px) {
-    .mymasonrygrid { /* gutter size offset */
-        margin: 0 auto; /* gutter size offset */
-        margin-left: 30%;
-
+@media screen and (max-width: 500px){
+    .largeFeatureCard > a {
+        font-size: 25px;
     }
-    .mymasonrygrid_column {
+
+    .largeFeatureCard > p {
+        font-size: 13px;
+        max-width: 60%;
     }
-    .mymasonrygrid_column > div {
-        margin-bottom: 15px; /* space between items */
-        width: 50vw;
+
+    .smallFeatureCard > a {
+        font-size: 25px;
+    }
+
+    .smallFeatureCard > p {
+        font-size: 13px;
+    }
+
+    .simpleFeatureCard > a {
+        font-size: 25px;
+    }
+
+    .simpleFeatureCard > p {
+        font-size: 13px;
+    }
+
+    #feature-card-image-guest {
+        width: auto;
+        height: 65%;
+        border: #E2E2E2 solid 1px;
+        border-radius: 100px 0px 10px 0px;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: auto;
+    }
+
+}
+
+
+@media screen and (min-width: 1600px) {
+    .largeFeatureCard > a{
+        font-size: 40px;
+    }
+    .largeFeatureCard > p {
+        font-size: 25px;
+    }
+    .smallFeatureCard > a {
+        font-size: 40px;
+    }
+
+    .smallFeatureCard > p {
+        font-size: 25px;
+    }
+
+    .simpleFeatureCard > a {
+        font-size: 40px;
+    }
+
+    .simpleFeatureCard > p {
+        font-size: 25px;
     }
 }
