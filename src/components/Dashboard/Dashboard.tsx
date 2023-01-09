@@ -7,7 +7,6 @@ import {Box} from "@mui/material";
 import {getFirestore, collection, query, where, doc, getDoc} from 'firebase/firestore';
 import { getDocs } from "firebase/firestore";
 import {useEffect, useState} from "react";
-import {unmountComponentAtNode} from "react-dom";
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
@@ -21,27 +20,26 @@ export function Dashboard() {
         const docSnapshopt = await getDoc(docRef).then(doc => {
             if(doc.exists()) {
                 console.log("Document data:", doc.data());
-                setPartners(doc.data().partners)
+                if(doc.data().partners != undefined) {
+                    setPartners(doc.data().partners)
+                } else {
+                    console.log("No partners found");
+                }
             } else {
                 console.log("No such document!");
             }
         })
-
-
     }
 
     useEffect(() => {
         console.log('attempting get partners with user: ' + user?.uid)
-        getPartners(user?.uid).then(r => console.log('partners: ' + r))
+        getPartners(user?.uid).then(r => console.log('partners: ' + r));
 
     }, [user]);
-    useEffect(() => {
-        console.log('attempting get partners with user: ' + user?.uid)
-        getPartners(user?.uid).then(r => console.log('partners: ' + r))
-
-    }, []);
 
     if (user && partners) {
+
+        console.log("FINAL PARTNERS", partners)
         return (
             <Box id={styles['box']}>
                 <style> @import url('https://fonts.googleapis.com/css2?family=Pavanam&display=swap');</style>
@@ -52,7 +50,7 @@ export function Dashboard() {
                 <a id={styles["email-display"]}>{user?.email} Dashboard </a>
                 <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles['grid']}>
                     <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-                        <h1 id={styles["hello-message"]}> Welcome {partners[0]} and {partners[1]}!</h1>
+                        <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Safin'} and {partners[1] ?? 'Ashar'}!</h1>
                         <h2 id={styles["start-here-message"]}> Start Here.</h2>
                     </div>
                     <div className={`${styles.largeFeatureCard} ${styles.gridItem}`}>
