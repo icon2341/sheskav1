@@ -10,13 +10,11 @@ body {
     display: block;
 }
 
-/*#features-grid {*/
-/*    display: grid;*/
-/*    grid-template-columns: 1fr 1fr;*/
-/*    gap: 20px;*/
-/*    max-width: 50vw;*/
-/*    margin: 0 auto;*/
-/*}*/
+#grid {
+    max-width: 50%;
+    margin-top: 10vh;
+    margin-left: 25%;
+}
 
 #features-grid > div{
     margin-top: 15px;
@@ -25,9 +23,8 @@ body {
 
 .welcomeSpace {
     display: block;
-    margin: 0 auto;
     max-width: 550px;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
 }
 
 .welcomeSpace > *{
@@ -37,12 +34,12 @@ body {
 #hello-message {
     font-family: Inter, sans-serif;
     font-weight: 400;
-    font-size: 55px;
+    font-size: 2.9vw;
 }
 
 #start-here-message {
     font-family: Inter, sans-serif;
-    font-size: 35px;
+    font-size: 2.6vw;
     font-weight: 300;
     margin-top: 10px;
 }
@@ -54,14 +51,29 @@ body {
     max-width: 550px;
     position: relative;
     margin: 0 auto;
-    width: 30%;
-    min-width: 300px;
-    padding-bottom: 20%;
+    min-width: 250px;
+    padding-bottom: 30%;
+}
+
+.largeFeatureCard {
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    overflow: hidden;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+.largeFeatureCard:hover, .largeFeatureCard:focus, .largeFeatureCard:active {
+    background-color: #2F5D7A;
+    color: white;
 }
 
 .largeFeatureCard > a{
     font-family: Pavanam, serif;
-    font-size: 2.9vw;
+    font-size: 2.8vw;
     padding-left: 7%;
     padding-top:3%;
     margin: 0;
@@ -70,30 +82,34 @@ body {
 
 .largeFeatureCard > p {
     font-family: Pavanam, serif;
-    font-size: 1.4vw;
+    font-size: 1.3vw;
     margin: 0;
     padding-left: 7%;
+    padding-right: 2%;
+    padding-bottom: 20px;
 }
 
 #feature-card-image-sheska {
     width: auto;
-    height: 65%;
-    border: #E2E2E2 solid 1px;
+    height: 60%;
+    border: none;
     border-radius: 100px 0px 10px 0px;
     position: absolute;
     right: 0;
     bottom: 0;
+    max-height: 50%;
 }
 
 #feature-card-image-guest {
-    width: 70%;
-    height: auto;
-    border: #E2E2E2 solid 1px;
-    border-radius: 10px 100px 10px 10px;
+    width: auto;
+    height: 60%;
+    border: none;
+    border-radius: 0px 100px 0px 10px;
     margin-top: 10%;
     position: absolute;
     bottom: 0;
     left: 0;
+    max-height: 50%;
 }
 
 .smallFeatureCard {
@@ -105,13 +121,26 @@ body {
     padding-bottom: 5vh;
     min-height: 125px;
     position: relative;
-    width: 30%;
-    min-width: 300px;
+    min-width: 250px;
+    width: 40%;
+}
+.smallFeatureCard {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    overflow: hidden;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+.smallFeatureCard:hover, .smallFeatureCard:focus, .smallFeatureCard:active {
+    background-color: #2F5D7A;
+    color: white;
 }
 
-.smallFeatureCard:hover {
-    background-color: #2F5D7A;
-}
 
 .smallFeatureCard > * {
     margin-left: 7%;
@@ -120,13 +149,13 @@ body {
 }
 
 .smallFeatureCard > a {
-    font-size: 2.9vw;
+    font-size: 2.8vw;
     display: block;
     padding-top: 3%;
 }
 
 .smallFeatureCard > p {
-    font-size: 1.4vw;
+    font-size: 1.3vw;
     margin-top: 1%;
 }
 
@@ -139,8 +168,23 @@ body {
     padding-bottom: 5vh;
     min-height: 100px;
     position: relative;
-    width: 30%;
-    min-width: 300px;
+    min-width: 250px;
+}
+
+.simpleFeatureCard {
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    overflow: hidden;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+.simpleFeatureCard:hover, .simpleFeatureCard:focus, .simpleFeatureCard:active {
+    background-color: #2F5D7A;
+    color: white;
 }
 
 .simpleFeatureCard > * {
@@ -150,13 +194,13 @@ body {
 }
 
 .simpleFeatureCard > a {
-    font-size: 2.9vw;
+    font-size: 2.8vw;
     display: block;
     padding-top: 3%;
 }
 
 .simpleFeatureCard > p {
-    font-size: 1.4vw;
+    font-size: 1.3vw;
     margin-top: 1%;
 }
 
@@ -168,7 +212,7 @@ body {
 }
 
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 600px){
     .largeFeatureCard > a {
         font-size: 25px;
     }
@@ -197,7 +241,7 @@ body {
     #feature-card-image-guest {
         width: auto;
         height: 65%;
-        border: #E2E2E2 solid 1px;
+        border: none;
         border-radius: 100px 0px 10px 0px;
         position: absolute;
         right: 0;
@@ -205,8 +249,41 @@ body {
         left: auto;
     }
 
-}
+    #hello-message {
+        font-family: Inter, sans-serif;
+        font-weight: 400;
+        font-size: 30px;
+    }
 
+    #start-here-message {
+        font-family: Inter, sans-serif;
+        font-size: 13px;
+        font-weight: 300;
+        margin-top: 10px;
+    }
+
+    .simpleFeatureCard {
+        width: 30vw;
+    }
+
+    .gridItem {
+        width: 30vw;
+    }
+
+    .smallFeatureCard {
+        width: 30vw;
+    }
+
+    .largeFeatureCard {
+        width: 30vw;
+    }
+
+    #grid {
+        margin-left: 10%;
+    }
+
+
+}
 
 @media screen and (min-width: 1600px) {
     .largeFeatureCard > a{
@@ -230,4 +307,18 @@ body {
     .simpleFeatureCard > p {
         font-size: 25px;
     }
+
+    #hello-message {
+        font-family: Inter, sans-serif;
+        font-weight: 400;
+        font-size: 50px;
+    }
+
+    #start-here-message {
+        font-family: Inter, sans-serif;
+        font-size: 35px;
+        font-weight: 300;
+        margin-top: 10px;
+    }
 }
+

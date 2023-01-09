@@ -1,7 +1,7 @@
 @import "../Butler_Webfont/stylesheet.css";
 
 #nav-bar {
-    background-color: #FFAEA3;
+    background-color: #24475B;
     width: 2vw;
     height: 100vh;
     position: fixed;
@@ -42,7 +42,7 @@
 }
 
 .navItemContainer:hover {
-    background: #ffcac2;
+    background: rgb(54, 103, 133);
     margin: 10px;
     border-radius: 20px;
 }
