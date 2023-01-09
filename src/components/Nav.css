@@ -36,9 +36,8 @@
 
 #nav-signout-button-container {
     flex: auto;
-
-    position: relative;
-    top: 59vh;
+    position: absolute;
+    bottom: 30px;
 }
 
 .navItemContainer:hover {

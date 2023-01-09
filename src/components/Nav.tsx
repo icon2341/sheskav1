@@ -1,5 +1,8 @@
 import "./Nav.css"
-import {useNavigate} from "react-router-dom";
+import {NavigateFunction, useNavigate} from "react-router-dom";
+import {signOut} from "firebase/auth";
+import firebase from "firebase/compat";
+import {auth} from "../index";
 
 
 export function Nav() {
@@ -36,16 +39,21 @@ export function Nav() {
                             <svg viewBox="0 0 48 48" className={"navIcon"}><path fill="#FFFFFF" d="M14 36v-3h13.95v3Zm0-9v-3h20v3ZM9 44q-1.2 0-2.1-.9Q6 42.2 6 41V10q0-1.2.9-2.1Q7.8 7 9 7h3.25V4h3.25v3h17V4h3.25v3H39q1.2 0 2.1.9.9.9.9 2.1v31q0 1.2-.9 2.1-.9.9-2.1.9Zm0-3h30V19.5H9V41Zm0-24.5h30V10H9Zm0 0V10v6.5Z"/></svg>
                             <a className={"navText"}> Event Information </a>
                         </div>
-                        <div className={"navItemContainer"} id={"nav-signout-button-container"}>
+                        <div className={"navItemContainer"} id={"nav-signout-button-container"} onClick={() => signOutUser(navigate)}>
                             <svg viewBox={"0 0 48 48"} id={"nav-signout-button"} className={"navIcon"}><path fill="#FFFFFF" d="M9 42q-1.2 0-2.1-.9Q6 40.2 6 39V9q0-1.2.9-2.1Q7.8 6 9 6h14.55v3H9v30h14.55v3Zm24.3-9.25-2.15-2.15 5.1-5.1h-17.5v-3h17.4l-5.1-5.1 2.15-2.15 8.8 8.8Z"/></svg>
                             <a className={"navText"}> Sign Out </a>
                         </div>
-
                     </li>
                 </ul>
             </nav>
         </div>
     )
+}
+
+async function signOutUser(navigate : NavigateFunction) {
+    await signOut(auth)
+    console.log("User is Signed out")
+    navigate("/");
 }
 
 export default Nav

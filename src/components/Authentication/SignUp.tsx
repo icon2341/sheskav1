@@ -89,6 +89,7 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
         try {
             await signInWithEmailAndPassword(auth, email, password)
             console.log("signed in my friend")
+            navigate('/dashboard')
         } catch (error) {
             console.log(`There was an error: ${error}`)
         }
