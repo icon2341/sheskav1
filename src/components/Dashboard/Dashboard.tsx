@@ -10,6 +10,7 @@ import {useEffect, useState} from "react";
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
+    //TODO FIX BUG WHERE IT DOES NOT LOAD THIS COMPONENT IF PARTNER DATA IS MISSING. ADD NULL CHECK
     const [user, loading, error] = useAuthState(auth);
 
     const [partners, setPartners] = useState([]);
