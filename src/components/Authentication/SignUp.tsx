@@ -2,7 +2,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword
 } from 'firebase/auth';
-import React, {ChangeEvent, useState} from 'react'
+import React, {ChangeEvent, useEffect, useRef, useState} from 'react'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import { doc, setDoc} from "firebase/firestore";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -10,15 +10,24 @@ import {auth, db} from "../../index";
 import styles from "./SignUp.module.css"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Toast from 'react-bootstrap/Toast'
+import {ToastContainer} from "react-bootstrap";
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
 //TODO ADD COOKIES REMEMEMBER ME OK
 
+let showToast: any;
 export function SignUp() {
     const navigate = useNavigate();
     const [txtEmail, setTxtEmail] = useState('')
     const [txtPassword, setTxtPassword] = useState('')
+    const [showA, setShowA] = useState(false);
 
+    useEffect(() => {
+        /* Assign update to outside variable */
+        showToast = setShowA
+        /* Unassign when component unmounts */
+    })
     const handleEmail = (event: ChangeEvent<HTMLInputElement>) => {
         setTxtEmail(event.currentTarget.value);
         console.log(txtEmail);
@@ -40,6 +49,17 @@ export function SignUp() {
                     <h1 className={styles.presentationHeader}>Give guests one of a kind experiences, find amazing vendors, allow guests to support you, make memories together.</h1>
                 </div>
                 <div className={styles.formContainer}>
+                    <ToastContainer className={styles.toastContainer} position={"top-end"}>
+                        <Toast show={showA} onClose={() => setShowA(false)}>
+                            <Toast.Header>
+                                <strong className="me-auto">ERROR</strong>
+                                <small>just now</small>
+                            </Toast.Header>
+                            <Toast.Body>
+                                Incorrect Password!
+                            </Toast.Body>
+                        </Toast>
+                    </ToastContainer>
                     <div className={styles.loginWidget}>
                         <div className={styles.loginWidgetHeader}>
                             <h1 className={styles.loginLogo}>Sheska</h1>
@@ -94,13 +114,19 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
             });
         })
     }
-    catch(error) {
+    catch(error : any) {
         try {
             await signInWithEmailAndPassword(auth, email, password)
             console.log("signed in my friend")
             navigate('/dashboard')
-        } catch (error) {
-            console.log(`There was an error: ${error}`)
+        } catch (e: any) {
+            console.log(`There was an error: ${e}`)
+            switch (e.code) {
+                case 'auth/wrong-password':
+                    console.log('BILBO')
+                    showToast(true)
+
+            }
         }
     }
 

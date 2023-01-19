@@ -95,6 +95,11 @@
     width: auto;
 }
 
+.toastContainer {
+    margin-top: 10%;
+    margin-right: 7%;
+}
+
 @media screen and (max-width: 500px) {
     .pageContainer {
         flex-direction: column-reverse;
