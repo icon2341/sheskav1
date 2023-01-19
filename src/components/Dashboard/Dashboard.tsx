@@ -4,8 +4,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "../../index";
 import Masonry from '@mui/lab/Masonry';
 import {Box} from "@mui/material";
-import {getFirestore, collection, query, where, doc, getDoc} from 'firebase/firestore';
-import { getDocs } from "firebase/firestore";
+import {doc, getDoc} from 'firebase/firestore';
 import {useEffect, useState} from "react";
 
 export function Dashboard() {
@@ -57,6 +56,7 @@ export function Dashboard() {
                     <div className={`${styles.largeFeatureCard} ${styles.gridItem}`}>
                         <a>Guest List</a>
                         <p>View and manage guests, dining, seating, and invitations.</p>
+
                         <img src={require("../../images/guestListImage.jpg")} id={styles["feature-card-image-guest"]}/>
                     </div>
                     <div className={`${styles.largeFeatureCard} ${styles.gridItem}`}>
