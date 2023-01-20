@@ -49,7 +49,7 @@ export function SignUp() {
                     <h1 className={styles.presentationHeader}>Give guests one of a kind experiences, find amazing vendors, allow guests to support you, make memories together.</h1>
                 </div>
                 <div className={styles.formContainer}>
-                    <ToastContainer className={styles.toastContainer} position={"top-end"}>
+                    <ToastContainer className={styles.toastContainer}>
                         <Toast show={showA} onClose={() => setShowA(false)}>
                             <Toast.Header>
                                 <strong className="me-auto">ERROR</strong>
@@ -68,7 +68,7 @@ export function SignUp() {
                         </div>
                         <div className={`${styles.loginWidgetFormContainer}`}>
                             <Form>
-                                <Form.Group className="mb-3 w-75 mx-auto" controlId="formBasicEmail">
+                                <Form.Group className={"mb-3 w-75 mx-auto spinner-border"} controlId="formBasicEmail">
                                     <Form.Control type="email" placeholder="Enter email" onChange={handleEmail}/>
                                 </Form.Group>
                                 <Form.Group className={"mb-3 w-75 mx-auto"}>

@@ -11,6 +11,7 @@ export function Nav() {
 
     return (
         <div>
+            //TODO ADD HEADER BAR
             <nav id={"nav-bar"}>
                 <div id={"logo-container"} >
                     <h1 id={"logo-short-hand"}>S</h1>
