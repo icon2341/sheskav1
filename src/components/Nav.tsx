@@ -4,14 +4,13 @@ import {signOut} from "firebase/auth";
 import firebase from "firebase/compat";
 import {auth} from "../index";
 
-
+//TODO ADD HEADER BAR
 export function Nav() {
 
     const navigate = useNavigate();
 
     return (
         <div>
-            //TODO ADD HEADER BAR
             <nav id={"nav-bar"}>
                 <div id={"logo-container"} >
                     <h1 id={"logo-short-hand"}>S</h1>
