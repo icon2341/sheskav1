@@ -96,8 +96,7 @@
 }
 
 .toastContainer {
-    margin-top: 10%;
-    margin-right: 7%;
+    margin: 0 auto;
 }
 
 @media screen and (max-width: 500px) {
