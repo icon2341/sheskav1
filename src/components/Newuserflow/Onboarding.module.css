@@ -1,0 +1,63 @@
+.onboardingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    width: 100vw;
+    background-color: #fefefe;
+    margin-top: 10%;
+}
+
+.questionPane {
+    display: block;
+    padding-bottom: 30px;
+    max-width: 40%;
+    margin: 0 auto;
+}
+
+.questionPaneTitle {
+    font-size: 40px;
+    font-weight: bold;
+    color: #24475B;
+    font-family: Roboto;
+    margin: 0;
+    padding: 0;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+.navigationButtonsContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.navigationButton {
+    display: block;
+    width: 40%;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background-color: #24475B;
+    margin: 10px;
+    padding: 0;
+}
+
+.sheskaLogo {
+    font-family: Butler;
+    font-weight: 900;
+    font-size: 50px;
+    display: block;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+
+}
