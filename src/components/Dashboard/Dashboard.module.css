@@ -115,6 +115,7 @@ body {
 .smallFeatureCard {
     background-color: #24475B;
     border-radius: 10px;
+    color: white;
     border: #E2E2E2 solid 1px;
     max-width: 550px;
     margin: 0 auto;
