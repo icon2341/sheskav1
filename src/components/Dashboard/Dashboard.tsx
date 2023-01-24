@@ -6,6 +6,7 @@ import Masonry from '@mui/lab/Masonry';
 import {Box} from "@mui/material";
 import {doc, getDoc} from 'firebase/firestore';
 import {useEffect, useState} from "react";
+import Spinner from 'react-bootstrap/Spinner';
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
@@ -92,8 +93,10 @@ export function Dashboard() {
         )
     } else if (loading) {
         return (
-            <div>
-                <a id={"email-display"}>LOADING...</a>
+            <div className={"d-flex justify-content-center"}>
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
             </div>
         )
     } else if (error) {
