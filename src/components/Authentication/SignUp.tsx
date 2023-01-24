@@ -68,7 +68,7 @@ export function SignUp() {
                         </div>
                         <div className={`${styles.loginWidgetFormContainer}`}>
                             <Form>
-                                <Form.Group className={"mb-3 w-75 mx-auto spinner-border"} controlId="formBasicEmail">
+                                <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
                                     <Form.Control type="email" placeholder="Enter email" onChange={handleEmail}/>
                                 </Form.Group>
                                 <Form.Group className={"mb-3 w-75 mx-auto"}>

@@ -1,7 +1,6 @@
 import "./Nav.css"
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {signOut} from "firebase/auth";
-import firebase from "firebase/compat";
 import {auth} from "../index";
 
 //TODO ADD HEADER BAR
