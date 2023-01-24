@@ -13,8 +13,8 @@ export function Listeditor(){
         return(
             <div>
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-                <a id={"email-display"}>{user?.email} List Editor </a>
-                <a className={`pane-title`}> List Editor</a>
+                <h2 id={"email-display"}>{user?.email} List Editor </h2>
+                <h2 className={`pane-title`}> List Editor</h2>
                 <div id={"list-cards"}>
                     <span className="material-symbols-outlined">add</span>
                 </div>
@@ -25,13 +25,13 @@ export function Listeditor(){
     } else if(loading) {
         return(
             <div>
-                <a id={"email-display"}>LOADING...</a>
+                <h1 id={"email-display"}>LOADING...</h1>
             </div>
         )
     } else if(error) {
         return(
             <div>
-                <a id={"email-display"}>AUTH ERROR</a>
+                <h1 id={"email-display"}>AUTH ERROR</h1>
             </div>
         )
     }

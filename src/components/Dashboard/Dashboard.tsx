@@ -18,10 +18,11 @@ export function Dashboard() {
     async function getPartners(uid: string | undefined) {
         const docRef = doc(db, "users", uid + "" );
         console.log('getting partners')
-        const docSnapshopt = await getDoc(docRef).then(doc => {
+        //docSnapShopt
+        await getDoc(docRef).then(doc => {
             if(doc.exists()) {
                 console.log("Document data:", doc.data());
-                if(doc.data().partners != undefined) {
+                if(doc.data().partners !== undefined) {
                     setPartners(doc.data().partners)
                 } else {
                     console.log("No partners found");
@@ -48,26 +49,27 @@ export function Dashboard() {
                 </style>
                 <link rel="stylesheet"
                       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
-                <a id={styles["email-display"]}>{user?.email} Dashboard </a>
+                <h1 id={styles["email-display"]}>{user?.email} Dashboard </h1>
                 <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles['grid']}>
                     <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
                         <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Safin'} and {partners[1] ?? 'Ashar'}!</h1>
                         <h2 id={styles["start-here-message"]}> Start Here.</h2>
                     </div>
                     <div className={`${styles.largeFeatureCard} ${styles.gridItem}`}>
-                        <a>Guest List</a>
+                        <h2>Guest List</h2>
                         <p>View and manage guests, dining, seating, and invitations.</p>
 
-                        <img src={require("../../images/guestListImage.jpg")} id={styles["feature-card-image-guest"]}/>
+                        <img src={require("../../images/guestListImage.jpg")} id={styles["feature-card-image-guest"]}
+                             alt={"invitation"}/>
                     </div>
                     <div className={`${styles.largeFeatureCard} ${styles.gridItem}`}>
-                        <a>Sheska List</a>
+                        <h2>Sheska List</h2>
                         <p>Create beautiful cards to showcase items your guests can donate to.</p>
                         <img src={require("../../images/weddingVenueExample.webp")}
-                             id={styles["feature-card-image-sheska"]}/>
+                             id={styles["feature-card-image-sheska"]} alt={"Shed with venue"}/>
                     </div>
                     <div className={`${styles.smallFeatureCard} ${styles.gridItem}`}>
-                        <a>Event Information</a>
+                        <h2>Event Information</h2>
                         <p>Create informative panels to guide your guests on your special day.</p>
                         <svg className={styles.arrow} height="48" width="48">
                             <path fill="white"
@@ -75,15 +77,15 @@ export function Dashboard() {
                         </svg>
                     </div>
                     <div className={`${styles.simpleFeatureCard} ${styles.gridItem}`}>
-                        <a>Event Preferences</a>
+                        <h2>Event Preferences</h2>
                         <p>Set up your event preferences and customize your event.</p>
                     </div>
                     <div className={`${styles.simpleFeatureCard} ${styles.gridItem}`}>
-                        <a>User Profile</a>
+                        <h2>User Profile</h2>
                         <p>Mange your profile, accounting, and aesthetics.</p>
                     </div>
                     <div className={`${styles.simpleFeatureCard} ${styles.gridItem}`}>
-                        <a>Dashboard</a>
+                        <h2>Dashboard</h2>
                         <p>View your event analytics and manage your event.</p>
                     </div>
                 </Masonry>
@@ -102,7 +104,7 @@ export function Dashboard() {
     } else if (error) {
         return (
             <div>
-                <a id={"email-display"}>AUTH ERROR</a>
+                <h1 id={"email-display"}>AUTH ERROR</h1>
             </div>
         )
     }

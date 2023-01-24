@@ -2,10 +2,9 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword
 } from 'firebase/auth';
-import React, {ChangeEvent, useEffect, useRef, useState} from 'react'
+import React, {ChangeEvent, useEffect, useState} from 'react'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import { doc, setDoc} from "firebase/firestore";
-import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "../../index";
 import styles from "./SignUp.module.css"
 import Button from 'react-bootstrap/Button';
@@ -27,7 +26,7 @@ export function SignUp() {
         /* Assign update to outside variable */
         showToast = setShowA
         /* Unassign when component unmounts */
-    })
+    }, [])
     const handleEmail = (event: ChangeEvent<HTMLInputElement>) => {
         setTxtEmail(event.currentTarget.value);
         console.log(txtEmail);
@@ -38,14 +37,14 @@ export function SignUp() {
         console.log(txtPassword);
     }
 
-    const [user, loading, error] = useAuthState(auth);
+    //const [user, loading, error] = useAuthState(auth);
 
     return(
         <div>
             <style> @import url('https://fonts.googleapis.com/css2?family=Pavanam&display=swap');</style>
             <div className={styles.pageContainer}>
                 <div className={styles.presentationContainer}>
-                    <img src={require("../../images/peopleHavingFun.jpg")} className={styles.peopleHavingFun}/>
+                    <img src={require("../../images/peopleHavingFun.jpg")} className={styles.peopleHavingFun} alt={'people having fun'}/>
                     <h1 className={styles.presentationHeader}>Give guests one of a kind experiences, find amazing vendors, allow guests to support you, make memories together.</h1>
                 </div>
                 <div className={styles.formContainer}>
@@ -110,7 +109,7 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
                 setDoc(userRef, {email: email}, {merge: true})
             ).then(() => {
                 console.log("signing up completed for: ", auth?.currentUser?.uid ?? "ERROR NULL USER")
-                navigate('/dashboard')
+                navigate('/onboarding')
             });
         })
     }

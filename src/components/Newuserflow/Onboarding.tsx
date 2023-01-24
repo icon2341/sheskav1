@@ -1,119 +1,120 @@
 
 import styles from "./Onboarding.module.css"
-import React, {Component, CSSProperties} from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import {Carousel} from "react-responsive-carousel";
+import React, {ChangeEvent, useState} from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css';
+import { useSwiper } from 'swiper/react';
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth} from "../../index";
+// Core modules imports are same as usual
+// Direct React component imports
 
+
+function SlideNextButton() {
+    const swiper = useSwiper();
+    return (
+        <button className={styles.navigationButton} onClick={() => swiper.slideNext()}>Next</button>
+    );
+}
+
+function SlidePreviousButton() {
+    const swiper = useSwiper();
+    return (
+        <button className={styles.navigationButton} onClick={() => swiper.slidePrev()}>Prev</button>
+    );
+}
+
+/**
+ * Onboarding function that gets critical user data for new users.
+ *
+ */
 export function Onboarding() {
-    var arrowStyles: CSSProperties = {
-        display: 'none'
-    };
-    class ExternalControlledCarousel extends Component<{}, { currentSlide: number; autoPlay: boolean }> {
+    const [user, loading, error] = useAuthState(auth);
 
-        constructor(props: any) {
-            super(props);
-
-            this.state = {
-                currentSlide: 0,
-                autoPlay: true,
-            };
-        }
-
-        next = () => {
-            this.setState((state) => ({
-                currentSlide: state.currentSlide + 1,
-            }));
-        };
-
-        prev = () => {
-            this.setState((state) => ({
-                currentSlide: state.currentSlide - 1,
-            }));
-        };
-
-        changeAutoPlay = () => {
-            this.setState((state) => ({
-                autoPlay: !state.autoPlay,
-            }));
-        };
-
-        updateCurrentSlide = (index: number) => {
-            const {currentSlide} = this.state;
-
-            if (currentSlide !== index) {
-                this.setState({
-                    currentSlide: index,
-                });
-            }
-        };
-
-        buttonGroup = () => {
-            return(
-                <div className={styles.navigationButtonsContainer}>
-                    <button className={styles.navigationButton} onClick={this.prev}>
-                        Prev
-                    </button>
-                    <button className={styles.navigationButton} onClick={this.next} >
-                        Next
-                    </button>
-                </div>
-            )
-        }
-
-        render() {
-            return (
-                <div>
-                    <style> @import url('https://fonts.googleapis.com/css2?family=Pavanam&display=swap');</style>
-                    <h1 className={styles.sheskaLogo}>Sheska</h1>
-                    <div className={styles.onboardingContainer}>
-                        <Carousel autoPlay={false} selectedItem={this.state.currentSlide} onChange={this.updateCurrentSlide}
-                                  statusFormatter={(current, total) => ``}
-                                  renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                                      hasPrev && (
-                                          <button type="button" onClick={onClickHandler} title={label} style={{ ...arrowStyles, left: 15 }}>
-                                              -
-                                          </button>
-                                      )
-                                  }
-                                  renderArrowNext={(onClickHandler, hasNext, label) =>
-                                      hasNext && (
-                                          <button type="button" onClick={onClickHandler} title={label} style={{ ...arrowStyles, right: 15 }}>
-                                              +
-                                          </button>
-                                      )
-                                  }
-                                  {...this.props}>
-                            <div className={styles.questionPane}>
-                                <h1 className={styles.questionPaneTitle}>Thank you for choosing to make
-                                    memories together!
-                                    But first, tell us about yourself!</h1>
-                                <div className={styles.navigationButtonsContainer}>
-                                    <button className={styles.navigationButton} onClick={this.next} >
-                                        Next
-                                    </button>
-                                </div>
-                            </div>
-                            <div className={styles.questionPane}>
-                                <h1 className={styles.questionPaneTitle}>Do you have a partner? Tell us about them!</h1>
-                                <Form>
-                                    <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
-                                        <Form.Control placeholder="Partner first name" onChange={() =>{}}/>
-                                    </Form.Group>
-                                    <Form.Group className={"mb-3 w-75 mx-auto"}>
-                                        <Form.Control  placeholder="Partner last name" onChange={() =>{}}/>
-                                    </Form.Group>
-                                </Form>
-                                {this.buttonGroup()}
-                            </div>
-
-                        </Carousel>
-                    </div>
-                </div>
-            )
-        }
+    //TODO in the future there needs to be onboarding branches so that this app can be utilized
+    //in a more sensitive way.
+    //set so that the arrows dont show up
+    const [txtPartnerLastname, setTxtPartnerLastname] = useState('');
+    const [txtPartnerFirstname, setTxtPartnerFirstname] = useState('');
+    const [txtUserFirstname, setTxtUserFirstname] = useState('');
+    const [txtUserLastname, setTxtUserLastname] = useState('');
+    const handlePartnerLastname = (event: ChangeEvent<HTMLInputElement>) => {
+        setTxtPartnerLastname(event.currentTarget.value);
+        console.log(txtPartnerLastname);
     }
 
-    return <ExternalControlledCarousel />;
+    const handlePartnerFirstname = (event:ChangeEvent<HTMLInputElement>) => {
+        setTxtPartnerFirstname(event.target.value);
+        console.log(txtPartnerFirstname);
+    }
+
+    const handleUserFirstname = (event: ChangeEvent<HTMLInputElement>) => {
+        setTxtUserFirstname(event.currentTarget.value);
+        console.log(txtUserFirstname);
+    }
+    const handleUserLastname = (event: ChangeEvent<HTMLInputElement>) => {
+        setTxtUserLastname(event.currentTarget.value);
+        console.log(txtUserLastname);
+    }
+
+    // noinspection TypeScriptValidateTypes
+    const swiper = useSwiper();
+    return (
+        <div>
+            <style> @import url('https://fonts.googleapis.com/css2?family=Pavanam&display=swap');</style>
+            <h1 className={styles.sheskaLogo}>Sheska</h1>
+            <div className={styles.onboardingContainer}>
+                <Swiper>
+                    <SwiperSlide>
+                        <div className={styles.questionPane}>
+                            <h1 className={styles.questionPaneTitle}>Thank you for choosing to make
+                                memories together!
+                                But first, tell us about yourself!</h1>
+                            <div className={styles.navigationButtonsContainer}>
+                                <SlideNextButton/>
+                            </div>
+                        </div>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        {/*TODO this can ask for much more information and it should be refactored to utilize
+                        the fancy bootstrap column crap*/}
+                        <div className={styles.questionPane}>
+                            <h1 className={styles.questionPaneTitle}>Just the essentials.</h1>
+                            <Form>
+                                <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
+                                    <Form.Control placeholder="Your First Name" onChange={handleUserFirstname}/>
+                                </Form.Group>
+                                <Form.Group className={"mb-3 w-75 mx-auto"}>
+                                    <Form.Control  placeholder="Your Last Name" onChange={handleUserLastname}/>
+                                </Form.Group>
+                            </Form>
+                            <div className={styles.navigationButtonsContainer}>
+                                <SlidePreviousButton/>
+                                <SlideNextButton/>
+                            </div>
+                        </div>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div className={styles.questionPane}>
+                            <h1 className={styles.questionPaneTitle}>Do you have a partner? Tell us about them!</h1>
+                            <Form>
+                                <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
+                                    <Form.Control placeholder="Partner first name" onChange={handlePartnerFirstname}/>
+                                </Form.Group>
+                                <Form.Group className={"mb-3 w-75 mx-auto"}>
+                                    <Form.Control  placeholder="Partner last name" onChange={handlePartnerLastname}/>
+                                </Form.Group>
+                            </Form>
+                            <div className={styles.navigationButtonsContainer}>
+                                <SlidePreviousButton/>
+                                <SlideNextButton/>
+                            </div>
+                        </div>
+                    </SwiperSlide>
+                </Swiper>
+            </div>
+        </div>
+    )
 }

@@ -17,7 +17,7 @@ export function InProgress() {
             </section>
             <section id={"product-card-section"}>
                 <div className={"product-card"}>
-                    <img src={require("../images/dv.gif")} className={"product-card-image"}/>
+                    <img src={require("../images/dv.gif")} alt="Interface example" className={"product-card-image"}/>
                     <div className={"product-card-text-container"}>
                         <h3 className={"product-card-title"}>
                             Easy to navigate interface
@@ -30,7 +30,7 @@ export function InProgress() {
                     </div>
                 </div>
                 <div className={"product-card"}>
-                    <img src={require("../images/ci.gif")} className={"product-card-image"}/>
+                    <img src={require("../images/ci.gif")} alt="product card example" className={"product-card-image"}/>
                     <div className={"product-card-text-container"}>
                         <h3 className={"product-card-title"}>
                             Collect Guest Info Easily
@@ -69,7 +69,7 @@ export function InProgress() {
                     </div>
                 </div>
                 <div className={"product-card"}>
-                    <img src={require("../images/ID.gif")} className={"product-card-image"}/>
+                    <img alt={'Item details'} src={require("../images/ID.gif")} className={"product-card-image"}/>
                     <div className={"product-card-text-container"}>
                         <h3 className={"product-card-title"}>
                             View Items in Detail
