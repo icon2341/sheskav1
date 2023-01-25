@@ -123,6 +123,7 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
             ).then(() => {
                 console.log("signing up completed for: ", auth?.currentUser?.uid ?? "ERROR NULL USER")
                 navigate('/onboarding')
+                return;
             });
         })
     }
@@ -133,14 +134,19 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
             const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
             await getDoc(userRef).then(doc => {
                 if (doc.exists()) {
-                    if(doc.data()?.passedOnboarding == false) {
+                    console.log("doc exists, check onboarding", doc.data())
+                    if(doc.data()?.passedOnboarding === false ||
+                        doc.data()?.passedOnboarding === undefined) {
+                        console.log("user has not passed onboarding")
                         navigate('/onboarding')
+                        return;
+                    } else {
+                        navigate('/dashboard')
                     }
                 } else {
                     throw new Error("User does not exist")
                 }
             })
-            navigate('/dashboard')
         } catch (e: any) {
             console.log(`There was an error: ${e}`)
             switch (e.code) {
