@@ -71,9 +71,9 @@ body {
     color: white;
 }
 
-.largeFeatureCard > a{
+.largeFeatureCard > h2{
     font-family: Pavanam, serif;
-    font-size: 2.8vw;
+    font-size: 2.6vw;
     padding-left: 7%;
     padding-top:3%;
     margin: 0;
@@ -149,8 +149,8 @@ body {
     color: white;
 }
 
-.smallFeatureCard > a {
-    font-size: 2.8vw;
+.smallFeatureCard > h2 {
+    font-size: 2.6vw;
     display: block;
     padding-top: 3%;
 }
@@ -194,8 +194,8 @@ body {
     max-width: 85%;
 }
 
-.simpleFeatureCard > a {
-    font-size: 2.8vw;
+.simpleFeatureCard > h2 {
+    font-size: 2.6vw;
     display: block;
     padding-top: 3%;
 }
