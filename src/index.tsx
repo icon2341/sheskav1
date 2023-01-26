@@ -12,7 +12,7 @@ import { getAuth, connectAuthEmulator} from "firebase/auth";
 import {getFirestore, connectFirestoreEmulator} from 'firebase/firestore'
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 
