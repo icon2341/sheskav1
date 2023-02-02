@@ -1,0 +1,18 @@
+@import "../../Butler_Webfont/stylesheet.css";
+
+.cardTest {
+    display: block;
+    color: #0a58ca;
+    background-color: blanchedalmond;
+    width: 350px;
+    height: 400px;
+    border-radius: 25px;
+}
+
+.cardTitle {
+    font-family: Butler;
+    color: white;
+    font-size: 50px;
+    padding-top: 15px;
+    padding-left: 15px;
+}

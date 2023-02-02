@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {firebaseConfig} from './credentials'
+import { getStorage } from "firebase/storage";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -16,8 +17,11 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 
-// connectAuthEmulator(auth, "http://localhost:9099")
-// connectFirestoreEmulator(db, 'localhost', 8080);
+// Initialize Cloud Storage and get a reference to the service
+export const storage = getStorage(app);
+
+connectAuthEmulator(auth, "http://localhost:9099")
+connectFirestoreEmulator(db, 'localhost', 8080);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

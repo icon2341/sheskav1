@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+.pageContainer {
+    margin: 0 auto;
+    width: 50%;
+    margin-top: 10%;
+}
+
+.cardContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#grid {
+    max-width: 70vw;
+}
+
+.pageTitle {
+    font-family: Inter;
+    margin-bottom: 30px;
+}
+
+@media screen and (max-width: 500px) {
+    .pageContainer {
+    }
+}
