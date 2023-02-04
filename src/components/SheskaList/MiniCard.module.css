@@ -1,18 +1,44 @@
 @import "../../Butler_Webfont/stylesheet.css";
 
 .cardTest {
+    background: #d22222;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
     display: block;
-    color: #0a58ca;
-    background-color: blanchedalmond;
-    width: 350px;
-    height: 400px;
-    border-radius: 25px;
+    border: #E2E2E2 solid 1px;
+    max-width: 550px;
+    position: relative;
+    margin: 0 auto;
+    height: auto;
 }
 
 .cardTitle {
     font-family: Butler;
     color: white;
-    font-size: 50px;
+    font-size: 2.6vw;
+    display: block;
     padding-top: 15px;
     padding-left: 15px;
+}
+
+@media screen and (max-width: 900px) {
+    .cardTitle {
+        font-size: 4vw;
+    }
+
+    .cardTest {
+        width: 80vw;
+        aspect-ratio: 2 / 1;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .cardTitle {
+        font-size: 5.5vw;
+    }
+
+    .cardTest {
+        width: 80vw;
+        aspect-ratio: 2 / 1;
+    }
 }

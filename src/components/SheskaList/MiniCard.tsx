@@ -15,7 +15,7 @@ export function MiniCard(props:any) {
         backgroundImage: 'url(' + image + ')'
     }
 
-    return (<div className={styles.cardTest}>
+    return (<div className={`${styles.cardTest}`}>
         <h3 className={styles.cardTitle}>{title}</h3>
     </div>)
 

@@ -1,9 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
-.pageContainer {
+.gridContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 20vh;
+}
+
+.pageTitleContainer {
+    width: 45%;
     margin: 0 auto;
-    width: 50%;
-    margin-top: 10%;
 }
 
 .cardContainer {
@@ -12,15 +18,56 @@
 }
 
 #grid {
-    max-width: 70vw;
+    max-width: 45%;
+    margin: 0 auto;
+}
+
+
+.loadingSpinner {
+    margin: auto auto;
+    text-align: center;
+}
+.gridItem {
+    width: 30vw;
 }
 
 .pageTitle {
     font-family: Inter;
-    margin-bottom: 30px;
+    padding-left: 10px;
+    font-size: 2.8vw;
+
 }
 
-@media screen and (max-width: 500px) {
-    .pageContainer {
+@media screen and (max-width: 900px) {
+    #grid {
+        max-width: 85%;
+    }
+
+    .pageTitleContainer {
+        min-width: 550px;
+        margin: 0 auto;
+    }
+
+    .pageTitle {
+        font-family: Inter;
+        padding-left: 10px;
+        font-size: 4vw;
+
+    }
+}
+
+@media screen  and (max-width: 670px){
+
+    .pageTitle {
+        font-family: Inter;
+        padding-left: 10px;
+        font-size: 6vw;
+
+    }
+
+    .pageTitleContainer {
+        min-width: 0;
+        width: 85%;
+        margin: 0 auto;
     }
 }

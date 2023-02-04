@@ -34,10 +34,30 @@ export function Dashboard() {
     }
 
     useEffect(() => {
-        console.log('attempting get partners with user: ' + user?.uid)
-        getPartners(user?.uid).then(r => console.log('partners: ' + r));
+        if(user !== null){
+            console.log('Attempt to get partners ' + user)
+            getPartners(user?.uid).then(r => {
+                console.log('partner data: ' + r);
+            });
+        }
 
     }, [user]);
+
+    var welcomeSpace;
+
+    if(partners === undefined || partners.length === 0 || loading) {
+        welcomeSpace =
+            <div className={`${styles.welcomeSpaceSpinner} ${styles.gridItem}`}>
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>
+    } else {
+        welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
+            <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Safin'} and {partners[1] ?? 'Ashar'}!</h1>
+            <h2 id={styles["start-here-message"]}> Start Here.</h2>
+        </div>
+    }
 
     if (user && partners) {
 
@@ -51,11 +71,8 @@ export function Dashboard() {
                       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
                 <h1 id={styles["email-display"]}>{user?.email} Dashboard </h1>
                 <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles['grid']}>
-                    <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-                        <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Safin'} and {partners[1] ?? 'Ashar'}!</h1>
-                        <h2 id={styles["start-here-message"]}> Start Here.</h2>
-                    </div>
-                    <div className={`${styles.largeFeatureCard} ${styles.gridItem}`}>
+                    {welcomeSpace}
+                    <div className={`${styles.largeFeatureCard}`}>
                         <h2>Guest List</h2>
                         <p>View and manage guests, dining, seating, and invitations.</p>
 

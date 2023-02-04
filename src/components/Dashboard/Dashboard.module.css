@@ -12,13 +12,21 @@ body {
 
 #grid {
     max-width: 50%;
-    margin-top: 10vh;
-    margin-left: 25%;
+    margin: 0 auto;
 }
 
 #features-grid > div{
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+.welcomeSpaceSpinner {
+    margin: auto auto;
+    text-align: center;
+    max-width: 550px;
+    display: block;
+    min-height: 200px;
+    padding-top: 100px;
 }
 
 .welcomeSpace {
@@ -51,7 +59,6 @@ body {
     max-width: 550px;
     position: relative;
     margin: 0 auto;
-    min-width: 250px;
     padding-bottom: 30%;
 }
 
@@ -122,7 +129,6 @@ body {
     padding-bottom: 5vh;
     min-height: 125px;
     position: relative;
-    min-width: 250px;
     width: 40%;
 }
 .smallFeatureCard {
@@ -169,7 +175,6 @@ body {
     padding-bottom: 5vh;
     min-height: 100px;
     position: relative;
-    min-width: 250px;
 }
 
 .simpleFeatureCard {
@@ -214,16 +219,61 @@ body {
 
 
 @media screen and (max-width: 600px){
-    .largeFeatureCard > a {
-        font-size: 25px;
+
+    #grid {
+        max-width: 65%;
+    }
+
+    .largeFeatureCard > h2 {
+        font-size: 5vw;
     }
 
     .largeFeatureCard > p {
-        font-size: 13px;
+        font-size: 2.9vw;
         max-width: 60%;
     }
 
-    .smallFeatureCard > a {
+    .smallFeatureCard > h2 {
+        font-size: 5vw;
+    }
+
+    .smallFeatureCard > p {
+        font-size: 2.9vw;
+    }
+
+    .simpleFeatureCard > h2 {
+        font-size: 5vw;
+    }
+
+    .simpleFeatureCard > p {
+        font-size: 2.9vw;
+    }
+
+    #hello-message {
+        font-family: Inter, sans-serif;
+        font-weight: 400;
+        font-size: 30px;
+    }
+
+    #start-here-message {
+        font-family: Inter, sans-serif;
+        font-size: 13px;
+        font-weight: 300;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 900px){
+    .largeFeatureCard > h2 {
+        font-size: 5vw;
+    }
+
+    .largeFeatureCard > p {
+        font-size: 2.9vw;
+        max-width: 60%;
+    }
+
+    .smallFeatureCard > h2 {
         font-size: 25px;
     }
 
@@ -231,7 +281,7 @@ body {
         font-size: 13px;
     }
 
-    .simpleFeatureCard > a {
+    .simpleFeatureCard > h2 {
         font-size: 25px;
     }
 
@@ -249,44 +299,13 @@ body {
         bottom: 0;
         left: auto;
     }
-
-    #hello-message {
-        font-family: Inter, sans-serif;
-        font-weight: 400;
-        font-size: 30px;
-    }
-
-    #start-here-message {
-        font-family: Inter, sans-serif;
-        font-size: 13px;
-        font-weight: 300;
-        margin-top: 10px;
-    }
-
-    .simpleFeatureCard {
-        width: 30vw;
-    }
-
-    .gridItem {
-        width: 30vw;
-    }
-
-    .smallFeatureCard {
-        width: 30vw;
-    }
-
-    .largeFeatureCard {
-        width: 30vw;
-    }
-
-    #grid {
-        margin-left: 10%;
-    }
-
-
 }
 
+
 @media screen and (min-width: 1600px) {
+    .largeFeatureCard {
+        min-width: 200px;
+    }
     .largeFeatureCard > a{
         font-size: 40px;
     }
