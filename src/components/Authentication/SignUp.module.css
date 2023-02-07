@@ -1,4 +1,4 @@
-.gridContainer {
+.pageContainer {
     display: flex;
     align-items: stretch;
     height: 100vh;
@@ -56,6 +56,11 @@
     text-decoration: none;
 }
 
+.pageContainer {
+    display: flex;
+    flex-direction: row;
+}
+
 .loginWidgetHeader {
     padding: 40px;
     padding-bottom: 10px;
@@ -100,7 +105,7 @@
 }
 
 @media screen and (max-width: 500px) {
-    .gridContainer {
+    .pageContainer {
         flex-direction: column-reverse;
     }
 

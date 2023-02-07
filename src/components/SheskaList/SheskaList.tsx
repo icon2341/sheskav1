@@ -14,16 +14,20 @@ export function SheskaList() {
     const [user, loading, error] = useAuthState(auth);
     const [listItems, setListItems] = useState([] as any);
     const [attemptedQuery, setAttemptedQuery] = useState(false);
+
+    //TODO There's a bug sometimes where if you have already attempted to get data in the server is down or connection
+    // is lost for whatever reason the application will not get your date again because attempted data is set to true
     async function getListItems(uid: string | undefined) {
 
         const querySnapshot = await getDocs(collection(db, "users/" + uid + "/sheska_list"));
         console.log("users/" + uid + "/sheska_list");
         const lama = [] as DocumentData[]
         querySnapshot.forEach((doc) => {
+            //TODO might just want to export the querySnapshot instead of mapping it to lama and then looping through lama to send to listItems
 
             // doc.data() is never undefined for query doc snapshots
             console.log(doc.id, " => ", doc.data());
-            lama.push(doc.data());
+            lama.push(doc);
         });
         setListItems(lama)
         lama.forEach((doc) => {console.log("inside data",doc)})
@@ -68,14 +72,13 @@ export function SheskaList() {
             )
         })
     } else {
-        cards = listItems.map((item: any) => {
+        cards = listItems.map((item: DocumentData) => {
             return (
                 <div className={``}>
                     <MiniCard
-                        title={item.title}
-                        description={item.description}
-                        image={item.image}
-                        link={item.link}
+                        title={item.data().title}
+                        description={item.data().description}
+                        cardID={item.id}
                     />
                 </div>
             )
