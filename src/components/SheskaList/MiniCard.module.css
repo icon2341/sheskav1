@@ -46,6 +46,11 @@
     max-width: 70%;
 }
 
+.cardTest:hover {
+    transition: transform 0.1s;
+    transform: scale(1.01);
+}
+
 @media screen and (max-width: 900px) {
     .cardTitle {
         font-size: 4vw;

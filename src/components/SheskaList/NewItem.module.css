@@ -1,0 +1,24 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 50%;
+    margin: 0 auto;
+    margin-top: 20vh;
+}
+
+.title {
+    font-family: Inter;
+    font-size: 2.8vw;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.subtitle {
+    font-family: Inter;
+    font-size: 1.5vw;
+    margin-bottom: 20px;
+    margin-left: 13%;
+
+}

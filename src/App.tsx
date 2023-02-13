@@ -12,6 +12,7 @@ import Nav from "./components/Nav";
 import Dashboard from "./components/Dashboard/Dashboard";
 import {Onboarding} from "./components/Newuserflow/Onboarding";
 import SheskaList from "./components/SheskaList/SheskaList";
+import NewItem from "./components/SheskaList/NewItem";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path={"/dashboard"} element={<><Nav/> <Dashboard/></>}></Route>
               <Route path={"/sheskalist"} element={<><Nav/> <SheskaList/></>}></Route>
               <Route path={"/onboarding"} element={<><Onboarding/></>}></Route>
+              <Route path={"/newitem"} element={<><Nav/><NewItem/></>}></Route>
           </Routes>
       </Router>
   );

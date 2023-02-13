@@ -94,7 +94,7 @@ export function SheskaList() {
             <Box className={styles.gridContainer}>
                 <div className={styles.pageTitleContainer}>
                     <h1 className={styles.pageTitle}> Your Sheska List </h1>
-                    <BsFillPlusSquareFill size={'3em'} className={styles.addCardButton} onClick={() => {navigate('/listeditor')}}/>
+                    <BsFillPlusSquareFill size={'3em'} className={styles.addCardButton} onClick={() => {navigate('/newitem')}}/>
                 </div>
                 <Masonry columns={{sm: 2, xs: 1}} spacing={3} id={styles['grid']}>
                     {cards}
