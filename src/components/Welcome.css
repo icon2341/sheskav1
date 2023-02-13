@@ -35,6 +35,11 @@ h2 {
     text-align: center;
     display: block;
 }
+button {
+    text-decoration: none;
+}
+
+
 .button {
     margin: 4vw;
     height: 7vw;
@@ -47,6 +52,7 @@ h2 {
     font-weight: lighter;
     font-family: Roboto;
     display: inline;
+    text-decoration: none;
 
 }
 
@@ -96,4 +102,8 @@ h2 {
         margin: 30px 4vw;
         font-size: 8vw;
     }
+}
+
+a {
+    text-decoration: none;
 }
