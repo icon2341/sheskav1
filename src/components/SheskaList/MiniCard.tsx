@@ -1,8 +1,9 @@
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, storage} from "../../index";
-import {ref, listAll} from "firebase/storage"
+import {ref, listAll, getDownloadURL} from "firebase/storage"
 import styles from "./MiniCard.module.css"
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
+import * as url from "url";
 
 export function MiniCard(props:any) {
     let image= props.image;
@@ -12,34 +13,50 @@ export function MiniCard(props:any) {
     let expectedAmount = props.expectedAmount;
     let actualAmount = props.actualAmount;
     let numberDonors = props.numberOfDonors;
+    const [slideImages, setSlideImages] = useState([] as string[]);
 
-    useEffect(() => {
-        const fetchImages = async () => {
+    const fetchImages = async () => {
+        console.log("fetching images", cardID)
 
-            const pathReference = ref(storage, 'users/'+ auth.currentUser?.uid.toString() + "/" + cardID +"/");
-            listAll(pathReference)
-                .then((res) => {
-                    res.prefixes.forEach((folderRef) => {
-                        // All the prefixes under listRef.
-                        // You may call listAll() recursively on them.
-                    });
-                    res.items.forEach((itemRef) => {
-                        // All the items under listRef.
-                    });
-                }).catch((error) => {
-                // Uh-oh, an error occurred!
-            });
+        const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
+        const imageURLs = [] as string[];
+        listAll(pathReference)
+            .then((res) => {
 
-        }
-    }, []);
+                // res.prefixes.forEach((folderRef) => {
+                //     // All the prefixes under listRef.
+                //     // You may call listAll() recursively on them.
+                // });
+                res.items.forEach((itemRef) => {
+                    // All the items under listRef.
+                    getDownloadURL(itemRef).then((url) => {
+                        imageURLs.push(url);
+                        console.log(cardID, imageURLs)
+                    })
+                });
+            }).then(() => {
+            setSlideImages(imageURLs);
+            console.log("images", slideImages)
+        }).catch((error) => {
+            // Uh-oh, an error occurred!
+        });
 
-    var divStyle = {
-        backgroundImage: 'url(' + image + ')'
     }
 
-    return (<div className={`${styles.cardTest}`}>
-        <h3 className={styles.cardTitle}>{title}</h3>
-    </div>)
+    useEffect(() => {
+        var lemon = fetchImages();
+    }, []);
+
+    const outputImage;
+    outputImage = useEffect(() => {
+        if(slideImages.length > 0) {
+            console.log("images", slideImages)
+            return (<img src={slideImages[1]}  className={styles.cardImage}/>))
+        }
+    }, [slideImages]);
+
+    return (
+        <img src={slideImages[1]}  className={styles.cardImage}/>)
 
 }
 
