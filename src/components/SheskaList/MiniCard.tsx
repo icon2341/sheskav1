@@ -15,7 +15,7 @@ export function MiniCard(props:any) {
     let numberDonors = props.numberOfDonors;
     const [slideImages, setSlideImages] = useState([] as string[]);
 
-    const fetchImages = async () => {
+    async function fetchImages() {
         console.log("fetching images", cardID)
 
         const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
@@ -30,34 +30,41 @@ export function MiniCard(props:any) {
                 res.items.forEach((itemRef) => {
                     // All the items under listRef.
                     getDownloadURL(itemRef).then((url) => {
-                        imageURLs.push(url);
-                        console.log(cardID, imageURLs)
+                        setSlideImages((prev) => [...prev, url]);
                     })
                 });
-            }).then(() => {
-            setSlideImages(imageURLs);
-            console.log("images", slideImages)
-        }).catch((error) => {
+            }).catch((error) => {
             // Uh-oh, an error occurred!
         });
 
     }
 
-    useEffect(() => {
-        var lemon = fetchImages();
+     useEffect(() => {
+        fetchImages().then(r => {
+            if(slideImages.length > 0) {
+                console.log("image urls", cardID, slideImages)
+            } else {
+                console.log("no image urls")
+            }
+        });
     }, []);
 
-    const outputImage;
-    outputImage = useEffect(() => {
-        if(slideImages.length > 0) {
-            console.log("images", slideImages)
-            return (<img src={slideImages[1]}  className={styles.cardImage}/>))
-        }
-    }, [slideImages]);
 
-    return (
-        <img src={slideImages[1]}  className={styles.cardImage}/>)
+    if(slideImages.length > 0){
+        return (
 
+            <div className= {styles.cardContainer}>
+                <img src={slideImages[0]}  className={styles.cardImage}/>
+                <h1 className={styles.cardTitle}>{title}</h1>
+            </div>
+        )
+    } else {
+        return (
+            <div className= {styles.cardTest}>
+                <h1 className={styles.cardTitle}>{title}</h1>
+            </div>
+        )
+    }
 }
 
 export default MiniCard;

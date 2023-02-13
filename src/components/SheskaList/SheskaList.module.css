@@ -10,6 +10,8 @@
 .pageTitleContainer {
     width: 45%;
     margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
 }
 
 .cardContainer {
@@ -36,6 +38,17 @@
     padding-left: 10px;
     font-size: 2.8vw;
 
+}
+
+.addCardButton {
+    color: #24475B;
+    margin: auto 0;
+    margin-right: 10px;
+}
+
+.addCardButton:hover {
+    color: #3a6f8f;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 900px) {

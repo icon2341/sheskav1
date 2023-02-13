@@ -22,7 +22,7 @@ function App() {
               <Route path={"/about"} element={<><InProgress /></>}></Route>
               <Route path={"/signup"} element={<><SignUp/></>}></Route>
               <Route path={"/dashboard"} element={<><Nav/> <Dashboard/></>}></Route>
-              <Route path={"/listeditor"} element={<><Nav/> <SheskaList/></>}></Route>
+              <Route path={"/sheskalist"} element={<><Nav/> <SheskaList/></>}></Route>
               <Route path={"/onboarding"} element={<><Onboarding/></>}></Route>
           </Routes>
       </Router>

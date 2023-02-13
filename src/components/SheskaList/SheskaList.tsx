@@ -9,8 +9,11 @@ import firebase from "firebase/app";
 import {DocumentData} from "firebase/firestore";
 import Spinner from "react-bootstrap/Spinner";
 import {Box, Skeleton} from "@mui/material";
+import {BsFillPlusSquareFill} from "react-icons/bs";
+import {useNavigate} from "react-router-dom";
 
 export function SheskaList() {
+    const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
     const [listItems, setListItems] = useState([] as any);
     const [attemptedQuery, setAttemptedQuery] = useState(false);
@@ -20,24 +23,25 @@ export function SheskaList() {
     async function getListItems(uid: string | undefined) {
 
         const querySnapshot = await getDocs(collection(db, "users/" + uid + "/sheska_list"));
-        console.log("users/" + uid + "/sheska_list");
+        // console.log("users/" + uid + "/sheska_list");
         const lama = [] as DocumentData[]
         querySnapshot.forEach((doc) => {
             //TODO might just want to export the querySnapshot instead of mapping it to lama and then looping through lama to send to listItems
 
             // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
+            // console.log(doc.id, " => ", doc.data());
             lama.push(doc);
         });
         setListItems(lama)
-        lama.forEach((doc) => {console.log("inside data",doc)})
+        //log message console.log("inside data",doc)
+        lama.forEach((doc) => {})
         return querySnapshot.docs;
     }
     useEffect(() => {
         if(user !== null){
-            console.log('Attempt to get cards ' + user)
+            // console.log('Attempt to get cards ' + user)
             getListItems(user?.uid).then(r => {
-                console.log('list data: ' + r);
+                // console.log('list data: ' + r);
                 setAttemptedQuery(true);
             });
         }
@@ -46,7 +50,7 @@ export function SheskaList() {
 
     useEffect(() => {
         if(attemptedQuery){
-            console.log('Attempted query: ' + attemptedQuery)
+            // console.log('Attempted query: ' + attemptedQuery)
         }
     }, [attemptedQuery]);
 
@@ -90,8 +94,9 @@ export function SheskaList() {
             <Box className={styles.gridContainer}>
                 <div className={styles.pageTitleContainer}>
                     <h1 className={styles.pageTitle}> Your Sheska List </h1>
+                    <BsFillPlusSquareFill size={'3em'} className={styles.addCardButton} onClick={() => {navigate('/listeditor')}}/>
                 </div>
-                <Masonry columns={{md: 2, xs: 1}} spacing={3} id={styles['grid']}>
+                <Masonry columns={{sm: 2, xs: 1}} spacing={3} id={styles['grid']}>
                     {cards}
                 </Masonry>
             </Box>

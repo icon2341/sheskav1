@@ -6,11 +6,12 @@
     height: 100%;
     border-radius: 10px;
     object-fit: cover;
-
 }
 
+
+
 .cardTest {
-    background: #d22222;
+    background: #24475B;
     aspect-ratio: 1 / 1;
     border-radius: 10px;
     display: block;
@@ -19,15 +20,30 @@
     position: relative;
     margin: 0 auto;
     height: auto;
+    z-index: 1;
+}
+
+.cardContainer {
+    position: relative;
+}
+
+.cardContainer:hover {
+    transition: transform 0.1s;
+    transform: scale(1.01);
 }
 
 .cardTitle {
     font-family: Butler;
-    color: white;
     font-size: 2.6vw;
+    top: 5%;
+    left: 5%;
+    font-weight: 400;
+    text-shadow: black 0.1em 0.1em 0.2em;
+    color: white;
     display: block;
-    padding-top: 15px;
-    padding-left: 15px;
+    z-index: 2;
+    position: absolute;
+    max-width: 70%;
 }
 
 @media screen and (max-width: 900px) {
@@ -43,7 +59,7 @@
 
 @media screen and (max-width: 600px) {
     .cardTitle {
-        font-size: 5.5vw;
+        font-size: 10vw;
     }
 
     .cardTest {

@@ -7,12 +7,13 @@ import {Box} from "@mui/material";
 import {doc, getDoc} from 'firebase/firestore';
 import {useEffect, useState} from "react";
 import Spinner from 'react-bootstrap/Spinner';
+import {useNavigate} from "react-router-dom";
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
     //TODO FIX BUG WHERE IT DOES NOT LOAD THIS COMPONENT IF PARTNER DATA IS MISSING. ADD NULL CHECK
     const [user, loading, error] = useAuthState(auth);
-
+    const navigate = useNavigate();
     const [partners, setPartners] = useState([]);
 
     async function getPartners(uid: string | undefined) {
@@ -79,7 +80,7 @@ export function Dashboard() {
                         <img src={require("../../images/guestListImage.jpg")} id={styles["feature-card-image-guest"]}
                              alt={"invitation"}/>
                     </div>
-                    <div className={`${styles.largeFeatureCard} ${styles.gridItem}`}>
+                    <div className={`${styles.largeFeatureCard} ${styles.gridItem}`} onClick={() => {navigate('/sheskalist')}}>
                         <h2>Sheska List</h2>
                         <p>Create beautiful cards to showcase items your guests can donate to.</p>
                         <img src={require("../../images/weddingVenueExample.webp")}
