@@ -20,5 +20,12 @@
     font-size: 1.5vw;
     margin-bottom: 20px;
     margin-left: 13%;
+}
 
+.slideContainer {
+    display: block;
+    width: 800px;
+    height: 400px;
+    background-color: salmon;
+    color: violet;
 }
