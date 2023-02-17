@@ -14,9 +14,8 @@
     background: #24475B;
     aspect-ratio: 1 / 1;
     border-radius: 10px;
-    display: block;
     border: #E2E2E2 solid 1px;
-    max-width: 550px;
+    width: 100%;
     position: relative;
     margin: 0 auto;
     height: auto;
@@ -51,20 +50,43 @@
     transform: scale(1.01);
 }
 
+.deleteIcon {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    z-index: 2;
+    color: white;
+    font-size: 4vw;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.deleteIcon:hover {
+    cursor: pointer;
+    background-color: rgba(36, 71, 91, 0.53);
+
+}
+
+
+
+
 @media screen and (max-width: 900px) {
     .cardTitle {
         font-size: 4vw;
     }
 
     .cardTest {
-        width: 80vw;
+        aspect-ratio: 2 / 1;
+    }
+
+    .cardImage {
         aspect-ratio: 2 / 1;
     }
 }
 
 @media screen and (max-width: 600px) {
     .cardTitle {
-        font-size: 10vw;
+        font-size: 5vw;
     }
 
     .cardTest {

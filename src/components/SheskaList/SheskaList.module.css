@@ -53,7 +53,7 @@
 
 @media screen and (max-width: 900px) {
     #grid {
-        max-width: 85%;
+        max-width: 65%;
     }
 
     .pageTitleContainer {
