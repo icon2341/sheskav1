@@ -90,7 +90,6 @@
     }
 
     .cardTest {
-        width: 80vw;
         aspect-ratio: 2 / 1;
     }
 }
