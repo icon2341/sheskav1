@@ -75,7 +75,7 @@ export function SignUp() {
                             <div className={styles.loginWidgetHeader}>
                                 <h1 className={styles.loginLogo}>Sheska</h1>
                                 <h2 className={styles.loginSubText}>Memories are made together</h2>
-                                <h3 className={styles.loginSubSubText}>Log in</h3>
+                                <h3 className={styles.loginSubSubText}>Sign Up</h3>
                             </div>
                             <div className={`${styles.loginWidgetFormContainer}`}>
                                 <Form>
