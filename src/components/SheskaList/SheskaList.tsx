@@ -61,6 +61,7 @@ export function SheskaList() {
                 <div className={``}>
                     <MiniCard
                         title={"Create your first card."}
+                        cardID={"createCard"}
                     />
                 </div>
             )

@@ -132,6 +132,7 @@
         width: 60%;
         text-align: center;
         position: center;
+        display: none;
     }
 
 }

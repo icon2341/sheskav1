@@ -12,6 +12,7 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import {DocumentReference} from "firebase/firestore";
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 
 // Import FilePond styles
 import 'filepond/dist/filepond.min.css'
@@ -20,7 +21,7 @@ import {ref, uploadBytes, deleteObject} from "firebase/storage";
 import Toast from "react-bootstrap/Toast";
 
 
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
 
 export function NewItem() {
@@ -84,71 +85,71 @@ export function NewItem() {
         }
     }, [user])
 
-    const server={
-        server: {
-            revert: (uniqueFileId: string, load: any, error: any   ) => {
-                // Should remove the earlier created temp file here
-                // ...
-                const fileRef = ref(storage, uniqueFileId);
-                deleteObject(fileRef).then(() => {
-                    console.log('file removed:' + uniqueFileId);
-                }).catch((error: any) => {
-                    console.log(error);
-                });
-
-                // Can call the error method if something is wrong, should exit after
-
-
-                // Should call the load method when done, no parameters required
-                load();
-            },
-
-                process: (fieldName:string, file : FilePondFile, metadata : any, load: any, error:any, progress: any, abort:any,
-                          transfer: any, options: any) => {
-
-                    const id = file.file.name;
-
-                    const fileRef = ref(storage, file.file.name);
-
-                    uploadBytes(fileRef, file.file).then((snapshot) => {
-                        progress(true, 100, 100);
-                        load(id);
-
-                    });
-
-                    return {
-                        abort: () => {
-                            // This function is entered if the user has tapped the cancel button
-                            // TODO MAKE SURE TO IMPLEMENT THIS SO THAT THE FILE IS NOT UPLOADED ON FIREBASE, CURERENTLY THIS DOES NOTHING
-                            abort();
-                        }
-                    }
-
-
-            // your processing code here
-        },
-            load: (source: string, load: any, error: any, progress: any, abort: any, headers: any) => {
-            // Should load the image and provide image information to FilePond
-            // ...
-
-            // Should call the progress method to update the progress to 100% before calling load
-            progress(true, 0, 1024);
-
-            // Should call the load method when done and pass the url to the image
-            load(source);
-
-            // Should expose an abort method so the request can be cancelled
-            return {
-                abort: () => {
-                    // This function is entered if the user has tapped the cancel button
-                    abort();
-                }
-            };
-        }
-
-    }
-
-    }
+    // const server={
+    //     server: {
+    //         revert: (uniqueFileId: string, load: any, error: any   ) => {
+    //             // Should remove the earlier created temp file here
+    //             // ...
+    //             const fileRef = ref(storage, uniqueFileId);
+    //             deleteObject(fileRef).then(() => {
+    //                 console.log('file removed:' + uniqueFileId);
+    //             }).catch((error: any) => {
+    //                 console.log(error);
+    //             });
+    //
+    //             // Can call the error method if something is wrong, should exit after
+    //
+    //
+    //             // Should call the load method when done, no parameters required
+    //             load();
+    //         },
+    //
+    //             process: (fieldName:string, file : FilePondFile, metadata : any, load: any, error:any, progress: any, abort:any,
+    //                       transfer: any, options: any) => {
+    //
+    //                 const id = file.file.name;
+    //
+    //                 const fileRef = ref(storage, file.file.name);
+    //
+    //                 uploadBytes(fileRef, file.file).then((snapshot) => {
+    //                     progress(true, 100, 100);
+    //                     load(id);
+    //
+    //                 });
+    //
+    //                 return {
+    //                     abort: () => {
+    //                         // This function is entered if the user has tapped the cancel button
+    //                         // TODO MAKE SURE TO IMPLEMENT THIS SO THAT THE FILE IS NOT UPLOADED ON FIREBASE, CURERENTLY THIS DOES NOTHING
+    //                         abort();
+    //                     }
+    //                 }
+    //
+    //
+    //         // your processing code here
+    //     },
+    //         load: (source: string, load: any, error: any, progress: any, abort: any, headers: any) => {
+    //         // Should load the image and provide image information to FilePond
+    //         // ...
+    //
+    //         // Should call the progress method to update the progress to 100% before calling load
+    //         progress(true, 0, 1024);
+    //
+    //         // Should call the load method when done and pass the url to the image
+    //         load(source);
+    //
+    //         // Should expose an abort method so the request can be cancelled
+    //         return {
+    //             abort: () => {
+    //                 // This function is entered if the user has tapped the cancel button
+    //                 abort();
+    //             }
+    //         };
+    //     }
+    //
+    // }
+    //
+    // }
 
     return (
 
@@ -180,7 +181,7 @@ export function NewItem() {
                 <h1 className={styles.title}>Add New Item</h1>
                 <h2 className={styles.subtitle}>Add the Title</h2>
                 <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
-                    <Form.Control type="email" placeholder="Enter Card Title" onChange={handleTitle}/>
+                    <Form.Control type="text" placeholder="Enter Card Title" onChange={handleTitle}/>
                 </Form.Group>
             {/*    TODO ADD AN IMAGE TOOL HERE TO SHOWCASE AND ADD IMAGES TO BE UPLOADED*/}
                 <FilePond
@@ -234,6 +235,7 @@ export function NewItem() {
                     }
 
                     }}
+                    acceptedFileTypes={['image/*']}
                     allowProcess={true}
                     onprocessfilestart={() =>{
                         console.log("File upload started")
@@ -252,7 +254,7 @@ export function NewItem() {
                 {/*</Carousel>*/}
                 <h2 className={styles.subtitle}>Add a subtitle</h2>
                 <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
-                    <Form.Control type="email" placeholder="Enter Subtitle" onChange={handleSubtitle}/>
+                    <Form.Control type="text" placeholder="Enter Subtitle" onChange={handleSubtitle}/>
                 </Form.Group>
                 <div className={"d-flex justify-content-center"}>
                     <Button variant="primary" id={"button-signup"} className={`${"d-block w-75 mx-auto text-center"} 

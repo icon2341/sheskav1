@@ -29,6 +29,10 @@ export function Welcome() {
                                 <li><a href="#">Careers</a></li>
                                 <li><a href="#">Blog</a></li>
                                 <li><a href="#">Support</a></li>
+                                <li><div className={styles.authButtons}>
+                                    <button className={styles.authButtonLight} onClick={() => navigate('/login')}>Log in</button>
+                                    <button className={styles.authButton} onClick={() => navigate('/signup')}>Sign Up</button>
+                                </div></li>
                             </div>
                         </div>
                     </div>
@@ -53,7 +57,7 @@ export function Welcome() {
                 {/*MAIN CONTENT*/}
 
                 <section className={styles.videoSection}>
-                    <video className={styles.video} autoPlay={true} loop={true} muted={true} src={require("../images/SheskaLandingVideo.mp4")}>
+                    <video className={styles.video} playsInline={true} autoPlay={true} loop={true} muted={true} src={require("../images/SheskaLandingVideo.mp4")}>
 
                     </video>
                     <h1 className={styles.mainTitle}>Sheska</h1>
