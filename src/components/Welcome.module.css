@@ -7,6 +7,11 @@
     height: 100vh;
 }
 
+.pageContainer {
+    height: 100vh;
+}
+
+
 .video {
     position: absolute;
     top: 0;
@@ -157,6 +162,7 @@
     width: 100%;
     box-shadow: 0 1px 4px rgb(146 161 176 / 15%);
     z-index: 1;
+    height: 100vh;
 }
 
 .navbar > * {

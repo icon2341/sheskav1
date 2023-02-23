@@ -13,12 +13,26 @@ import Toast from 'react-bootstrap/Toast'
 import {ToastContainer} from "react-bootstrap";
 import {useAuthState} from "react-firebase-hooks/auth";
 import firebase from "firebase/app";
+import {Formik} from "formik";
+import * as Yup from 'yup';
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
 
 let showToast: any;
 export function SignUp() {
+
+    const validationSchema = Yup.object({
+        email: Yup.string().email('Invalid email address').required('Required'),
+        password: Yup.string().required('Required')
+            .min(8, 'Password is too short - should be 8 chars minimum.')
+            .matches(/[0-9]/, 'Password requires a number')
+            .matches(/[a-z]/, 'Password requires a lowercase letter')
+            .matches(/[A-Z]/, 'Password requires an uppercase letter')
+            .matches(/[^\w]/, 'Password requires a symbol'),
+        confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match')
+    });
+
     const navigate = useNavigate();
     const [txtEmail, setTxtEmail] = useState('')
     const [txtPassword, setTxtPassword] = useState('')
@@ -78,23 +92,102 @@ export function SignUp() {
                                 <h3 className={styles.loginSubSubText}>Sign Up</h3>
                             </div>
                             <div className={`${styles.loginWidgetFormContainer}`}>
-                                <Form>
-                                    <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
-                                        <Form.Control type="email" placeholder="Enter email" onChange={handleEmail}/>
-                                    </Form.Group>
-                                    <Form.Group className={"mb-3 w-75 mx-auto"}>
-                                        <Form.Control type="password" placeholder="Password" onChange={handlePassword}/>
-                                    </Form.Group>
-                                    <Form.Group className={`${"mb-3 d-flex justify-content-center"} ${styles.loginWidgetCheckbox}`} controlId="formBasicCheckbox">
-                                        <Form.Check type="checkbox" label="Remember Me" checked={checked} onChange={() => setChecked(!checked)}/>
-                                    </Form.Group>
-                                    <div className={"d-flex justify-content-center"}>
-                                        <Button variant="primary" id={"button-signup"} className={`${"d-block w-75 mx-auto text-center"} 
-                                        ${styles.loginButton}`} onClick={() => createAccount(txtEmail,txtPassword, navigate, checked)}>
-                                            Submit
-                                        </Button>
-                                    </div>
-                                </Form>
+                                {/*<Form>*/}
+                                {/*    <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">*/}
+                                {/*        <Form.Control type="email" placeholder="Enter email" onChange={handleEmail}/>*/}
+                                {/*    </Form.Group>*/}
+                                {/*    <Form.Group className={"mb-3 w-75 mx-auto"}>*/}
+                                {/*        <Form.Control type="password" placeholder="Password" onChange={handlePassword}/>*/}
+                                {/*    </Form.Group>*/}
+                                {/*    <Form.Group className={`${"mb-3 d-flex justify-content-center"} ${styles.loginWidgetCheckbox}`} controlId="formBasicCheckbox">*/}
+                                {/*        <Form.Check type="checkbox" label="Remember Me" checked={checked} onChange={() => setChecked(!checked)}/>*/}
+                                {/*    </Form.Group>*/}
+                                {/*    <div className={"d-flex justify-content-center"}>*/}
+                                {/*        <Button variant="primary" id={"button-signup"} className={`${"d-block w-75 mx-auto text-center"} */}
+                                {/*        ${styles.loginButton}`} onClick={() => createAccount(txtEmail,txtPassword, navigate, checked)}>*/}
+                                {/*            Submit*/}
+                                {/*        </Button>*/}
+                                {/*    </div>*/}
+                                {/*</Form>*/}
+
+                                <Formik validationSchema={validationSchema}
+                                        onSubmit={console.log}
+                                        initialValues={{
+                                            email: '',
+                                            password: '',
+                                            confirmPassword: ''
+                                        }}>
+                                    {({
+                                            handleSubmit,
+                                            handleChange,
+                                            handleBlur,
+                                            values,
+                                            touched,
+                                            isValid,
+                                            errors,
+                                    }) => (
+                                        <Form noValidate onSubmit={handleSubmit}>
+                                            <Form.Group controlId={"lemonForm01"} className={"mb-3 w-50 mx-auto"}>
+                                                <Form.Control
+                                                    type={"email"}
+                                                    name={"email"}
+                                                    value={values.email}
+                                                    onChange={handleChange}
+                                                    placeholder={"Email"}
+                                                    isValid={touched.email && !errors.email}
+                                                    isInvalid={!!errors.email}
+                                                    />
+                                                <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
+                                                <Form.Control.Feedback  type={"invalid"} >{errors.email}</Form.Control.Feedback>
+                                            </Form.Group>
+                                            <Form.Group controlId={"lemonForm02"} className={"mb-3 w-50 mx-auto"}>
+                                                <Form.Control
+                                                    type={"password"}
+                                                    name={"password"}
+                                                    value={values.password}
+                                                    onChange={handleChange}
+                                                    placeholder={"Password"}
+                                                    isValid={touched.password && !errors.password}
+                                                    isInvalid={!!errors.password}
+                                                />
+                                                <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
+                                                <Form.Control.Feedback  type={"invalid"} >{errors.password}</Form.Control.Feedback>
+                                            </Form.Group>
+                                            <Form.Group controlId={"lemonForm03"} className={"mb-3 w-50 mx-auto"}>
+                                                <Form.Control
+                                                    type={"password"}
+                                                    name={"confirmPassword"}
+                                                    value={values.confirmPassword}
+                                                    onChange={handleChange}
+                                                    placeholder={"Confirm Password"}
+                                                    isValid={touched.confirmPassword && !errors.confirmPassword}
+                                                    isInvalid={!!errors.confirmPassword}
+                                                />
+                                                <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
+                                                <Form.Control.Feedback  type={"invalid"} >{errors.confirmPassword}</Form.Control.Feedback>
+                                            </Form.Group>
+                                            {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
+                                                <div className={"d-flex justify-content-center"}>
+                                                    <Button disabled={!!errors.email || !!errors.password || !!errors.confirmPassword} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
+                                                    ${styles.loginButton}`} onClick={() => createAccount(values.email,values.password, navigate, checked)}>
+                                                        Submit
+                                                    </Button>
+                                                </div>
+
+                                        </Form>
+                                        )}
+                                </Formik>
+                                <div className={styles.loginWidgetFooter}>
+                                    <h2 className={`${styles.passwordFooter} ${'text-muted'}`}>Passwords must be at least 8 characters long, contain upper and lowercase letters, numbers, and at least one special character</h2>
+                                    <br/>
+                                    <text className={`${styles.passwordFooter} ${'text-muted'}`}>Already have an account?</text>
+                                    <button className={`${styles.signInButt}`} onClick={() => {navigate('/login')}}>Sign In!</button>
+                                </div>
+
+
+
+
+
                             </div>
                         </div>
                     </div>
