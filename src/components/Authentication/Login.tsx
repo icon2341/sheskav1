@@ -56,11 +56,15 @@ export function Login() {
      */
     const handleSubmit = async (values: any, { setErrors } : any) => {
         //login the user and return a promise that can do two things on error (for now, here is where you add error handling)
+
         loginUser(values.email,values.password, navigate, rememberChecked).catch((reason) => {
+            console.log("LOL", reason)
             if (reason === "Incorrect Password") {
                 setErrors({password: 'Incorrect Password'})
             } else if (reason === "User Not Found") {
                 setErrors({email: 'User does not exist'})
+            } else if (reason === "Too Many Requests") {
+                setErrors({password: 'Too many requests, try again later or reset password.'})
             }
         });
 
@@ -245,15 +249,18 @@ async function loginUser(txtEmail : string, txtPassword : string, navigate : Nav
         switch (e.code) {
             case 'auth/wrong-password':
                 console.log('wrong password')
-                showToast(true)
                 return new Promise((resolve, reject) => {
                     reject("Incorrect Password")
                 });
             case 'auth/user-not-found':
                 console.log('user not found')
-                showToast(true)
                 return new Promise((resolve, reject) => {
                     reject("User Not Found")
+                });
+            case 'auth/too-many-requests':
+                console.log('too many requests, account is temporarily locked out')
+                return new Promise((resolve, reject) => {
+                    reject("Too Many Requests")
                 });
 
         }
