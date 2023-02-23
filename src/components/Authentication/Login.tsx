@@ -11,6 +11,7 @@ import Form from 'react-bootstrap/Form';
 import {useAuthState} from "react-firebase-hooks/auth";
 import * as Yup from "yup";
 import {Formik} from "formik";
+import {InputGroup} from "react-bootstrap";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
@@ -37,6 +38,8 @@ export function Login() {
      * determines whether 'remember me' is checked
      */
     const [rememberChecked,setRememberRememberChecked] = React.useState(false);
+
+    const [showPass, setShowPass] = React.useState(false);
 
     //Allows for calling the toast whenever showA is changed (DEPRECATED)
     // useEffect(() => {
@@ -137,16 +140,29 @@ export function Login() {
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.email}</Form.Control.Feedback>
                                             </Form.Group>
                                             <Form.Group controlId={"lemonForm02"} className={"mb-3 w-50 mx-auto"}>
-                                                <Form.Control
-                                                    type={"password"}
-                                                    name={"password"}
-                                                    value={values.password}
-                                                    onChange={handleChange}
-                                                    placeholder={"Password"}
-                                                    isValid={touched.password && !errors.password}
-                                                    isInvalid={!!errors.password}
-                                                />
-                                                <Form.Control.Feedback  type={"invalid"} >{errors.password}</Form.Control.Feedback>{/*<Form.Control.Feedback  type={"invalid"}>{showA ? "incorrect password" : "incorrect password"}</Form.Control.Feedback>*/}
+                                                <InputGroup>
+                                                    <Form.Control
+                                                        type={showPass ? "text" : "password"}
+                                                        name={"password"}
+                                                        value={values.password}
+                                                        onChange={handleChange}
+                                                        placeholder={"Password"}
+                                                        isValid={touched.password && !errors.password}
+                                                        isInvalid={!!errors.password}
+                                                    />
+                                                    {/*TODO this is square and it annoys me*/}
+                                                    <InputGroup.Text>
+
+                                                        <i onClick={() => {
+                                                            setShowPass(!showPass)
+
+                                                        }}>
+                                                            <i className={showPass ? 'fa fa-eye-slash' : 'fa fa-eye'}></i>
+                                                        </i>
+                                                    </InputGroup.Text>
+                                                    <Form.Control.Feedback  type={"invalid"} >{errors.password}</Form.Control.Feedback>{/*<Form.Control.Feedback  type={"invalid"}>{showA ? "incorrect password" : "incorrect password"}</Form.Control.Feedback>*/}
+
+                                                </InputGroup>
                                             </Form.Group>
                                             <Form.Group className={`${"mb-3 d-flex justify-content-center"} ${styles.loginWidgetCheckbox}`} controlId="formBasicCheckbox">
                                                 <Form.Check type="checkbox" label="Remember Me" checked={rememberChecked} onChange={() => setRememberRememberChecked(!rememberChecked)}/>
@@ -165,7 +181,7 @@ export function Login() {
 
                                 {/*RESET PASSWORD FOOTER*/}
                                 <div className={styles.loginWidgetFooter}>
-                                    <a className={`${styles.passwordFooter} ${'text-muted'} ${styles.resetPassword}`}  onClick={() => {navigate('/login')}}>Forgot your password?</a>
+                                    <a className={`${styles.passwordFooter} ${'text-muted'} ${styles.resetPassword}`}  onClick={() => {navigate('/resetpassword')}}>Forgot your password?</a>
                                 </div>
                             </div>
                         </div>

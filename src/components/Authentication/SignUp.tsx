@@ -2,24 +2,25 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence
 } from 'firebase/auth';
-import React, {ChangeEvent, useEffect, useState} from 'react'
+import React from 'react'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {auth, db} from "../../index";
 import styles from "./SignUp.module.css"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Toast from 'react-bootstrap/Toast'
-import {ToastContainer} from "react-bootstrap";
+import {InputGroup} from "react-bootstrap";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {Formik} from "formik";
 import * as Yup from 'yup';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
 
 let showToast: any;
 export function SignUp() {
+
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Required'),
@@ -37,6 +38,7 @@ export function SignUp() {
      */
     const navigate = useNavigate();
     const [checked,setChecked] = React.useState(false);
+    const [showPass, setShowPass] = React.useState(false);
 
     //Allows for calling the toast whenever showA is changed (DEPRECATED)
     // useEffect(() => {
@@ -65,17 +67,6 @@ export function SignUp() {
                         <h1 className={styles.presentationHeader}>Give guests one of a kind experiences, find amazing vendors, allow guests to support you, make memories together.</h1>
                     </div>
                     <div className={styles.formContainer}>
-                        {/*<ToastContainer className={styles.toastContainer}>*/}
-                        {/*    <Toast show={showA} onClose={() => setShowA(false)}>*/}
-                        {/*        <Toast.Header>*/}
-                        {/*            <strong className="me-auto">ERROR</strong>*/}
-                        {/*            <small>just now</small>*/}
-                        {/*        </Toast.Header>*/}
-                        {/*        <Toast.Body>*/}
-                        {/*            Incorrect Password!*/}
-                        {/*        </Toast.Body>*/}
-                        {/*    </Toast>*/}
-                        {/*</ToastContainer>*/}
                         <div className={styles.loginWidget}>
                             <div className={styles.loginWidgetHeader}>
                                 <h1 className={styles.loginLogo}>Sheska</h1>
@@ -114,21 +105,33 @@ export function SignUp() {
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.email}</Form.Control.Feedback>
                                             </Form.Group>
                                             <Form.Group controlId={"lemonForm02"} className={"mb-3 w-50 mx-auto"}>
-                                                <Form.Control
-                                                    type={"password"}
-                                                    name={"password"}
-                                                    value={values.password}
-                                                    onChange={handleChange}
-                                                    placeholder={"Password"}
-                                                    isValid={touched.password && !errors.password}
-                                                    isInvalid={!!errors.password}
-                                                />
-                                                <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
-                                                <Form.Control.Feedback  type={"invalid"} >{errors.password}</Form.Control.Feedback>
+                                                <InputGroup>
+                                                    <Form.Control
+                                                        type={showPass ? "text" : "password"}
+                                                        name={"password"}
+                                                        value={values.password}
+                                                        onChange={handleChange}
+                                                        placeholder={"Password"}
+                                                        isValid={touched.password && !errors.password}
+                                                        isInvalid={!!errors.password}
+                                                    />
+                                                    {/*TODO this is square and it anmoys me*/}
+                                                    <InputGroup.Text>
+
+                                                        <i onClick={() => {
+                                                            setShowPass(!showPass)
+                                                        }}>
+                                                            <i className={showPass ? 'fa fa-eye-slash' : 'fa fa-eye'}></i>
+                                                        </i>
+                                                    </InputGroup.Text>
+                                                    <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
+                                                    <Form.Control.Feedback  type={"invalid"} >{errors.password}</Form.Control.Feedback>
+                                                </InputGroup>
+
                                             </Form.Group>
                                             <Form.Group controlId={"lemonForm03"} className={"mb-3 w-50 mx-auto"}>
                                                 <Form.Control
-                                                    type={"password"}
+                                                    type={showPass ? "text" : "password"}
                                                     name={"confirmPassword"}
                                                     value={values.confirmPassword}
                                                     onChange={handleChange}
@@ -138,6 +141,7 @@ export function SignUp() {
                                                 />
                                                 <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.confirmPassword}</Form.Control.Feedback>
+
                                             </Form.Group>
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                                 <div className={"d-flex justify-content-center"}>
