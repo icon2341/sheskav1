@@ -5,14 +5,13 @@ import {
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {doc, getDoc, setDoc} from "firebase/firestore";
-import {app, auth, db} from "../../index";
+import {auth, db} from "../../index";
 import styles from "./SignUp.module.css"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Toast from 'react-bootstrap/Toast'
 import {ToastContainer} from "react-bootstrap";
 import {useAuthState} from "react-firebase-hooks/auth";
-import firebase from "firebase/app";
 import {Formik} from "formik";
 import * as Yup from 'yup';
 
@@ -33,26 +32,18 @@ export function SignUp() {
         confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match')
     });
 
+    /**
+     * navigation object
+     */
     const navigate = useNavigate();
-    const [txtEmail, setTxtEmail] = useState('')
-    const [txtPassword, setTxtPassword] = useState('')
-    const [showA, setShowA] = useState(false);
     const [checked,setChecked] = React.useState(false);
 
-    useEffect(() => {
-        /* Assign update to outside variable */
-        showToast = setShowA
-        /* Unassign when component unmounts */
-    }, [])
-    const handleEmail = (event: ChangeEvent<HTMLInputElement>) => {
-        setTxtEmail(event.currentTarget.value);
-        console.log(txtEmail);
-    }
-
-    const handlePassword = (event: ChangeEvent<HTMLInputElement>) => {
-        setTxtPassword(event.target.value);
-        console.log(txtPassword);
-    }
+    //Allows for calling the toast whenever showA is changed (DEPRECATED)
+    // useEffect(() => {
+    //     /* Assign update to outside variable */
+    //     showToast = setShowA
+    //     /* Unassign when component unmounts */
+    // }, [])
 
     const [user, loading, error] = useAuthState(auth);
     if (user) {
@@ -74,17 +65,17 @@ export function SignUp() {
                         <h1 className={styles.presentationHeader}>Give guests one of a kind experiences, find amazing vendors, allow guests to support you, make memories together.</h1>
                     </div>
                     <div className={styles.formContainer}>
-                        <ToastContainer className={styles.toastContainer}>
-                            <Toast show={showA} onClose={() => setShowA(false)}>
-                                <Toast.Header>
-                                    <strong className="me-auto">ERROR</strong>
-                                    <small>just now</small>
-                                </Toast.Header>
-                                <Toast.Body>
-                                    Incorrect Password!
-                                </Toast.Body>
-                            </Toast>
-                        </ToastContainer>
+                        {/*<ToastContainer className={styles.toastContainer}>*/}
+                        {/*    <Toast show={showA} onClose={() => setShowA(false)}>*/}
+                        {/*        <Toast.Header>*/}
+                        {/*            <strong className="me-auto">ERROR</strong>*/}
+                        {/*            <small>just now</small>*/}
+                        {/*        </Toast.Header>*/}
+                        {/*        <Toast.Body>*/}
+                        {/*            Incorrect Password!*/}
+                        {/*        </Toast.Body>*/}
+                        {/*    </Toast>*/}
+                        {/*</ToastContainer>*/}
                         <div className={styles.loginWidget}>
                             <div className={styles.loginWidgetHeader}>
                                 <h1 className={styles.loginLogo}>Sheska</h1>
@@ -92,24 +83,6 @@ export function SignUp() {
                                 <h3 className={styles.loginSubSubText}>Sign Up</h3>
                             </div>
                             <div className={`${styles.loginWidgetFormContainer}`}>
-                                {/*<Form>*/}
-                                {/*    <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">*/}
-                                {/*        <Form.Control type="email" placeholder="Enter email" onChange={handleEmail}/>*/}
-                                {/*    </Form.Group>*/}
-                                {/*    <Form.Group className={"mb-3 w-75 mx-auto"}>*/}
-                                {/*        <Form.Control type="password" placeholder="Password" onChange={handlePassword}/>*/}
-                                {/*    </Form.Group>*/}
-                                {/*    <Form.Group className={`${"mb-3 d-flex justify-content-center"} ${styles.loginWidgetCheckbox}`} controlId="formBasicCheckbox">*/}
-                                {/*        <Form.Check type="checkbox" label="Remember Me" checked={checked} onChange={() => setChecked(!checked)}/>*/}
-                                {/*    </Form.Group>*/}
-                                {/*    <div className={"d-flex justify-content-center"}>*/}
-                                {/*        <Button variant="primary" id={"button-signup"} className={`${"d-block w-75 mx-auto text-center"} */}
-                                {/*        ${styles.loginButton}`} onClick={() => createAccount(txtEmail,txtPassword, navigate, checked)}>*/}
-                                {/*            Submit*/}
-                                {/*        </Button>*/}
-                                {/*    </div>*/}
-                                {/*</Form>*/}
-
                                 <Formik validationSchema={validationSchema}
                                         onSubmit={console.log}
                                         initialValues={{
@@ -200,7 +173,14 @@ export function SignUp() {
 
 export default SignUp
 
-
+/**
+ * Creates a new user account with the given email and password. Also adds them to Firestore
+ * //TODO MAKE THE user sign in redirection way better
+ * @param txtEmail users email
+ * @param txtPassword user's password
+ * @param navigate navigate function
+ * @param rememberMe if user has selected remember me
+ */
 async function createAccount(txtEmail : string, txtPassword : string, navigate : NavigateFunction, rememberMe : boolean) {
     // checks if user has selected remember me, sets auth state persistence naturally.
     if(rememberMe) {

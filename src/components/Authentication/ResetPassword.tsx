@@ -1,7 +1,7 @@
 import {
     signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence
 } from 'firebase/auth';
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {auth, db} from "../../index";
@@ -11,19 +11,19 @@ import Form from 'react-bootstrap/Form';
 import {useAuthState} from "react-firebase-hooks/auth";
 import * as Yup from "yup";
 import {Formik} from "formik";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
 
 let showToast: any;
-export function Login() {
+export function ResetPassword() {
 
     /**
      * Schema that denotes that password and email should be valid and required, used by Formik
      */
     const validationSchema = Yup.object({
-        email: Yup.string().email('Invalid email address').required('Required'),
-        password: Yup.string().required('Required')
+        email: Yup.string().email('Invalid email address').required('Required')
     });
     /**
      * Allows for navigating a user
@@ -53,18 +53,20 @@ export function Login() {
      */
     const handleSubmit = async (values: any, { setErrors } : any) => {
         //login the user and return a promise that can do two things on error (for now, here is where you add error handling)
-        loginUser(values.email,values.password, navigate, rememberChecked).catch((reason) => {
-            if (reason === "Incorrect Password") {
-                setErrors({password: 'Incorrect Password'})
-            } else if (reason === "User Not Found") {
-                setErrors({email: 'User does not exist'})
-            }
-        });
+        sendPasswordResetEmail(auth, values.email)
+            .then(() => {
+                // Password reset email sent!
+                // ..
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ..
+            });
 
     };
 
     const [user, loading, error] = useAuthState(auth);
-    //if the user is logged in, redirect them to the dashboard
     if (user) {
         navigate('/dashboard');
         return(<div>
@@ -95,23 +97,17 @@ export function Login() {
                         {/*        </Toast.Body>*/}
                         {/*    </Toast>*/}
                         {/*</ToastContainer>*/}
-                        {/*LOGIN WIDGET*/}
                         <div className={styles.loginWidget}>
                             <div className={styles.loginWidgetHeader}>
                                 <h1 className={styles.loginLogo}>Sheska</h1>
                                 <h2 className={styles.loginSubText}>Memories are made together</h2>
-                                <h3 className={styles.loginSubSubText}>Log in</h3>
+                                <h3 className={styles.loginSubSubText}>Password Reset</h3>
                             </div>
-
-                            {/*LOGIN FORM WITH FORMIK*/}
                             <div className={`${styles.loginWidgetFormContainer}`}>
-                                {/*Formik will handle the form, states, and submission
-                                validation Schema*/}
                                 <Formik validationSchema={validationSchema}
                                         onSubmit={handleSubmit}
                                         initialValues={{
-                                            email: '',
-                                            password: ''
+                                            email: ''
                                         }}
                                         enableReinitialize>
                                     {({
@@ -135,25 +131,11 @@ export function Login() {
                                                     isInvalid={!!errors.email}
                                                 />
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.email}</Form.Control.Feedback>
-                                            </Form.Group>
-                                            <Form.Group controlId={"lemonForm02"} className={"mb-3 w-50 mx-auto"}>
-                                                <Form.Control
-                                                    type={"password"}
-                                                    name={"password"}
-                                                    value={values.password}
-                                                    onChange={handleChange}
-                                                    placeholder={"Password"}
-                                                    isValid={touched.password && !errors.password}
-                                                    isInvalid={!!errors.password}
-                                                />
-                                                <Form.Control.Feedback  type={"invalid"} >{errors.password}</Form.Control.Feedback>{/*<Form.Control.Feedback  type={"invalid"}>{showA ? "incorrect password" : "incorrect password"}</Form.Control.Feedback>*/}
-                                            </Form.Group>
-                                            <Form.Group className={`${"mb-3 d-flex justify-content-center"} ${styles.loginWidgetCheckbox}`} controlId="formBasicCheckbox">
-                                                <Form.Check type="checkbox" label="Remember Me" checked={rememberChecked} onChange={() => setRememberRememberChecked(!rememberChecked)}/>
+                                                <Form.Control.Feedback>Great, if an account exists with that email, you will get a password reset email.</Form.Control.Feedback>
                                             </Form.Group>
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                             <div className={"d-flex justify-content-center"}>
-                                                <Button disabled={!!errors.email || !!errors.password} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
+                                                <Button disabled={!!errors.email} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
                                                     ${styles.loginButton}`} onClick={() => {handleSubmit()}}>
                                                     Submit
                                                 </Button>
@@ -162,10 +144,8 @@ export function Login() {
                                         </Form>
                                     )}
                                 </Formik>
-
-                                {/*RESET PASSWORD FOOTER*/}
                                 <div className={styles.loginWidgetFooter}>
-                                    <a className={`${styles.passwordFooter} ${'text-muted'} ${styles.resetPassword}`}  onClick={() => {navigate('/login')}}>Forgot your password?</a>
+                                    <a className={`${styles.passwordFooter} ${'text-muted'} ${styles.resetPassword}`}  onClick={() => {navigate('/login')}}>Nevermind</a>
                                 </div>
                             </div>
                         </div>
@@ -177,17 +157,9 @@ export function Login() {
 
 }
 
-export default Login
+export default ResetPassword
 
-//TODO ADD OVERLOAD FUNCTIONS FOR DIFFERENT SORTS OF AUTHENTICATION
-/**
- * This function will attempt to login a user with the given email and password and will redirect them, it will also
- * return promises that denote the errors observed.
- * @param txtEmail email of user as string
- * @param txtPassword passowrd of user as string
- * @param navigate navigate object to redirect user
- * @param rememberMe remember me checkbox to change browser session details
- */
+
 async function loginUser(txtEmail : string, txtPassword : string, navigate : NavigateFunction, rememberMe : boolean){
     // checks if user has selected remember me, sets auth state persistence naturally.
     if(rememberMe) {
@@ -201,15 +173,12 @@ async function loginUser(txtEmail : string, txtPassword : string, navigate : Nav
     const password : string = txtPassword;
 
     try {
-        // tries to sign in user with email and password auth
         await signInWithEmailAndPassword(auth, email, password)
-        // console.log("signed in my friend")
+        console.log("signed in my friend")
         const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
-        //determines where to redirect user
         await getDoc(userRef).then(doc => {
             if (doc.exists()) {
                 console.log("doc exists, check onboarding", doc.data())
-                // make sure user has passed onboarding, redirects them accordingly
                 if(doc.data()?.passedOnboarding === false ||
                     doc.data()?.passedOnboarding === undefined) {
                     console.log("user has not passed onboarding")
@@ -224,7 +193,6 @@ async function loginUser(txtEmail : string, txtPassword : string, navigate : Nav
             }
         })
     } catch (e: any) {
-        //handle various errors
         console.log(`There was an error: ${e}`)
         switch (e.code) {
             case 'auth/wrong-password':
@@ -243,12 +211,74 @@ async function loginUser(txtEmail : string, txtPassword : string, navigate : Nav
         }
     }
 
-    //Returns a promise that denotes that the user has signed in
     return new Promise((resolve, reject) => {
         resolve("User Signed In");
     });
 
 }
+
+//ORIGINAL LOGIN AND SIGNUP, DEPRECATED
+// async function createAccount(txtEmail : string, txtPassword : string, navigate : NavigateFunction, rememberMe : boolean) {
+//     // checks if user has selected remember me, sets auth state persistence naturally.
+//     if(rememberMe) {
+//         await auth.setPersistence(browserLocalPersistence)
+//     } else {
+//         await auth.setPersistence(browserSessionPersistence)
+//     }
+//
+//     console.log(`Signup Attempted on ${txtEmail}`)
+//
+//     const email : string = txtEmail
+//     const password : string = txtPassword
+//     try {
+//         await createUserWithEmailAndPassword(auth, email, password).then((cred) => {
+//             console.log(cred)
+//             sessionStorage.setItem('Auth Token', cred.user.refreshToken)
+//
+//             const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
+//             console.log("adding to doc...")
+//             return (
+//                 setDoc(userRef, {email: email, passedOnboarding: false}, {merge: true})
+//             ).then(() => {
+//                 console.log("signing up completed for: ", auth?.currentUser?.uid ?? "ERROR NULL USER")
+//                 navigate('/onboarding')
+//                 return;
+//             });
+//         })
+//     }
+//     catch(error : any) {
+//         try {
+//             await signInWithEmailAndPassword(auth, email, password)
+//             console.log("signed in my friend")
+//             const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
+//             await getDoc(userRef).then(doc => {
+//                 if (doc.exists()) {
+//                     console.log("doc exists, check onboarding", doc.data())
+//                     if(doc.data()?.passedOnboarding === false ||
+//                         doc.data()?.passedOnboarding === undefined) {
+//                         console.log("user has not passed onboarding")
+//                         navigate('/onboarding')
+//                         return;
+//                     } else {
+//                         navigate('/dashboard')
+//                     }
+//                 } else {
+//                     throw new Error("User does not exist")
+//                 }
+//             })
+//         } catch (e: any) {
+//             console.log(`There was an error: ${e}`)
+//             switch (e.code) {
+//                 case 'auth/wrong-password':
+//                     console.log('wrong password')
+//                     showToast(true)
+//
+//             }
+//         }
+//     }
+//
+// }
+
 
 
 

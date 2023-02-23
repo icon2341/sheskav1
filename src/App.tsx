@@ -14,6 +14,7 @@ import {Onboarding} from "./components/Newuserflow/Onboarding";
 import SheskaList from "./components/SheskaList/SheskaList";
 import NewItem from "./components/SheskaList/NewItem";
 import Login from "./components/Authentication/Login";
+import ResetPassword from "./components/Authentication/ResetPassword";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path={"/sheskalist"} element={<><Nav/> <SheskaList/></>}></Route>
               <Route path={"/onboarding"} element={<><Onboarding/></>}></Route>
               <Route path={"/newitem"} element={<><Nav/><NewItem/></>}></Route>
+              <Route path={"/resetpassword"} element={<><ResetPassword/></>}></Route>
           </Routes>
       </Router>
   );

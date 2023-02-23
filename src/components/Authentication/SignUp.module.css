@@ -54,13 +54,14 @@ small {
     display: block;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 5px;
+    width: 70%;
     margin: 0 max(50px, auto);
 }
 
 .loginLogo {
     font-family: Butler, "Open Sans";
     font-weight: 900;
-    font-size: 80px;
+    font-size: 5vw;
     color: black;
     margin: 0 auto;
     display: block;
@@ -166,6 +167,10 @@ small {
     .pageContainer {
         justify-content: center;
         flex-direction: column-reverse;
+    }
+
+    .loginLogo {
+        font-size: 11vw;
     }
 
     .presentationContainer {
