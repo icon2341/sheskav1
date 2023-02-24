@@ -1,13 +1,13 @@
 
 import styles from "./Onboarding.module.css"
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import Form from "react-bootstrap/Form";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { useSwiper } from 'swiper/react';
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "../../index";
-import {doc, setDoc} from "firebase/firestore";
+import {doc, getDoc, setDoc} from "firebase/firestore";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 // Core modules imports are same as usual
 // Direct React component imports
@@ -60,6 +60,12 @@ export function Onboarding() {
         setTxtUserLastname(event.currentTarget.value);
         console.log(txtUserLastname);
     }
+
+    //CHECKS IF USER HAS PASSED ONBOARDING ALREADY, IF SO, REDIRECTS TO DASHBOARD
+    useEffect(() => {
+        checkIfUserHasPassedOnboarding(navigate);
+    }, []);
+
 
     // noinspection TypeScriptValidateTypes
     if(user) {
@@ -146,4 +152,25 @@ async function sendUserOnboardingData(navigate : NavigateFunction, txtUserFirstn
 
         navigate('/dashboard')
     }
+}
+
+async function checkIfUserHasPassedOnboarding(navigate : NavigateFunction) {
+    const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
+    //determines where to redirect user
+    await getDoc(userRef).then(doc => {
+        if (doc.exists()) {
+            console.log("doc exists, check onboarding", doc.data())
+            // make sure user has passed onboarding, redirects them accordingly
+            if(doc.data()?.passedOnboarding === false ||
+                doc.data()?.passedOnboarding === undefined) {
+                console.log("user has not passed onboarding")
+                return;
+            } else {
+                navigate('/dashboard')
+            }
+        } else {
+            throw new Error("User does not exist")
+
+        }
+    })
 }

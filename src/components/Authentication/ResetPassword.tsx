@@ -53,12 +53,7 @@ export function ResetPassword() {
      */
     const handleSubmit = async (values: any, { setErrors } : any) => {
         //login the user and return a promise that can do two things on error (for now, here is where you add error handling)
-        sendPasswordResetEmail(auth, values.email)
-            .then(() => {
-                // Password reset email sent!
-                // ..
-            })
-            .catch((error) => {
+        sendPasswordResetEmail(auth, values.email).catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 // ..
@@ -136,7 +131,7 @@ export function ResetPassword() {
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                             <div className={"d-flex justify-content-center"}>
                                                 <Button disabled={!!errors.email} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
-                                                    ${styles.loginButton}`} onClick={() => {handleSubmit()}}>
+                                                    ${styles.loginButton}`}>
                                                     Submit
                                                 </Button>
                                             </div>

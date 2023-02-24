@@ -40,6 +40,21 @@ export function SignUp() {
     const [checked,setChecked] = React.useState(false);
     const [showPass, setShowPass] = React.useState(false);
 
+    const handleSubmit = async (values: any, { setErrors } : any) => {
+        //login the user and return a promise that can do two things on error (for now, here is where you add error handling)
+
+        createAccount(values.email, values.password, navigate, checked).catch((reason) => {
+            console.log("LOL", reason.code)
+            if (reason === "Email in Use") {
+                setErrors({email: 'Email already in use'})
+            } else if (reason === "Error adding user to database") {
+                setErrors({email: 'Error adding user to database, contact support at www.sheska.co/support'})
+            }
+        });
+
+    };
+
+
     //Allows for calling the toast whenever showA is changed (DEPRECATED)
     // useEffect(() => {
     //     /* Assign update to outside variable */
@@ -75,7 +90,7 @@ export function SignUp() {
                             </div>
                             <div className={`${styles.loginWidgetFormContainer}`}>
                                 <Formik validationSchema={validationSchema}
-                                        onSubmit={console.log}
+                                        onSubmit={handleSubmit}
                                         initialValues={{
                                             email: '',
                                             password: '',
@@ -146,7 +161,7 @@ export function SignUp() {
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                                 <div className={"d-flex justify-content-center"}>
                                                     <Button disabled={!!errors.email || !!errors.password || !!errors.confirmPassword} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
-                                                    ${styles.loginButton}`} onClick={() => createAccount(values.email,values.password, navigate, checked)}>
+                                                    ${styles.loginButton}`}>
                                                         Submit
                                                     </Button>
                                                 </div>
@@ -158,7 +173,7 @@ export function SignUp() {
                                     <h2 className={`${styles.passwordFooter} ${'text-muted'}`}>Passwords must be at least 8 characters long, contain upper and lowercase letters, numbers, and at least one special character</h2>
                                     <br/>
                                     <text className={`${styles.passwordFooter} ${'text-muted'}`}>Already have an account?</text>
-                                    <button className={`${styles.signInButt}`} onClick={() => {navigate('/login')}}>Sign In!</button>
+                                    <button className={`${styles.signInButt}`} onClick={() => {navigate('/login')}}>Log In!</button>
                                 </div>
 
 
@@ -210,39 +225,33 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
                 console.log("signing up completed for: ", auth?.currentUser?.uid ?? "ERROR NULL USER")
                 navigate('/onboarding')
                 return;
-            });
+            }).catch((error) => {
+                console.log(error)
+                return new Promise((resolve, reject) => {
+                    reject("Error adding user to database")
+
+                });
+            })
         })
     }
     catch(error : any) {
-        try {
-            await signInWithEmailAndPassword(auth, email, password)
-            console.log("signed in my friend")
-            const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
-            await getDoc(userRef).then(doc => {
-                if (doc.exists()) {
-                    console.log("doc exists, check onboarding", doc.data())
-                    if(doc.data()?.passedOnboarding === false ||
-                        doc.data()?.passedOnboarding === undefined) {
-                        console.log("user has not passed onboarding")
-                        navigate('/onboarding')
-                        return;
-                    } else {
-                        navigate('/dashboard')
-                    }
-                } else {
-                    throw new Error("User does not exist")
-                }
-            })
-        } catch (e: any) {
-            console.log(`There was an error: ${e}`)
-            switch (e.code) {
-                case 'auth/wrong-password':
-                    console.log('wrong password')
-                    showToast(true)
+        console.log(error)
+        //handle various errors
+        console.log(`There was an error: ${error}`)
 
-            }
+        switch (error.code) {
+            case 'auth/email-already-in-use':
+                console.log('email already in use')
+                return new Promise((resolve, reject) => {
+                    reject("Email in Use")
+                });
+
         }
     }
+
+    return new Promise((resolve, reject) => {
+        resolve("Success");
+    });
 
 }
 
