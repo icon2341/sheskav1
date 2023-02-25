@@ -154,17 +154,17 @@ export function NewItem() {
     return (
 
         <div className={styles.pageContainer}>
-            <ToastContainer className={styles.toastContainer}>
-                <Toast show={showA} onClose={() => setShowA(false)}>
-                    <Toast.Header>
-                        <strong className="me-auto">ERROR</strong>
-                        <small>just now</small>
-                    </Toast.Header>
-                    <Toast.Body>
-                        Are you sure you don't want to add any images?
-                    </Toast.Body>
-                </Toast>
-            </ToastContainer>
+            {/*<ToastContainer className={styles.toastContainer}>*/}
+            {/*    <Toast show={showA} onClose={() => setShowA(false)}>*/}
+            {/*        <Toast.Header>*/}
+            {/*            <strong className="me-auto">ERROR</strong>*/}
+            {/*            <small>just now</small>*/}
+            {/*        </Toast.Header>*/}
+            {/*        <Toast.Body>*/}
+            {/*            Are you sure you don't want to add any images?*/}
+            {/*        </Toast.Body>*/}
+            {/*    </Toast>*/}
+            {/*</ToastContainer>*/}
             <ToastContainer className={styles.toastContainer}>
                 <Toast show={showB} onClose={() => setShowB(false)}>
                     <Toast.Header>
