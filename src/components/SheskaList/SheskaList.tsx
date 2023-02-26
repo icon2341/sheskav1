@@ -89,6 +89,11 @@ export function SheskaList() {
             )
         })
     }
+    //TODO having trouble with the css for this card since the CSS is built off of minicard, either copy minicard cardTestcss
+    // or move this logic to minicard.tsx with its own css class that looks as it should.
+    cards.splice(1, 0, (<div className={`${styles.miniCardButton} ${styles.gridItem}`}>
+        Return to Home
+    </div>))
 
     if(user){
         return(
