@@ -13,7 +13,6 @@ import {InputGroup} from "react-bootstrap";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {Formik} from "formik";
 import * as Yup from 'yup';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
@@ -49,6 +48,8 @@ export function SignUp() {
                 setErrors({email: 'Email already in use'})
             } else if (reason === "Error adding user to database") {
                 setErrors({email: 'Error adding user to database, contact support at www.sheska.co/support'})
+            } else if (reason === "Server Refused Connection") {
+                setErrors({email: 'Server Refused Connection, contact support at www.sheska.co/support'})
             }
         });
 
@@ -244,6 +245,11 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
                 console.log('email already in use')
                 return new Promise((resolve, reject) => {
                     reject("Email in Use")
+                });
+            case 'auth/network-request-failed':
+                console.log('network request failed')
+                return new Promise((resolve, reject) => {
+                    reject("Server Refused Connection")
                 });
 
         }

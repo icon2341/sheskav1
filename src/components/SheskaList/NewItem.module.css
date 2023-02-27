@@ -4,8 +4,13 @@
     justify-content: center;
     max-width: 50%;
     margin: 0 auto;
-    margin-top: 20vh;
-    padding-bottom: 300px;
+    background: #FDFDFD;
+    border-radius: 10px;
+    margin-top: 75px;
+    border: #E2E2E2 solid 1px;
+    padding-top: 30px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    padding-bottom: 20px;
 }
 
 .title {
@@ -19,8 +24,9 @@
 .subtitle {
     font-family: Inter;
     font-size: 1.5vw;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     margin-left: 13%;
+    margin-top: 40px;
 }
 
 .slideContainer {
@@ -29,4 +35,19 @@
     height: 400px;
     background-color: salmon;
     color: violet;
+}
+
+.filePond {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.textEditor {
+    width: 75%;
+    background: #FDFDFD;
+    border-radius: 10px;
+    border: #E2E2E2 solid 1px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
 }

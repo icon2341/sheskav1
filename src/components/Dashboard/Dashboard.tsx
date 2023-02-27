@@ -70,7 +70,7 @@ export function Dashboard() {
                 </style>
                 <link rel="stylesheet"
                       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
-                <h1 id={styles["email-display"]}>{user?.email} Dashboard </h1>
+                <h1 id={styles["email-display"]}>{user?.email} Dashboard Pre-Alpha v0.12</h1>
                 <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles['grid']}>
                     {welcomeSpace}
                     <div className={`${styles.largeFeatureCard}`}>

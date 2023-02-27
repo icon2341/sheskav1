@@ -89,15 +89,18 @@ export function SheskaList() {
             )
         })
     }
-    //TODO having trouble with the css for this card since the CSS is built off of minicard, either copy minicard cardTestcss
-    // or move this logic to minicard.tsx with its own css class that looks as it should.
-    cards.splice(1, 0, (<div className={`${styles.miniCardButton} ${styles.gridItem}`}>
-        Return to Home
-    </div>))
+
+    cards.splice(1, 0, (
+
+        <div className={`${styles.miniCardButton} ${styles.gridItem}`}  onClick={() =>{ navigate('/dashboard')}}>
+            <svg className={styles.arrowButton} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={48} color={"white"}><path fill="#FFFFFF" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+            <h3 className={`${styles.miniCardButtonText}`}>Return to Home</h3>
+        </div>))
 
     if(user){
         return(
             <Box className={styles.gridContainer}>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
                 <div className={styles.pageTitleContainer}>
                     <h1 className={styles.pageTitle}> Your Sheska List </h1>
                     <BsFillPlusSquareFill size={'3em'} className={styles.addCardButton} onClick={() => {navigate('/newitem')}}/>

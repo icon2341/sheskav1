@@ -1,0 +1,135 @@
+/* Placeholder (at the top) */
+.ProseMirror p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Basic editor styles */
+.ProseMirror {
+    margin-top: 0.75em;
+    padding: 0 0.75em;
+}
+
+.ProseMirror {
+    margin-top: 0.75em;
+    padding: 0 0.75em;
+    border: none;
+    outline: none;
+    padding-bottom: 10px;
+}
+
+.ProseMirror-focused {
+    border: none;
+    outline: none;
+
+}
+
+
+
+/*!* Placeholder (at the top) *!*/
+/*.ProseMirror p.is-editor-empty:first-child::before {*/
+/*    color: #adb5bd;*/
+/*    content: attr(data-placeholder);*/
+/*    float: left;*/
+/*    height: 0;*/
+/*    pointer-events: none;*/
+/*}*/
+
+/* Placeholder (on every new line) */
+.ProseMirror .is-empty::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #ced4da;
+    pointer-events: none;
+    height: 0;
+}
+
+.ProseMirror::selection {
+    display: none;
+}
+
+/* Basic editor styles */
+.ProseMirror {
+    > * + * {
+        margin-top: 0.75em;
+    }
+
+    ul,
+    ol {
+        padding: 0 1rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        line-height: 1.1;
+    }
+
+    code {
+        background-color: rgba(#616161, 0.1);
+        color: #616161;
+    }
+
+    pre {
+        background: #0D0D0D;
+        color: #FFF;
+        font-family: 'JetBrainsMono', monospace;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+
+        code {
+            color: inherit;
+            padding: 0;
+            background: none;
+            font-size: 0.8rem;
+        }
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    blockquote {
+        padding-left: 1rem;
+        border-left: 2px solid rgba(#0D0D0D, 0.1);
+    }
+
+    hr {
+        border: none;
+        border-top: 2px solid rgba(#0D0D0D, 0.1);
+        margin: 2rem 0;
+    }
+}
+
+.buttonCluster {
+    padding-bottom: 15px;
+}
+
+.buttonCluster > button{
+    border-radius: 4px;
+    padding: 3px;
+    border: none;
+    margin: 2px 2px;
+    background-color: #fcfcfc;
+    border: 0.5px solid #dcdcdc;
+}
+
+
+.buttonCluster > button:hover{
+    border-radius: 4px;
+    padding: 3px;
+    border: solid 1px #2F5D7A;
+}
+
+.buttonCluster > .is-active {
+    border-radius: 4px;
+    padding: 3px;
+    border: solid 1px #2F5D7A;
+}
