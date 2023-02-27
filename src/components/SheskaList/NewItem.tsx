@@ -122,34 +122,19 @@ export function NewItem() {
             }),
         ],
         content: `
+<!--TODO use the custom documents system to make this into a placeholder text rather than REAL text like it is rn-->
               <h2>
                 Hi there,
               </h2>
               <p>
-                this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
+                This is a WYSIWYG editor, meaning what you see is what you (and your guests) will get. Use this as your canvas
+                to describe this item to your hearts content! You can add images, links videos, bullet points and beyond!
+                With the power of WYSIWYG you can create a beautiful and engaging description of your item.
+               
+                <br>
+                <br>
+                Double click on any of the buttons above to apply styles to your text.
               </p>
-              <ul>
-                <li>
-                  That’s a bullet list with one …
-                </li>
-                <li>
-                  … or two list items.
-                </li>
-              </ul>
-              <p>
-                Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-              </p>
-              <pre><code class="language-css">body {
-          display: none;
-        }</code></pre>
-              <p>
-                I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-              </p>
-              <blockquote>
-                Wow, that’s amazing. Good work, boy! 👏
-                <br />
-                — Mom
-              </blockquote>
             `,
     })
 
