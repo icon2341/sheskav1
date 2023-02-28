@@ -140,6 +140,7 @@ export function Login() {
                                                     placeholder={"Email"}
                                                     isValid={touched.email && !errors.email}
                                                     isInvalid={!!errors.email}
+                                                    autoComplete={"email"}
                                                 />
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.email}</Form.Control.Feedback>
                                             </Form.Group>
@@ -153,6 +154,7 @@ export function Login() {
                                                         placeholder={"Password"}
                                                         isValid={touched.password && !errors.password}
                                                         isInvalid={!!errors.password}
+                                                        autoComplete={"current-password"}
                                                     />
                                                     {/*TODO this is square and it annoys me*/}
                                                     <InputGroup.Text>
