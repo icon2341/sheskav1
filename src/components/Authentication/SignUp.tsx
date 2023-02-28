@@ -116,6 +116,7 @@ export function SignUp() {
                                                     placeholder={"Email"}
                                                     isValid={touched.email && !errors.email}
                                                     isInvalid={!!errors.email}
+                                                    autoComplete={"email"}
                                                     />
                                                 <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.email}</Form.Control.Feedback>
@@ -130,6 +131,7 @@ export function SignUp() {
                                                         placeholder={"Password"}
                                                         isValid={touched.password && !errors.password}
                                                         isInvalid={!!errors.password}
+                                                        autoComplete={"new-password"}
                                                     />
                                                     {/*TODO this is square and it anmoys me*/}
                                                     <InputGroup.Text>
@@ -154,6 +156,7 @@ export function SignUp() {
                                                     placeholder={"Confirm Password"}
                                                     isValid={touched.confirmPassword && !errors.confirmPassword}
                                                     isInvalid={!!errors.confirmPassword}
+                                                    autoComplete={"off"}
                                                 />
                                                 <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.confirmPassword}</Form.Control.Feedback>
@@ -173,7 +176,7 @@ export function SignUp() {
                                 <div className={styles.loginWidgetFooter}>
                                     <h2 className={`${styles.passwordFooter} ${'text-muted'}`}>Passwords must be at least 8 characters long, contain upper and lowercase letters, numbers, and at least one special character</h2>
                                     <br/>
-                                    <text className={`${styles.passwordFooter} ${'text-muted'}`}>Already have an account?</text>
+                                    <small className={`${styles.passwordFooter} ${'text-muted'}`}>Already have an account?</small>
                                     <button className={`${styles.signInButt}`} onClick={() => {navigate('/login')}}>Log In!</button>
                                 </div>
 
