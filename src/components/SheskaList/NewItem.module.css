@@ -3,14 +3,13 @@
     flex-direction: column;
     justify-content: center;
     max-width: 50%;
-    margin: 0 auto;
     background: #FDFDFD;
     border-radius: 10px;
-    margin-top: 75px;
     border: #E2E2E2 solid 1px;
     padding-top: 30px;
     box-shadow: 0 0 1px rgba(0, 0, 0, 0);
     padding-bottom: 20px;
+    margin: 50px auto 40px;
 }
 
 .title {
@@ -50,4 +49,9 @@
     margin: 0 auto;
     margin-bottom: 30px;
     padding-bottom: 30px;
+}
+
+.loginButton {
+    margin-left: 12%;
+    margin-right: 20px;
 }

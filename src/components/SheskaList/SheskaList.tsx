@@ -77,15 +77,16 @@ export function SheskaList() {
             )
         })
     } else {
-        cards = listItems.map((item: DocumentData) => {
+        cards = listItems.map((item: DocumentData, index : number) => {
             return (
-                <div className={``}>
+                <div>
                     <MiniCard
                         title={item.data().title}
                         description={item.data().description}
                         cardID={item.id}
                     />
                 </div>
+
             )
         })
     }
