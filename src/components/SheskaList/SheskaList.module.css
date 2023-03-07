@@ -8,6 +8,48 @@
     margin-top: 20vh;
 }
 
+.initCard {
+    background-color: white;
+    border: #E2E2E2 solid 1px;
+    border-radius: 10px;
+    color: black;
+
+    font-family: Butler;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+
+    font-size: 3vw;
+    padding-left: 20px;
+    font-weight: bold;
+    aspect-ratio: 1 / 1;
+    position: relative;
+}
+
+.initCard:hover {
+    transition: transform 0.1s;
+    transform: scale(1.01);
+}
+
+.initCardLogo {
+    font-weight: 900;
+    font-family: Butler;
+    position: absolute;
+    left: 6%;
+    top: 4%;
+    font-size: 8vw;
+    color: #0e2431;
+}
+
+.initCardHeader {
+    padding-top: 50%;
+    display: block;
+}
+
+.initCardFooter {
+    display: block;
+    font-size: 1.3vw;
+    text-decoration: underline;
+}
+
 .miniCardButton {
     background-color: #0e2431;
     border-radius: 10px;
@@ -95,6 +137,10 @@
 @media screen and (max-width: 900px) {
     #grid {
         max-width: 65%;
+    }
+
+    .initCard {
+        aspect-ratio: 2 / 1;
     }
 
     .pageTitleContainer {

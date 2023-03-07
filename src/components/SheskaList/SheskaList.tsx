@@ -57,11 +57,14 @@ export function SheskaList() {
     if (listItems.length === 0 && attemptedQuery) {
         cards = [1].map((item: any) => {
             return (
-                <div className={``}>
-                    <MiniCard
-                        title={"Create your first card."}
-                        cardID={"createCard"}
-                    />
+                <div className={styles.initCard}>
+                    {/*<MiniCard*/}
+                    {/*    title={"Create your first card."}*/}
+                    {/*    cardID={"createCard"}*/}
+                    {/*/>*/}
+                    <h2 className={styles.initCardLogo}>S</h2>
+                    <h3 className={styles.initCardHeader}> Create your first card. </h3>
+                    <h4 className={styles.initCardFooter}> Here is a guide.</h4>
                 </div>
             )
         })

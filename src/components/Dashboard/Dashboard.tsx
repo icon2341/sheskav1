@@ -8,13 +8,14 @@ import {doc, getDoc} from 'firebase/firestore';
 import {useEffect, useState} from "react";
 import Spinner from 'react-bootstrap/Spinner';
 import {useNavigate} from "react-router-dom";
+import {data} from "jquery";
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
     //TODO FIX BUG WHERE IT DOES NOT LOAD THIS COMPONENT IF PARTNER DATA IS MISSING. ADD NULL CHECK
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
-    const [partners, setPartners] = useState([]);
+    const [partners, setPartners] = useState<string[]>([]);
 
     async function getPartners(uid: string | undefined) {
         const docRef = doc(db, "users", uid + "" );
@@ -27,6 +28,7 @@ export function Dashboard() {
                     setPartners(doc.data().partners)
                 } else {
                     console.log("No partners found");
+                    setPartners(partners => [...partners, doc.data().name])
                 }
             } else {
                 console.log("No such document!");
@@ -45,7 +47,7 @@ export function Dashboard() {
     }, [user]);
 
     var welcomeSpace;
-
+    console.log("PARTNERSONE", partners)
     if(partners === undefined || partners.length === 0 || loading) {
         welcomeSpace =
             <div className={`${styles.welcomeSpaceSpinner} ${styles.gridItem}`}>
@@ -53,9 +55,14 @@ export function Dashboard() {
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>
             </div>
-    } else {
+    } else if(partners[1] === '') {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-            <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Safin'} and {partners[1] ?? 'Ashar'}!</h1>
+            <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Add Name in settings'}!</h1>
+            <h2 id={styles["start-here-message"]}> Start Here.</h2>
+        </div>
+    }  else {
+        welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
+            <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Add Name in settings'} and {partners[1] ?? 'Ashar'}!</h1>
             <h2 id={styles["start-here-message"]}> Start Here.</h2>
         </div>
     }
@@ -70,7 +77,7 @@ export function Dashboard() {
                 </style>
                 <link rel="stylesheet"
                       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
-                <h1 id={styles["email-display"]}>{user?.email} Dashboard Pre-Alpha v0.12</h1>
+                <h1 id={styles["email-display"]}>{user?.email} Dashboard Pre-Alpha v0.2</h1>
                 <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles['grid']}>
                     {welcomeSpace}
                     <div className={`${styles.largeFeatureCard}`}>
