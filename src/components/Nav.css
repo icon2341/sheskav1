@@ -8,6 +8,7 @@
     top: 0;
     left: 0;
     transition: .1s ease-out;
+    z-index: 10;
 }
 
 #logo-container {

@@ -2,6 +2,7 @@
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db, storage} from "../../index";
 import styles from "./NewItem.module.css";
+import globalStyles from "../../App.module.css";
 import Form from "react-bootstrap/Form";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
@@ -14,7 +15,6 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import {DocumentReference} from "firebase/firestore";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import Tiptap from "../Util/Tiptap";
 import { Editor } from '@tiptap/core'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -82,34 +82,7 @@ export function NewItem() {
         content: 'heading block*',
     })
 
-    // const editor = useEditor({
-    //     extensions: [
-    //         CustomDocument,
-    //         StarterKit.configure({
-    //             document: false,
-    //         }),
-    //         Placeholder.configure({
-    //             placeholder: ({node}) => {
-    //                 if (node.type.name === 'heading') {
-    //                     return 'What’s the title?'
-    //                 }
-    //
-    //                 return 'Can you add some further context?'
-    //             },
-    //         }),
-    //     ],
-    //     content: `
-    //       <h1>
-    //         It’ll always have a heading …
-    //       </h1>
-    //       <p>
-    //         … if you pass a custom document. That’s the beauty of having full control over the schema.
-    //       </p>
-    //     `,
-    //     // content: '<p>Hello. This is a WYSIWYG editor, meaning what you see is what you (and your guests) will see.</p>',
-    // })
-
-    const editor = useEditor({
+    const editor : any | null = useEditor({
         extensions: [
             Color.configure({ types: [TextStyle.name, ListItem.name] }),
             // @ts-ignore
@@ -311,19 +284,11 @@ export function NewItem() {
 
     return (
         <div className={styles.pageContainer}>
-
-            {/*<ToastContainer className={styles.toastContainer}>*/}
-            {/*    <Toast show={showA} onClose={() => setShowA(false)}>*/}
-            {/*        <Toast.Header>*/}
-            {/*            <strong className="me-auto">ERROR</strong>*/}
-            {/*            <small>just now</small>*/}
-            {/*        </Toast.Header>*/}
-            {/*        <Toast.Body>*/}
-            {/*            Are you sure you don't want to add any images?*/}
-            {/*        </Toast.Body>*/}
-            {/*    </Toast>*/}
-            {/*</ToastContainer>*/}
-
+            <div className={`${globalStyles.backButton} ${styles.gridItem}`} title={"Warning this will discard changes"}
+                 onClick={() =>{ navigate('/sheskalist')}}>
+                <svg className={globalStyles.backArrowButton} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={48} color={"#0e2431"}><path fill="#FFFFFF" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+                <h3 className={`${globalStyles.backButtonText}`}>Return to List</h3>
+            </div>
 
             <ToastContainer className={styles.toastContainer}>
                 <Toast show={showB} onClose={() => setShowB(false)}>
@@ -425,8 +390,8 @@ export function NewItem() {
                 </div>
 
 
-                <div className={"d-flex justify-content-center"}>
-                    <Button variant="primary" id={"button-signup"} className={`${"d-block w-75 mx-auto text-center"} 
+                <div className={"d-flex"}>
+                    <Button variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"} 
                                         ${styles.loginButton}`} onClick={() => {
                                             console.log("SEND BUTTON PRESSED")
                                             //TODO FIX BUG 001, FILE UPLOADING IN PROGRESS IS NOT WORKING in PROD
@@ -434,16 +399,21 @@ export function NewItem() {
                                                 setShowB(true);
                                                 console.log("SEND BUTTON PRESSED BUT FILE UPLOADING")
                                             } else if(files.length === 0 && shownEmptyFilePrompt === true) {
-                                                postNewSheskaCard(title, subtitle, navigate, docRef)
+                                                postNewSheskaCard(title, subtitle, navigate, docRef, editor)
                                             } else if (files.length === 0 && shownEmptyFilePrompt === false) {
                                                 setShownEmptyFilePrompt(true);
                                                 setShowA(true);
                                             } else if (files.length !== 0) {
-                                                postNewSheskaCard(title, subtitle, navigate, docRef)
-                                            }
-                    }}>
+                                                postNewSheskaCard(title, subtitle, navigate, docRef, editor)
+                                            }}}>
                         Submit
                     </Button>
+                    {/*TODO ADD PREVIEW FUNCTIONALITITY ONCE GUEST WEB IS DONE*/}
+                    <Button variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"} 
+                                        ${styles.previewButton}`} onClick={() => {console.log("SEND BUTTON PRESSED")}}>
+                        Preview
+                    </Button>
+
                 </div>
             </div>
         </div>
@@ -452,12 +422,23 @@ export function NewItem() {
 
 export default NewItem;
 
-async function postNewSheskaCard(title:string, subtitle:string, navigate: NavigateFunction, docRef: any) {
+/**
+ *
+ * @param title the card's title
+ * @param subtitle the subtitle data for card
+ * @param navigate navigation high order function to move back to sheskalist after completion
+ * @param docRef reference to the document being updated in firestore, this is passed in rather then generated
+ * at call time because the document reference needs to be created at the parent level because the same ref should be
+ * used in firestore and google cloud.
+ */
+async function postNewSheskaCard(title:string, subtitle:string, navigate: NavigateFunction, docRef: any, editor: Editor | null) {
     try {
+
         await setDoc(docRef,
             {
                 title: title,
-                subtitle: subtitle
+                subtitle: subtitle,
+                description: editor?.getHTML()
             }).then(() => {
                 navigate('/sheskalist');
         });
