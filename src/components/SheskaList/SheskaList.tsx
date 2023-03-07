@@ -4,18 +4,17 @@ import React, {useEffect, useState} from "react";
 import styles from "./SheskaList.module.css"
 import MiniCard from "./MiniCard";
 import Masonry from "@mui/lab/Masonry";
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
-import firebase from "firebase/app";
-import {DocumentData} from "firebase/firestore";
+import {collection, getDocs} from "firebase/firestore";
 import Spinner from "react-bootstrap/Spinner";
-import {Box, Skeleton} from "@mui/material";
+import {Box} from "@mui/material";
 import {BsFillPlusSquareFill} from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
+import SheskaCardDef from "../Utils/SheskaCardDef";
 
 export function SheskaList() {
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const [listItems, setListItems] = useState([] as any);
+    const [listItems, setListItems] = useState([] as SheskaCardDef[]);
     const [attemptedQuery, setAttemptedQuery] = useState(false);
 
     //TODO There's a bug sometimes where if you have already attempted to get data in the server is down or connection
@@ -24,17 +23,17 @@ export function SheskaList() {
 
         const querySnapshot = await getDocs(collection(db, "users/" + uid + "/sheska_list"));
         // console.log("users/" + uid + "/sheska_list");
-        const lama = [] as DocumentData[]
+        const sheskaCards = [] as SheskaCardDef[]
         querySnapshot.forEach((doc) => {
             //TODO might just want to export the querySnapshot instead of mapping it to lama and then looping through lama to send to listItems
 
             // doc.data() is never undefined for query doc snapshots
             // console.log(doc.id, " => ", doc.data());
-            lama.push(doc);
+            sheskaCards.push(new SheskaCardDef(doc.id, doc.data().title, doc.data().subtitle, doc.data().description));
         });
-        setListItems(lama)
+        setListItems(sheskaCards)
         //log message console.log("inside data",doc)
-        lama.forEach((doc) => {})
+        sheskaCards.forEach((doc) => {})
         return querySnapshot.docs;
     }
     useEffect(() => {
@@ -77,13 +76,13 @@ export function SheskaList() {
             )
         })
     } else {
-        cards = listItems.map((item: DocumentData, index : number) => {
+        cards = listItems.map((card: SheskaCardDef, index : number) => {
             return (
                 <div>
                     <MiniCard
-                        title={item.data().title}
-                        description={item.data().description}
-                        cardID={item.id}
+                        title={card.title}
+                        description={card.description}
+                        cardID={card.cardID}
                     />
                 </div>
 
