@@ -188,6 +188,9 @@ export function Login() {
                                 {/*RESET PASSWORD FOOTER*/}
                                 <div className={styles.loginWidgetFooter}>
                                     <a className={`${styles.passwordFooter} ${'text-muted'} ${styles.resetPassword}`}  onClick={() => {navigate('/resetpassword')}}>Forgot your password?</a>
+                                    <br/>
+                                    <small className={`${styles.passwordFooter} ${'text-muted'}`}>Dont Already have an account?</small>
+                                    <button className={`${styles.signInButt}`} onClick={() => {navigate('/signup')}}>Sign Up!</button>
                                 </div>
                             </div>
                         </div>

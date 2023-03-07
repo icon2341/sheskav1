@@ -68,12 +68,13 @@ export function MiniCard(props:any) {
         )
     } else {
         return (
-            <div className= {styles.cardTest}>
+            <div className= {styles.noImageCard}>
                 {cardID !== "createCard" && <AiFillDelete className={styles.deleteIcon} onClick={() => {
                     deleteCardImages(cardID).then(r => {deleteCard(cardID);})
                 }
                 }/>}
-                <h1 className={styles.cardTitle}>{title}</h1>
+                <h2 className={styles.noImageCardLogo}>S</h2>
+                <h1 className={styles.noImageCardHeader}>{title}</h1>
             </div>
         )
     }

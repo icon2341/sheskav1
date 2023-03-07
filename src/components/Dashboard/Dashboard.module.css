@@ -73,7 +73,7 @@ body {
     -webkit-transition-property: color, background-color;
     transition-property: color, background-color;
 }
-.largeFeatureCard:hover, .largeFeatureCard:focus, .largeFeatureCard:active {
+.largeFeatureCard:hover, .largeFeatureCard:focus, .largeFeatureCard:active{
     background-color: #2F5D7A;
     color: white;
 }
