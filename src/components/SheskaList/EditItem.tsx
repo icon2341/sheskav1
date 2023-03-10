@@ -33,6 +33,7 @@ import 'filepond/dist/filepond.min.css';
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import Toast from "react-bootstrap/Toast";
 import "./NewItemUtil.scss";
+import {Swiper} from "swiper/react";
 
 
 
@@ -110,13 +111,24 @@ export function EditItem() {
             `,
     })
 
+
+
+
     // @ts-ignore
     return (
-        <div>
-            <h1>
-                {location.state.cardID}
-                CARDHERE
-            </h1>
+        <div className={styles.pageContainer}>
+            <div className={styles.formContainer}>
+                <h1 className={styles.title}>Edit Card</h1>
+                <h2 className={styles.subtitle}>Title:</h2>
+                <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
+                    <Form.Control type="text" placeholder={location.state.title} onChange={handleTitle}/>
+                </Form.Group>
+                <Swiper allowTouchMove={false}>
+
+                </Swiper>
+
+            </div>
+
         </div>
     )
 
