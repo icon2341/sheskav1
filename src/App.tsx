@@ -15,12 +15,16 @@ import SheskaList from "./components/SheskaList/SheskaList";
 import NewItem from "./components/SheskaList/NewItem";
 import Login from "./components/Authentication/Login";
 import ResetPassword from "./components/Authentication/ResetPassword";
+import EditItem from "./components/SheskaList/EditItem";
 
 function App() {
   return (
 
       <Router>
           <Routes>
+              <Route path={"/editcard"} element={<><Nav/><EditItem/></>}></Route>
+              <Route path={"/resetpassword"} element={<><ResetPassword/></>}></Route>
+              <Route path={"/newitem"} element={<><Nav/><NewItem/></>}></Route>
               <Route path={"/"} element={<><Welcome/></>}></Route>
               <Route path={"/about"} element={<><InProgress /></>}></Route>
               <Route path={"/login"} element={<><Login/></>}></Route>
@@ -28,8 +32,6 @@ function App() {
               <Route path={"/dashboard"} element={<><Nav/> <Dashboard/></>}></Route>
               <Route path={"/sheskalist"} element={<><Nav/> <SheskaList/></>}></Route>
               <Route path={"/onboarding"} element={<><Onboarding/></>}></Route>
-              <Route path={"/newitem"} element={<><Nav/><NewItem/></>}></Route>
-              <Route path={"/resetpassword"} element={<><ResetPassword/></>}></Route>
           </Routes>
       </Router>
   );
