@@ -86,6 +86,7 @@ export function SheskaList() {
                         title={card.title}
                         description={card.description}
                         cardID={card.cardID}
+                        subtitle={card.subtitle}
                     />
                 </div>
 

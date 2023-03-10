@@ -6,6 +6,7 @@ import styles from "./MiniCard.module.css"
 import React, {useEffect, useState} from "react";
 import {AiFillDelete} from "react-icons/ai";
 import * as url from "url";
+import {useNavigate} from "react-router-dom";
 
 export function MiniCard(props:any) {
     let image= props.image;
@@ -15,7 +16,15 @@ export function MiniCard(props:any) {
     let expectedAmount = props.expectedAmount;
     let actualAmount = props.actualAmount;
     let numberDonors = props.numberOfDonors;
+    let subtitle = props.subtitle;
     const [slideImages, setSlideImages] = useState([] as string[]);
+    const navigate = useNavigate();
+
+    const toEditPage = () => {
+        navigate("/editcard", {state: {cardID: cardID,
+                                                title: title,
+                                                subtitle: subtitle}});
+    }
 
     async function fetchImages() {
         console.log("fetching images", cardID)
@@ -62,13 +71,13 @@ export function MiniCard(props:any) {
                     deleteCard(cardID);
                 }
                 }/>
-                <img src={slideImages[0]}  className={styles.cardImage}/>
+                <img src={slideImages[0]}  className={styles.cardImage} onClick={toEditPage}/>
                 <h1 className={styles.cardTitle}>{title}</h1>
             </div>
         )
     } else {
         return (
-            <div className= {styles.noImageCard}>
+            <div className= {styles.noImageCard} onClick={toEditPage}>
                 {cardID !== "createCard" && <AiFillDelete className={styles.deleteIcon} onClick={() => {
                     deleteCardImages(cardID).then(r => {deleteCard(cardID);})
                 }
