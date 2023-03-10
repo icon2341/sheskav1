@@ -100,11 +100,8 @@ export function NewItem() {
                 This is a WYSIWYG editor, meaning what you see is what you (and your guests) will get. Use this as your canvas
                 to describe this item to your hearts content! You can add images, links videos, bullet points and beyond!
                 With the power of WYSIWYG you can create a beautiful and engaging description of your item.
-               
-                <br>
-                <br>
-                Double click on any of the buttons above to apply styles to your text.
               </p>
+              <p>Double click on any of the buttons above to apply styles to your text.</p>
             `,
     })
 
