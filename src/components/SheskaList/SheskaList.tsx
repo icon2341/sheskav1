@@ -1,15 +1,15 @@
-import {useAuthState} from "react-firebase-hooks/auth";
-import {auth, db} from "../../index";
-import React, {useEffect, useState} from "react";
-import styles from "./SheskaList.module.css"
-import MiniCard from "./MiniCard";
 import Masonry from "@mui/lab/Masonry";
-import {collection, getDocs} from "firebase/firestore";
+import { Box } from "@mui/material";
+import { collection, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
-import {Box} from "@mui/material";
-import {BsFillPlusSquareFill} from "react-icons/bs";
-import {useNavigate} from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { BsFillPlusSquareFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../../index";
 import SheskaCardDef from "../Utils/SheskaCardDef";
+import MiniCard from "./MiniCard";
+import styles from "./SheskaList.module.css";
 
 export function SheskaList() {
     const navigate = useNavigate();
@@ -81,7 +81,7 @@ export function SheskaList() {
     } else {
         cards = listItems.map((card: SheskaCardDef, index : number) => {
             return (
-                <div>
+                <div key={index}>
                     <MiniCard
                         title={card.title}
                         description={card.description}
