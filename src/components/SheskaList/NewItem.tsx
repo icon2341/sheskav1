@@ -1,40 +1,39 @@
 
-import {useAuthState} from "react-firebase-hooks/auth";
-import {auth, db, storage} from "../../index";
-import styles from "./NewItem.module.css";
-import globalStyles from "../../App.module.css";
-import Form from "react-bootstrap/Form";
-import React, {ChangeEvent, useEffect, useState} from "react";
-import Button from "react-bootstrap/Button";
-import {doc, addDoc, collection, setDoc} from "firebase/firestore";
-import {NavigateFunction, useNavigate} from "react-router-dom";
-import {Carousel, ToastContainer} from "react-bootstrap";
-import { FilePond, registerPlugin } from 'react-filepond'
+import { Editor } from '@tiptap/core';
+import Document from '@tiptap/extension-document';
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import {DocumentReference} from "firebase/firestore";
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import { Editor } from '@tiptap/core'
-import Document from '@tiptap/extension-document'
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
+import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Carousel, ToastContainer } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { FilePond, registerPlugin } from 'react-filepond';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import globalStyles from "../../App.module.css";
+import { auth, db, storage } from "../../index";
 import TipTapMenuBar from "./EditorUtil";
+import styles from "./NewItem.module.css";
 
 
 // Import FilePond styles
-import 'filepond/dist/filepond.min.css'
-import {FilePondFile} from "filepond";
-import {ref, uploadBytes, deleteObject} from "firebase/storage";
-import Toast from "react-bootstrap/Toast";
-import {EditorContent, useEditor} from "@tiptap/react";
+import { Extension } from '@tiptap/core';
+import { Color } from "@tiptap/extension-color";
+import ListItem from '@tiptap/extension-list-item';
+import { Placeholder } from "@tiptap/extension-placeholder";
+import TextStyle from '@tiptap/extension-text-style';
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import {Placeholder} from "@tiptap/extension-placeholder";
+import { FilePondFile } from "filepond";
+import 'filepond/dist/filepond.min.css';
+import { deleteObject, ref, uploadBytes } from "firebase/storage";
+import Toast from "react-bootstrap/Toast";
 import "./NewItemUtil.scss";
-import { Extension } from '@tiptap/core'
-import ListItem from '@tiptap/extension-list-item'
-import TextStyle from '@tiptap/extension-text-style'
-import {Color} from "@tiptap/extension-color";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
@@ -214,7 +213,7 @@ export function NewItem() {
 
 
                 <div className={"d-flex"}>
-                    <Button variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"} 
+                    <Button variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
                                         ${styles.loginButton}`} onClick={() => {
                                             console.log("SEND BUTTON PRESSED")
                                             //TODO FIX BUG 001, FILE UPLOADING IN PROGRESS IS NOT WORKING in PROD
@@ -232,7 +231,7 @@ export function NewItem() {
                         Submit
                     </Button>
                     {/*TODO ADD PREVIEW FUNCTIONALITITY ONCE GUEST WEB IS DONE*/}
-                    <Button variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"} 
+                    <Button variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
                                         ${styles.previewButton}`} onClick={() => {console.log("SEND BUTTON PRESSED")}}>
                         Preview
                     </Button>

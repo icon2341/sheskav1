@@ -1,12 +1,14 @@
 import Masonry from "@mui/lab/Masonry";
 import { Box } from "@mui/material";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { deleteObject, listAll, ref } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { BsFillPlusSquareFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { auth, db } from "../../index";
+import { string } from "yup";
+import { auth, db, storage } from "../../index";
 import SheskaCardDef from "../Utils/SheskaCardDef";
 import MiniCard from "./MiniCard";
 import styles from "./SheskaList.module.css";
@@ -14,7 +16,7 @@ import styles from "./SheskaList.module.css";
 export function SheskaList() {
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
-    const [listItems, setListItems] = useState([] as SheskaCardDef[]);
+    const [listItems, setListItems] = useState({} as { [id: string]: SheskaCardDef });
     const [attemptedQuery, setAttemptedQuery] = useState(false);
 
     //TODO There's a bug sometimes where if you have already attempted to get data in the server is down or connection
@@ -23,17 +25,17 @@ export function SheskaList() {
 
         const querySnapshot = await getDocs(collection(db, "users/" + uid + "/sheska_list"));
         // console.log("users/" + uid + "/sheska_list");
-        const sheskaCards = [] as SheskaCardDef[]
+        const sheskaCards = {} as { [id: string]: SheskaCardDef, };
         querySnapshot.forEach((doc) => {
             //TODO might just want to export the querySnapshot instead of mapping it to lama and then looping through lama to send to listItems
 
             // doc.data() is never undefined for query doc snapshots
             // console.log(doc.id, " => ", doc.data());
-            sheskaCards.push(new SheskaCardDef(doc.id, doc.data().title, doc.data().subtitle, doc.data().description));
+            sheskaCards[doc.id] = new SheskaCardDef(doc.id, doc.data().title, doc.data().subtitle, doc.data().description);
         });
         setListItems(sheskaCards)
         //log message console.log("inside data",doc)
-        sheskaCards.forEach((doc) => {})
+        // Object.entries(sheskaCards).forEach(([id, cardDef]) => {})
         return querySnapshot.docs;
     }
     useEffect(() => {
@@ -53,8 +55,59 @@ export function SheskaList() {
         }
     }, [attemptedQuery]);
 
+    async function deleteCardImages (cardID: string) {
+        const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
+        listAll(pathReference)
+            .then((res) => {
+
+                // res.prefixes.forEach((folderRef) => {
+                //     // All the prefixes under listRef.
+                //     // You may call listAll() recursively on them.
+                // });
+                res.items.forEach((itemRef) => {
+                    // All the items under listRef.
+                    deleteObject(itemRef).then(() => {
+                        // File deleted successfully
+                        console.log("deleted")
+                    }).catch((error) => {
+                        // Uh-oh, an error occurred!
+                        console.log(error)
+                    })
+                });
+            }).catch((error) => {
+            // Uh-oh, an error occurred!
+        });
+
+        deleteObject(pathReference).then(() => {
+            // File deleted successfully
+            console.log("deleted")
+        }).catch((error) => {
+            // Uh-oh, an error occurred!
+            console.log(error)
+        });
+    }
+
+    function removeListItem(cardID: string) {
+        const { [cardID]: removedCard, ...newListItems } = listItems;
+        setListItems(newListItems);
+    }
+
+    async function deleteCard(cardID: string) {
+        await deleteDoc(doc(db, 'users/' + auth.currentUser?.uid.toString() + "/sheska_list", cardID))
+        .then(() => {
+            console.log("deleted card from firestore")
+
+            removeListItem(cardID);
+
+            // window.location.reload();
+        })
+        .catch((error : Error) => {
+            console.log(error)
+        });
+    }
+
     var cards;
-    if (listItems.length === 0 && attemptedQuery) {
+    if (Object.keys(listItems).length === 0 && attemptedQuery) {
         cards = [1].map((item: any) => {
             return (
                 <div className={styles.initCard}>
@@ -68,7 +121,7 @@ export function SheskaList() {
                 </div>
             )
         })
-    } else if(listItems.length === 0) {
+    } else if(Object.keys(listItems).length === 0) {
         cards = [1].map((item: any) => {
             return (
                 <div className={`${styles.gridItem} ${styles.loadingSpinner}`}>
@@ -79,19 +132,21 @@ export function SheskaList() {
             )
         })
     } else {
-        cards = listItems.map((card: SheskaCardDef, index : number) => {
+        cards = Object.entries(listItems).map(([id, card]) => {
             return (
-                <div key={index}>
+                <div key={id}>
                     <MiniCard
                         title={card.title}
                         description={card.description}
                         cardID={card.cardID}
                         subtitle={card.subtitle}
+                        deleteCard={deleteCard}
+                        deleteCardImages={deleteCardImages}
                     />
                 </div>
 
             )
-        })
+        });
     }
 
     cards.splice(1, 0, (

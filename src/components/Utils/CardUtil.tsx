@@ -1,9 +1,7 @@
-import {DocumentData} from "firebase/firestore";
-import SheskaCardDef from "./SheskaCardDef";
-import sheskaCardDef from "./SheskaCardDef";
-import {getDownloadURL, listAll, ref} from "firebase/storage";
-import {FirebaseStorage} from "firebase/storage";
-import {Auth} from "firebase/auth";
+import { Auth } from "firebase/auth";
+import { DocumentData } from "firebase/firestore";
+import { FirebaseStorage, getDownloadURL, listAll, ref } from "firebase/storage";
+import { default as SheskaCardDef, default as sheskaCardDef } from "./SheskaCardDef";
 
 /**
  * Returns a SheskaCardDef object from a DocumentData object
@@ -20,22 +18,14 @@ export function getCardFromDocData(docData: DocumentData) : SheskaCardDef {
  * @param auth the Firebase Auth instance
  */
 export async function getSheskaCardImagesUrls(cardID: string, storage: FirebaseStorage, auth: Auth) : Promise<string[]> {
-    const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
+    const pathString = '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/";
+    const pathReference = ref(storage, pathString);
     let imageURLs: string[] = [];
-    listAll(pathReference).then((res) => {
-        res.items.forEach((itemRef) => {
-            getDownloadURL(itemRef).then((url) => {
-                imageURLs.push(url)
-            }).catch((error) => {
-                console.log(error);
-                return new Promise((resolve, reject) => {
-                    reject(error);
-                })
-            })
-        })
-    })
+    const response = await listAll(pathReference);
+    await Promise.all(response.items.map(async (itemRef) => {
+        const url = await getDownloadURL(itemRef);
+        imageURLs.push(url);
+    }));
 
-    return new Promise((resolve, reject) => {
-        resolve(imageURLs);
-    })
+    return imageURLs;
 }
