@@ -134,6 +134,14 @@
     cursor: pointer;
 }
 
+.backButtonText {
+    padding-left: 10px;
+}
+
+.pointerCursor {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 900px) {
     #grid {
         max-width: 65%;

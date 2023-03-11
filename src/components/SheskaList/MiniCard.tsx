@@ -4,7 +4,7 @@ import { MouseEvent, MouseEventHandler, MutableRefObject, useCallback, useEffect
 import { AiFillDelete as DeleteButton } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { auth, db, storage } from "../../index";
-import { getSheskaCardImagesUrls } from "../Utils/CardUtil";
+import { deleteCard, deleteCardImages, getSheskaCardImagesUrls } from "../Utils/CardUtil";
 import styles from "./MiniCard.module.css";
 
 export function MiniCard(props: any) {
@@ -36,8 +36,10 @@ export function MiniCard(props: any) {
     const handleDeleteClick = async (event: MouseEvent) => {
         event.stopPropagation();
 
-        props.deleteCardImages(props.cardID);
-        props.deleteCard(props.cardID);
+        deleteCardImages(props.cardID);
+        deleteCard(props.cardID).then(() => {
+            props.removeCard(props.cardID);
+        });
     };
 
     if(slideImages.length > 0) {

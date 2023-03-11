@@ -1,14 +1,15 @@
 
-import styles from './Dashboard.module.css'
-import {useAuthState} from "react-firebase-hooks/auth";
-import {auth, db} from "../../index";
 import Masonry from '@mui/lab/Masonry';
-import {Box} from "@mui/material";
-import {doc, getDoc} from 'firebase/firestore';
-import {useEffect, useState} from "react";
+import { Box } from "@mui/material";
+import { doc, getDoc } from 'firebase/firestore';
+import { data } from "jquery";
+import { useEffect, useState } from "react";
 import Spinner from 'react-bootstrap/Spinner';
-import {useNavigate} from "react-router-dom";
-import {data} from "jquery";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../../index";
+import { LoadingIndicator } from '../LoadingIndicator';
+import styles from './Dashboard.module.css';
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
@@ -46,15 +47,16 @@ export function Dashboard() {
 
     }, [user]);
 
-    var welcomeSpace;
+    let welcomeSpace;
     console.log("PARTNERSONE", partners)
     if(partners === undefined || partners.length === 0 || loading) {
         welcomeSpace =
-            <div className={`${styles.welcomeSpaceSpinner} ${styles.gridItem}`}>
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </Spinner>
-            </div>
+            // <div className={`${styles.welcomeSpaceSpinner} ${styles.gridItem}`}>
+            //     <Spinner animation="border" role="status">
+            //         <span className="visually-hidden">Loading...</span>
+            //     </Spinner>
+            // </div>
+            <LoadingIndicator />
     } else if(partners[1] === '') {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
             <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Add Name in settings'}!</h1>

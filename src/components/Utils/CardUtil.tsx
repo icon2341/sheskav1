@@ -1,6 +1,7 @@
 import { Auth } from "firebase/auth";
-import { DocumentData } from "firebase/firestore";
-import { FirebaseStorage, getDownloadURL, listAll, ref } from "firebase/storage";
+import { deleteDoc, doc, DocumentData } from "firebase/firestore";
+import { deleteObject, FirebaseStorage, getDownloadURL, listAll, ref } from "firebase/storage";
+import { auth, db, storage } from "../../index";
 import { default as SheskaCardDef, default as sheskaCardDef } from "./SheskaCardDef";
 
 /**
@@ -28,4 +29,26 @@ export async function getSheskaCardImagesUrls(cardID: string, storage: FirebaseS
     }));
 
     return imageURLs;
+}
+
+export async function deleteCardImages (cardID: string) {
+    const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
+    listAll(pathReference)
+    .then((res) => {
+        res.items.forEach((itemRef) => {
+            deleteObject(itemRef)
+            .catch((error) => {
+                console.log(error)
+            })
+        });
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
+export async function deleteCard(cardID: string) {
+    await deleteDoc(doc(db, 'users/' + auth.currentUser?.uid.toString() + "/sheska_list", cardID))
+    .catch((error) => {
+        console.error(error);
+    });
 }

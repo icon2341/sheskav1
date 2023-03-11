@@ -52,8 +52,6 @@
     text-decoration: underline;
 }
 
-
-
 .cardTest {
     background: #24475B;
     aspect-ratio: 2 / 1;
@@ -94,7 +92,7 @@
     transform: scale(1.01);
 }
 
-.deleteIcon {
+.deleteIcon, .backIcon {
     position: absolute;
     top: 5%;
     right: 5%;
@@ -110,9 +108,6 @@
     background-color: rgba(36, 71, 91, 0.53);
 
 }
-
-
-
 
 @media screen and (max-width: 900px) {
     .cardTitle {
