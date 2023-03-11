@@ -55,41 +55,24 @@ export function SheskaList() {
         }
     }, [attemptedQuery]);
 
-    async function deleteCardImages (cardID: string) {
-        const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
-        listAll(pathReference)
-            .then((res) => {
-
-                // res.prefixes.forEach((folderRef) => {
-                //     // All the prefixes under listRef.
-                //     // You may call listAll() recursively on them.
-                // });
-                res.items.forEach((itemRef) => {
-                    // All the items under listRef.
-                    deleteObject(itemRef).then(() => {
-                        // File deleted successfully
-                        console.log("deleted")
-                    }).catch((error) => {
-                        // Uh-oh, an error occurred!
-                        console.log(error)
-                    })
-                });
-            }).catch((error) => {
-            // Uh-oh, an error occurred!
-        });
-
-        deleteObject(pathReference).then(() => {
-            // File deleted successfully
-            console.log("deleted")
-        }).catch((error) => {
-            // Uh-oh, an error occurred!
-            console.log(error)
-        });
-    }
-
     function removeListItem(cardID: string) {
         const { [cardID]: removedCard, ...newListItems } = listItems;
         setListItems(newListItems);
+    }
+
+    async function deleteCardImages (cardID: string) {
+        const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
+        listAll(pathReference)
+        .then((res) => {
+            res.items.forEach((itemRef) => {
+                deleteObject(itemRef)
+                .catch((error) => {
+                    console.log(error)
+                })
+            });
+        }).catch((error) => {
+            console.error(error);
+        });
     }
 
     async function deleteCard(cardID: string) {
@@ -98,15 +81,13 @@ export function SheskaList() {
             console.log("deleted card from firestore")
 
             removeListItem(cardID);
-
-            // window.location.reload();
         })
         .catch((error : Error) => {
             console.log(error)
         });
     }
 
-    var cards;
+    let cards;
     if (Object.keys(listItems).length === 0 && attemptedQuery) {
         cards = [1].map((item: any) => {
             return (
