@@ -37,7 +37,7 @@ export function MiniCard(props: any) {
     const handleDeleteClick = async (event: MouseEvent) => {
         event.stopPropagation();
 
-        deleteCardImages(props.cardID);
+        await deleteCardImages(props.cardID);
         deleteCard(props.cardID).then(() => {
             props.removeCard(props.cardID);
         });

@@ -1,5 +1,5 @@
 import { Auth } from "firebase/auth";
-import { deleteDoc, doc, DocumentData } from "firebase/firestore";
+import {deleteDoc, doc, DocumentData, getDoc} from "firebase/firestore";
 import { deleteObject, FirebaseStorage, getDownloadURL, listAll, ref } from "firebase/storage";
 import { auth, db, storage } from "../../index";
 import { default as SheskaCardDef, default as sheskaCardDef } from "./SheskaCardDef";
@@ -30,6 +30,43 @@ export async function getSheskaCardImagesUrls(cardID: string, storage: FirebaseS
 
     return imageURLs;
 }
+
+/**
+ * gets the description of a card from the database
+ * @param cardID the id of the card to get the description of
+ * @returns a promise that resolves to the description of the card on success or an error on failure. Note if there is no
+ *  description present it will return reject 'Document does not have a description'
+ *
+ */
+export async function getCardDescription (cardID: string): Promise<string> {
+    try {
+        const docRef = doc(db, 'users/' + auth.currentUser?.uid.toString() + "/sheska_list/" + cardID);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            if (docSnap.data().description) {
+                return new Promise((resolve, reject) => {
+                    resolve(docSnap.data()?.description);
+                    console.log(docSnap.data()?.description, 'DESCRIPTION');
+                });
+            } else {
+                return new Promise((resolve, reject) => {
+                    reject("Document does not have a description");
+                });
+            }
+        } else {
+            return new Promise((resolve, reject) => {
+                reject("Document does not exist");
+            });
+        }
+    } catch (error) {
+        return new Promise((resolve, reject) => {
+            reject(error);
+            console.log('ERROR GETTING CARD DESCRIPTION: ' + error);
+        });
+    }
+}
+
 
 export async function deleteCardImages (cardID: string) {
     const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");

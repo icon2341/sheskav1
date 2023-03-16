@@ -1,69 +1,35 @@
 
-import { Editor } from '@tiptap/core';
-import Document from '@tiptap/extension-document';
-import Paragraph from '@tiptap/extension-paragraph';
-import Text from '@tiptap/extension-text';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { Carousel, ToastContainer } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import Form from "react-bootstrap/Form";
-import { FilePond, registerPlugin } from 'react-filepond';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
-import globalStyles from "../../App.module.css";
+import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, storage } from "../../index";
 import styles from "./NewItem.module.css";
-
-
-// Import FilePond styles
-import { Extension } from '@tiptap/core';
-import { Color } from "@tiptap/extension-color";
-import ListItem from '@tiptap/extension-list-item';
-import { Placeholder } from "@tiptap/extension-placeholder";
-import TextStyle from '@tiptap/extension-text-style';
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { FilePondFile } from "filepond";
 import 'filepond/dist/filepond.min.css';
-import {deleteObject, FirebaseStorage, getDownloadURL, listAll, ref, uploadBytes} from "firebase/storage";
-import Toast from "react-bootstrap/Toast";
 import "./NewItemUtil.scss";
-import {Swiper} from "swiper/react";
-import {getSheskaCardImagesUrls} from "../Utils/CardUtil";
-import {Auth} from "firebase/auth";
-import {string} from "yup";
+import {getCardDescription, getSheskaCardImagesUrls} from "../Utils/CardUtil";
 import {v4 as uuidv4} from "uuid";
+import ImageOrganizer from "./ImageManager/ImageOrganizer";
+import {FilePond, registerPlugin} from "react-filepond";
+import { Button } from "react-bootstrap";
+import {deleteObject, ref, uploadBytes} from "firebase/storage";
+import FilePondPluginFileRename from 'filepond-plugin-file-rename';
+import * as Yup from "yup";
+import {Formik} from "formik";
+import TipTapMenuBar from "./EditorUtil";
+import {EditorContent, useEditor} from "@tiptap/react";
+import {Color} from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
+import ListItem from "@tiptap/extension-list-item";
+import StarterKit from "@tiptap/starter-kit";
+import {LoadingIndicator} from "../LoadingIndicator";
+import {usePromiseTracker} from "react-promise-tracker";
 
-// import {DragDropContext, Droppable} from 'react-beautiful-dnd';
-import {DragDropContext} from "@hello-pangea/dnd";
-import {
-    DndContext,
-    closestCenter,
-    KeyboardSensor,
-    PointerSensor,
-    useSensor,
-    useSensors, useDraggable, useDroppable,
-    DragOverlay,
-} from '@dnd-kit/core';
-import {
-    arrayMove, horizontalListSortingStrategy,
-    rectSwappingStrategy,
-    rectSortingStrategy,
-    SortableContext,
-    sortableKeyboardCoordinates, useSortable,
-    verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-
-import {CSS} from '@dnd-kit/utilities';
-import zIndex from "@mui/material/styles/zIndex";
-import { Box } from "grommet";
-
-
+registerPlugin(FilePondPluginFileRename)
+const area = 'editcard';
 /**
  * The EditItem component shows an edit page (not unlike the new item page) that allows the user to edit the data, unlike
  * the new item page, it will show the page on top of a blurred background of the sheska list.
@@ -71,46 +37,67 @@ import { Box } from "grommet";
  *
  **/
 export function EditItem() {
-    //first thing that needs to be done is to get the cards data from firestore, all of it.
-    //then we need to create a form that will allow the user to edit the data.
-
-    //verify authentication
     const [user, loading, error] = useAuthState(auth);
     const [images, setImages] = useState<{ [id: string]: string }>();
     const navigate = useNavigate();
     const location = useLocation();
     const [docRef, setDocRef] = useState<DocumentReference>();
-    const [title, setTitle] = React.useState(location.state.title);
-    const [subtitle, setSubtitle] = React.useState(location.state.subtitle);
-    const [files, setFiles] = useState<FilePondFile[]>([]);
+    const [title, setTitle] = React.useState(location?.state?.title);
+    const [files, setFiles] = useState([] as FilePondFile[]);
     const [imageOrder, setImageOrder] = useState<string[]>([]);
+    let filePondRef :FilePond | null;
+    const [imagesToBeDeleted, setImagesToBeDeleted] = useState<string[]>([]);
+    const [filePondFileMapping, setFilePondFileMapping] = useState<{ [id: string]: string }>();
+    const { promiseInProgress } = usePromiseTracker({ area: area, delay: 0 });
+    const [filePondLoading,setFilePondLoading] = useState(false);
+    const validationSchema = Yup.object({
+    });
+
+    const server = {
+        revert: (uniqueFileId: string, load: any, error: any   ) => {
+            // Should remove the earlier created temp file here
+            // ...
+            const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + docRef?.id + "/" +uniqueFileId);
+            deleteObject(fileRef).then(() => {
+                console.log('file removed:' + uniqueFileId);
+            }).catch((error: any) => {
+                console.log(error);
+            });
+
+            // Can call the error method if something is wrong, should exit after
 
 
-    const handleTitle = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.currentTarget.value);
-        console.log(title);
-    }
+            // Should call the load method when done, no parameters required
+            load();
+        },
+        process: (fieldName: any, file:any, metadata:any, load:any, error:any, progress:any, abort:any, transfer:any, options:any) => {
+            const id = file.name;
 
-    const handleSubtitle = (event: ChangeEvent<HTMLInputElement>) => {
-        setSubtitle(event.currentTarget.value);
-        console.log(subtitle);
-    }
+            const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + location.state.cardID + "/" +file.name);
 
-    useEffect(() => {
-        files.map((file) => {console.log("File: " + file.id, file.file.name, file.origin)})
+            uploadBytes(fileRef, file).then((snapshot) => {
+                progress(true, 100, 100);
+                load(id);
 
-    }, [files])
+            });
 
-    useEffect(() => {
-        if(user != null)  {
-            const docRef = doc(collection(db, "users/" + auth.currentUser?.uid + "/sheska_list/"))
-            setDocRef(docRef);
+            return {
+                abort: () => {
+                    // This function is entered if the user has tapped the cancel button
+                    // TODO MAKE SURE TO IMPLEMENT THIS SO THAT THE FILE IS NOT UPLOADED ON FIREBASE, CURERENTLY THIS DOES NOTHING
+                    const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + docRef?.id + "/" +file.name);
+                    deleteObject(fileRef).then(() => {
+                        console.log('file removed:' + file.name);
+                    }).catch((error: any) => {
+                        console.log(error);
+                    });
+                    abort();
+                }
+            }
         }
-    }, [user])
 
-    /**
-     * This is the editor that will be used to create the description of the item
-     */
+    }
+
     const editor : any | null = useEditor({
         extensions: [
             Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -132,21 +119,36 @@ export function EditItem() {
                 This is a WYSIWYG editor, meaning what you see is what you (and your guests) will get. Use this as your canvas
                 to describe this item to your hearts content! You can add images, links videos, bullet points and beyond!
                 With the power of WYSIWYG you can create a beautiful and engaging description of your item.
-
-                <br>
-                <br>
-                Double click on any of the buttons above to apply styles to your text.
               </p>
+              <p>Double click on any of the buttons above to apply styles to your text.</p>
             `,
     })
 
     useEffect(() => {
-        if(user) {
+        console.log('imagesDel', imagesToBeDeleted)
+        console.log('filePondFileMapping', filePondFileMapping)
+
+        imagesToBeDeleted.forEach((imageId: string) => {
+            if(filePondRef?.getFile(filePondFileMapping![imageId]) != null){
+                filePondRef?.removeFile(filePondFileMapping![imageId])
+                setImagesToBeDeleted(imagesToBeDeleted.filter((id: string) => id !== imageId))
+            }
+            }
+        )
+        console.log('FILE POND REF', filePondRef)
+    }, [imagesToBeDeleted, setImagesToBeDeleted])
+
+    useEffect(() => {
+        if (user) {
+            const docRef = doc(collection(db, "users/" + auth.currentUser?.uid + "/sheska_list/"))
+            setDocRef(docRef);
             getSheskaCardImagesUrls(location.state.cardID, storage, auth).then((urls) => {
                 const imageMap: { [id: string]: string } = {};
                 const imageOrderInternal: string[] = [];
                 urls.forEach((url) => {
-                    let id = uuidv4();
+
+                    const id = ref(storage, url).name;
+                    console.log(id)
                     imageMap[id] = url;
                     imageOrderInternal.push(id);
 
@@ -154,79 +156,212 @@ export function EditItem() {
                 setImages(imageMap)
                 setImageOrder(imageOrderInternal);
             })
-
         }
-    }, [user])
+    }, [])
 
     useEffect(() => {
-        console.log("Images: " + images);
-        console.log("Image Order: " + imageOrder);
-    }, [images, imageOrder])
 
-    const [activeId, setActiveId] = useState(null);
+        setImages((prevImages) => {
+            console.log('FILES CHANGED, UPDATING IMAGES')
+            files.forEach((file) => {
+                console.log(file.file.name);
 
-    function handleDragStart(event: any) {
-        setActiveId(event.active.id);
-    }
+            })
+            const newImages: { [id: string]: string } = {};
+            const newImageOrder: string[] = [];
+            const newFilePondFileMapping: { [id: string]: string } = {};
 
-    function handleDragEnd(event: any) {
-        const {active, over} = event;
-        setActiveId(null);
-        if (active.id !== over.id) {
+            imageOrder.forEach((id) => {
+                if (prevImages) {
+                    newImages[id] = prevImages[id];
+                    newImageOrder.push(id);
+                }
+            })
 
-            setImageOrder((items : any) => {
-                const oldIndex = items.indexOf(active.id);
-                const newIndex = items.indexOf(over.id);
+            files.forEach(
+                (file) => {
+                    newFilePondFileMapping[file.filenameWithoutExtension] = file.id;
 
-                return arrayMove(items, oldIndex, newIndex);
-            });
-        }
-    }
-    const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
+                    if(images){
+                        if(!(file.filenameWithoutExtension in images)) {
+                            newImages[file.filenameWithoutExtension] = URL.createObjectURL(file.file);
+                            newImageOrder.push(file.filenameWithoutExtension);
+                        }
+                    }
+                }
+            )
+
+            setImageOrder(newImageOrder);
+            setFilePondFileMapping(newFilePondFileMapping);
+            // console.log("SIZE OF FILEPOND FILE MAPPING: " + Object.keys(newFilePondFileMapping).length)
+            // console.log('NEW FILE POND FILE MAPPING', newFilePondFileMapping)
+            // console.log("SIZE OF IMAGES " + images?.length);
+            // console.log("SIZE OF IMAGESORDER: " + imageOrder.length);
+            return newImages;
         })
-    );
 
-    //TODO integrate FILEPOND or some other DnD file uploader into this
-    //TODO add 'x' button to remove images from the list and from storage via Filepond API
-    //TODO add fileOrderFunctionality so that the user can reorder the images and it can show up elewhere in the list
-    //TODO add custom drag and drop UI
-    //TODO add error message and success message UI
-    //Abstract the DND image manager so that it can be used elsewhere
+    }, [files.length])
+    const uploadFiles = (values: any, { setErrors } : any) => {
+        console.log('IMAGES THAT ARE BEING DELETED', imagesToBeDeleted)
+
+        filePondRef?.processFiles();
+        uploadImagesOrder(imageOrder, location.state.cardID);
+
+        imagesToBeDeleted.forEach((imageId: string) => {
+            deleteImage(imageId, location.state.cardID, setImageOrder, imageOrder)
+        })
+
+        uploadCardDescription(location.state.cardID, editor.getHTML());
+
+        const docRef = doc(db, "users/" + auth.currentUser?.uid + "/sheska_list/" + location.state);
+        setDoc(docRef, {
+            description: editor.getHTML(),
+            title: values.title,
+            subtitle: values.subtitle,
+        }, {merge: true}).then(() => {
+            console.log("Document successfully updated!");
+        }).catch((error) => {
+            console.error("Error updating document: ", error);
+        });
 
 
-    if(user) {
+
+    }
+
+
+    if (user) {
         // @ts-ignore
         return (
             <div className={styles.pageContainer}>
                 <div className={styles.formContainer}>
                     <h1 className={styles.title}>Edit Card</h1>
-                    <h2 className={styles.subtitle}>Title:</h2>
-                    <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
-                        <Form.Control type="text" placeholder={location.state.title} onChange={handleTitle}/>
-                    </Form.Group>
 
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={closestCenter}
-                        onDragEnd={handleDragEnd}
-                        onDragStart={handleDragStart}
+                    <Formik
+                        validationSchema={validationSchema}
+                        initialValues={{
+                            title: '',
+                            subtitle: '',}}
+                        onSubmit={uploadFiles}
                     >
-                        <Box
-                            flex={true}
-                            wrap={true}
-                            direction="row"
-                            className={styles.imageContainer}
-                        >
+                        {({
+                                handleSubmit,
+                                handleChange,
+                                values,
+                                touched,
+                                isValid,
+                                errors,
+                        }) => (
+                            <Form>
+                                <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
+                                    <label className={styles.sectionHeader} >Title</label>
+                                    <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Edit your card title. (optional) </p>
+                                    <Form.Control
+                                        type={"text"}
+                                        name={"title"}
+                                        value={values.title}
+                                        onChange={(value) => {
+                                            handleChange(value)
+                                        }}
+                                        placeholder={location.state.title}
+                                    />
+                                </Form.Group>
 
-                            <SortableContext items={imageOrder} strategy={rectSortingStrategy}>
-                                {imageOrder.map(id => <SortableItem key={id} id={id} images={images} />)}
-                            </SortableContext>
-                        </Box>
-                    </DndContext>
+                                <Form.Group controlId={'subtitleForm'} className={"mb-3 w-75 mx-auto"}>
+                                    <label className={styles.sectionHeader} >Subtitle</label>
+                                    <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Edit your subtitle, short but descriptive. (optional)</p>
 
+                                    <Form.Control
+                                        as={"textarea"}
+                                        type={"text"}
+                                        name={"subtitle"}
+                                        value={values.subtitle}
+                                        onChange={(value) => {
+                                            handleChange(value)
+                                        }}
+                                        placeholder={location.state.subtitle}
+                                    />
+                                </Form.Group>
+
+                                <label className={`${styles.sectionHeader} mb-3 w-100 mx-auto`}  >Manage Images</label>
+                                <ImageOrganizer images={images} imageOrder={imageOrder} setImageOrder={setImageOrder} setImages={setImages} cardID={location.state.cardID}
+                                                setImagesToBeDeleted={setImagesToBeDeleted} imagesToBeDeleted={imagesToBeDeleted}/>
+
+                                <Form.Group controlId={'imageForm'} className={"mb-5 w-75 mx-auto "}>
+                                    {/*s s*/}
+                                    <FilePond
+
+                                        className={styles.filePond}
+                                        instantUpload={false}
+                                        allowMultiple={true}
+                                        server={server}
+                                        onprocessfilestart={() => {setFilePondLoading(true)}}
+                                        onprocessfile={() => {setFilePondLoading(false)}}
+
+                                        onremovefile={(error: any, file: FilePondFile) => {
+                                            let newFiles: FilePondFile[] = [];
+                                            setImages((prevImages) => {
+                                                // console.log('FILES CHANGED, UPDATING IMAGES')
+
+                                                const newImages: { [id: string]: string } = {};
+                                                const newImageOrder: string[] = [];
+
+
+                                                imageOrder.forEach((id) => {
+                                                    if (prevImages) {
+                                                        if(id !== file.filenameWithoutExtension){
+
+                                                            newImages[id] = prevImages[id];
+                                                            newImageOrder.push(id);
+                                                        }
+                                                    }
+                                                })
+
+                                                setImageOrder(newImageOrder);
+
+                                                console.log("SIZE OF IMAGES " + images?.length);
+                                                console.log("SIZE OF IMAGESORDER: " + imageOrder.length);
+                                                return newImages;
+                                            })
+
+                                            files.forEach((fileItem) => {
+                                                if (fileItem.filenameWithoutExtension !== file.filenameWithoutExtension) {
+                                                    newFiles.push(fileItem);
+                                                }
+                                            })
+
+                                            setFiles(newFiles);
+
+                                        }
+                                        }
+
+                                        onupdatefiles={(fileItems: FilePondFile[]) => {
+                                            setFiles(fileItems);
+                                        }}
+
+                                        ref={ref => filePondRef = ref}
+                                        fileRenameFunction={(file) => {
+                                            return `${uuidv4()}${file.extension}`; }}
+
+                                    />
+                                </Form.Group>
+
+                                <div className={styles.textEditor}>
+                                    <TipTapMenuBar editor={editor}/>
+                                    <EditorContent editor={editor}/>
+                                </div>
+
+                                <Button type={'submit'} disabled={filePondLoading} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
+                                        ${styles.loginButton}`}> Submit</Button>
+
+                            </Form>
+
+
+
+
+
+                        )}
+
+                    </Formik>
 
                 </div>
 
@@ -234,70 +369,47 @@ export function EditItem() {
         )
     } else {
         return (
-        <div>
-            <h1>Not logged in</h1>
-        </div>
-            )
+            <div>
+                <h1>Not logged in</h1>
+            </div>
+        )
     }
 
+}
+
+function uploadImagesOrder(imageOrder: string[], cardID: string) {
+
+    const docRef = doc(db, "users/"+ auth.currentUser?.uid +"/sheska_list/" + cardID);
+    setDoc(docRef, {
+        imageOrder: imageOrder
+    }, { merge: true }).then(() => {
+        console.log("Document successfully updated!");
+    }).catch((error) => {
+        console.error("Error updating document: ", error);
+    });
+}
+
+function uploadCardDescription(cardID: string, description: string) {
+    const docRef = doc(db, "users/" + auth.currentUser?.uid + "/sheska_list/" + cardID);
+    setDoc(docRef, {
+        description: description
+    }, {merge: true}).then(() => {
+        console.log("Document successfully updated!");
+    }).catch((error) => {
+        console.error("Error updating document: ", error);
+    });
+}
+
+
+function deleteImage(imageID: string, cardID: string, setImageOrder: any, imageOrder: string[]) {
+    const imageRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + cardID + "/" + imageID)
+    deleteObject(imageRef).then(() => {
+        console.log("Deleted image");
+        setImageOrder(imageOrder.filter((id) => id !== imageID));
+    }).catch((error) => {
+        console.error(error);
+    });
 }
 
 export default EditItem;
-
-
-function Draggable(props: any) {
-    const {attributes, listeners, setNodeRef, transform} = useDraggable({
-        id: props.id,
-    });
-    const style = transform ? {
-        transform: CSS.Translate.toString(transform),
-    } : undefined;
-
-
-}
-
-function Droppable(props: any) {
-    const {isOver, setNodeRef} = useDroppable({
-        id: 'droppable',
-    });
-    const style = {
-        color: isOver ? 'green' : undefined,
-    };
-
-
-    return (
-        <div ref={setNodeRef} style={style}>
-            {props.children}
-        </div>
-    );
-}
-
-function SortableItem(props: any) {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-    } = useSortable({id: props.id});
-
-    let style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        zIndex: 1000,
-    };
-
-    const imageStyle = {
-        width: '150px',
-        height: '100px',
-        borderRadius: '10px',
-        margin: '10px',
-    }
-
-    return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <img style={imageStyle} src={props.images[props.id]} alt={'SUGMA'} className={styles.image}/>
-        </div>
-    );
-}
 

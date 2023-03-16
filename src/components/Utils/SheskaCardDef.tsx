@@ -14,16 +14,18 @@ class SheskaCard {
     private _cardID: string;
     private _title: string;
     private _subtitle: string;
-    private _description: string;
-    private _imageURLs?: string[];
+    private _description?: string;
+    private _imageOrder?: string[];
 
-    constructor(cardID: string, title: string, subtitle: string, description: string, imageURLs?: string[]) {
+    constructor(cardID: string, title: string, subtitle: string, description?: string, imageOrder?: string[],) {
         this._cardID = cardID;
         this._title = title;
         this._subtitle = subtitle;
-        this._description = description;
-        if(imageURLs) {
-            this._imageURLs = imageURLs;
+        if(description) {
+            this._description = description;
+        }
+        if(imageOrder) {
+            this._imageOrder = imageOrder;
         }
     }
 
@@ -64,11 +66,11 @@ class SheskaCard {
         this._subtitle = value;
     }
 
-    get description(): string {
+    get description(): string | undefined {
         return this._description;
     }
 
-    set description(value: string) {
+    set description(value: string | undefined) {
         this._description = value;
     }
 
