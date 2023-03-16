@@ -51,7 +51,7 @@
 }
 
 .miniCardButton {
-    background-color: #0e2431;
+    background-color: #24475B;
     border-radius: 10px;
     color: white;
     font-family: Pavanam;
@@ -130,7 +130,7 @@
 }
 
 .addCardButton:hover {
-    color: #3a6f8f;
+    color: #2F5D7A;
     cursor: pointer;
 }
 
