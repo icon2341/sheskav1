@@ -1,35 +1,35 @@
 
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
-import React, {ChangeEvent, useEffect, useRef, useState} from "react";
-import Form from "react-bootstrap/Form";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useLocation, useNavigate } from "react-router-dom";
-import { auth, db, storage } from "../../index";
-import styles from "./NewItem.module.css";
-import { FilePondFile } from "filepond";
-import 'filepond/dist/filepond.min.css';
-import "./NewItemUtil.scss";
-import {getCardDescription, getSheskaCardImagesUrls} from "../Utils/CardUtil";
-import {v4 as uuidv4} from "uuid";
-import ImageOrganizer from "./ImageManager/ImageOrganizer";
-import {FilePond, registerPlugin} from "react-filepond";
-import { Button } from "react-bootstrap";
-import {deleteObject, ref, uploadBytes} from "firebase/storage";
-import FilePondPluginFileRename from 'filepond-plugin-file-rename';
-import * as Yup from "yup";
-import {Formik} from "formik";
-import TipTapMenuBar from "./EditorUtil";
-import {EditorContent, useEditor} from "@tiptap/react";
-import {Color} from "@tiptap/extension-color";
-import TextStyle from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
+import TextStyle from "@tiptap/extension-text-style";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import {LoadingIndicator} from "../LoadingIndicator";
-import {usePromiseTracker} from "react-promise-tracker";
+import { FilePondFile } from "filepond";
+import FilePondPluginFileRename from 'filepond-plugin-file-rename';
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import 'filepond/dist/filepond.min.css';
+import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
+import { deleteObject, ref, uploadBytes } from "firebase/storage";
+import { Formik } from "formik";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Button } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import { FilePond, registerPlugin } from "react-filepond";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
+import { useLocation, useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import * as Yup from "yup";
+import { auth, db, storage } from "../../index";
+import { LoadingIndicator } from "../LoadingIndicator";
+import { getCardDescription, getSheskaCardImagesUrls } from "../Utils/CardUtil";
+import TipTapMenuBar from "./EditorUtil";
+import ImageOrganizer from "./ImageManager/ImageOrganizer";
+import styles from "./NewItem.module.css";
+import "./NewItemUtil.scss";
 
 registerPlugin(FilePondPluginFileRename)
-const area = 'editcard';
+const area = 'editCard';
 /**
  * The EditItem component shows an edit page (not unlike the new item page) that allows the user to edit the data, unlike
  * the new item page, it will show the page on top of a blurred background of the sheska list.
@@ -48,10 +48,11 @@ export function EditItem() {
     let filePondRef :FilePond | null;
     const [imagesToBeDeleted, setImagesToBeDeleted] = useState<string[]>([]);
     const [filePondFileMapping, setFilePondFileMapping] = useState<{ [id: string]: string }>();
-    const { promiseInProgress } = usePromiseTracker({ area: area, delay: 0 });
     const [filePondLoading,setFilePondLoading] = useState(false);
     const validationSchema = Yup.object({
     });
+
+    const { promiseInProgress } = usePromiseTracker({ area, delay: 0 });
 
     const server = {
         revert: (uniqueFileId: string, load: any, error: any   ) => {
@@ -75,7 +76,7 @@ export function EditItem() {
 
             const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + location.state.cardID + "/" +file.name);
 
-            uploadBytes(fileRef, file).then((snapshot) => {
+            uploadBytes(fileRef, file).then((snapshot: any) => {
                 progress(true, 100, 100);
                 load(id);
 
@@ -140,7 +141,7 @@ export function EditItem() {
 
     useEffect(() => {
         if (user) {
-            const docRef = doc(collection(db, "users/" + auth.currentUser?.uid + "/sheska_list/"))
+            const docRef = doc(collection(db, `users/${auth.currentUser?.uid}/sheska_list/`))
             setDocRef(docRef);
             getSheskaCardImagesUrls(location.state.cardID, storage, auth).then((urls) => {
                 const imageMap: { [id: string]: string } = {};
@@ -160,7 +161,6 @@ export function EditItem() {
     }, [])
 
     useEffect(() => {
-
         setImages((prevImages) => {
             console.log('FILES CHANGED, UPDATING IMAGES')
             files.forEach((file) => {
@@ -199,8 +199,7 @@ export function EditItem() {
             // console.log("SIZE OF IMAGESORDER: " + imageOrder.length);
             return newImages;
         })
-
-    }, [files.length])
+    }, [files])
     const uploadFiles = (values: any, { setErrors } : any) => {
         console.log('IMAGES THAT ARE BEING DELETED', imagesToBeDeleted)
 
@@ -213,19 +212,17 @@ export function EditItem() {
 
         uploadCardDescription(location.state.cardID, editor.getHTML());
 
-        const docRef = doc(db, "users/" + auth.currentUser?.uid + "/sheska_list/" + location.state);
-        setDoc(docRef, {
+        const docRef = doc(db, `users/${auth.currentUser?.uid}/sheska_list/${location.state}`);
+        trackPromise(setDoc(docRef, {
             description: editor.getHTML(),
             title: values.title,
             subtitle: values.subtitle,
         }, {merge: true}).then(() => {
             console.log("Document successfully updated!");
+            navigate(-1);
         }).catch((error) => {
             console.error("Error updating document: ", error);
-        });
-
-
-
+        }), 'editItem');
     }
 
 
@@ -239,8 +236,8 @@ export function EditItem() {
                     <Formik
                         validationSchema={validationSchema}
                         initialValues={{
-                            title: '',
-                            subtitle: '',}}
+                            title: location.state.title,
+                            subtitle: location.state.subtitle,}}
                         onSubmit={uploadFiles}
                     >
                         {({
@@ -251,7 +248,10 @@ export function EditItem() {
                                 isValid,
                                 errors,
                         }) => (
-                            <Form>
+                            <Form onSubmit={(event) => {
+                                event.preventDefault();
+                                handleSubmit();
+                            }}>
                                 <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
                                     <label className={styles.sectionHeader} >Title</label>
                                     <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Edit your card title. (optional) </p>
@@ -262,7 +262,6 @@ export function EditItem() {
                                         onChange={(value) => {
                                             handleChange(value)
                                         }}
-                                        placeholder={location.state.title}
                                     />
                                 </Form.Group>
 
@@ -278,7 +277,6 @@ export function EditItem() {
                                         onChange={(value) => {
                                             handleChange(value)
                                         }}
-                                        placeholder={location.state.subtitle}
                                     />
                                 </Form.Group>
 
@@ -350,38 +348,28 @@ export function EditItem() {
                                     <EditorContent editor={editor}/>
                                 </div>
 
-                                <Button type={'submit'} disabled={filePondLoading} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
+                                <Button type={'submit'} disabled={promiseInProgress || filePondLoading} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
 
                             </Form>
-
-
-
-
-
                         )}
-
                     </Formik>
-
                 </div>
-
             </div>
-        )
+        );
     } else {
         return (
             <div>
                 <h1>Not logged in</h1>
             </div>
-        )
+        );
     }
-
 }
 
 function uploadImagesOrder(imageOrder: string[], cardID: string) {
-
-    const docRef = doc(db, "users/"+ auth.currentUser?.uid +"/sheska_list/" + cardID);
+    const docRef = doc(db, `users/${auth.currentUser?.uid}/sheska_list/${cardID}`);
     setDoc(docRef, {
-        imageOrder: imageOrder
+        imageOrder
     }, { merge: true }).then(() => {
         console.log("Document successfully updated!");
     }).catch((error) => {
@@ -406,7 +394,7 @@ function deleteImage(imageID: string, cardID: string, setImageOrder: any, imageO
     deleteObject(imageRef).then(() => {
         console.log("Deleted image");
         setImageOrder(imageOrder.filter((id) => id !== imageID));
-    }).catch((error) => {
+    }).catch((error: Error) => {
         console.error(error);
     });
 }

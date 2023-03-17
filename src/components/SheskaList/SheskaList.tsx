@@ -19,7 +19,7 @@ export type CardDef = { [id: string]: SheskaCardDef };
 export function SheskaList() {
     const [user, loading, error] = useAuthState(auth);
     const [cardDefs, setCardDefs] = useState<CardDef>({});
-    const { promiseInProgress } = usePromiseTracker({ area: area, delay: 0 });
+    const { promiseInProgress } = usePromiseTracker({ area, delay: 0 });
 
     // TODO There's a bug sometimes where if you have already attempted to get data in the server is down or connection
     // is lost for whatever reason the application will not get your date again because attempted data is set to true

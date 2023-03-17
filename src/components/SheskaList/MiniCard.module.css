@@ -104,7 +104,6 @@
 }
 
 .deleteIcon:hover {
-    cursor: pointer;
     background-color: rgba(36, 71, 91, 0.53);
 
 }

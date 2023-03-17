@@ -1,18 +1,24 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, getDownloadURL, listAll, ref } from "firebase/storage";
 import { MouseEvent, MouseEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
-import { AiFillDelete as DeleteButton } from "react-icons/ai";
+import { Button } from "react-bootstrap";
+import { AiFillDelete as DeleteIcon } from "react-icons/ai";
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 import { useNavigate } from "react-router-dom";
 import { auth, db, storage } from "../../index";
 import { deleteCard, deleteCardImages, getSheskaCardImagesUrls } from "../Utils/CardUtil";
 import miniCardStyles from "./MiniCard.module.css";
 import sheskaListStyles from "./SheskaList.module.css";
 
+const area = 'miniCard';
 export function MiniCard(props: any) {
     const [slideImages, setSlideImages] = useState([] as string[]);
     const navigate = useNavigate();
+    const { promiseInProgress } = usePromiseTracker({ area, delay: 0 })
 
     const toEditPage = () => {
+        if (promiseInProgress)
+            return;
         navigate("/editcard", {
             state: {
                 cardID: props.cardID,
@@ -38,15 +44,21 @@ export function MiniCard(props: any) {
         event.stopPropagation();
 
         await deleteCardImages(props.cardID);
-        deleteCard(props.cardID).then(() => {
+        trackPromise(deleteCard(props.cardID).then(() => {
             props.removeCard(props.cardID);
-        });
+        }), area);
     };
+
+    const deleteButton = (
+        <button style={{ backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }} onClick={handleDeleteClick} disabled={promiseInProgress} >
+            <DeleteIcon className={miniCardStyles.deleteIcon} size={48} />
+        </button>
+    )
 
     if(slideImages.length > 0) {
         return (
             <div className={miniCardStyles.cardContainer}>
-                <DeleteButton className={miniCardStyles.deleteIcon} onClick={handleDeleteClick}/>
+                {deleteButton}
                 <img src={slideImages[0]} alt='Slide' className={miniCardStyles.cardImage} onClick={toEditPage}/>
                 <h1 className={miniCardStyles.cardTitle}>{props.title}</h1>
             </div>
@@ -63,7 +75,7 @@ export function MiniCard(props: any) {
     }
     return (
         <div className={miniCardStyles.noImageCard} onClick={toEditPage}>
-            <DeleteButton className={miniCardStyles.deleteIcon} size={48} onClick={handleDeleteClick}/>
+            {deleteButton}
             <h2 className={miniCardStyles.noImageCardLogo}>S</h2>
             <h1 className={miniCardStyles.noImageCardHeader}>{props.title}</h1>
         </div>

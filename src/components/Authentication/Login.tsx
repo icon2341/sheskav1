@@ -1,17 +1,15 @@
-import {
-    signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence
-} from 'firebase/auth';
-import React, {useEffect, useState} from 'react'
-import {NavigateFunction, useNavigate} from "react-router-dom";
-import {doc, getDoc, setDoc} from "firebase/firestore";
-import {auth, db} from "../../index";
-import styles from "./SignUp.module.css";
+import { browserLocalPersistence, browserSessionPersistence, signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { Formik } from "formik";
+import React, { useEffect, useState } from 'react';
+import { InputGroup } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import {useAuthState} from "react-firebase-hooks/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import {Formik} from "formik";
-import {InputGroup} from "react-bootstrap";
+import { auth, db } from "../../index";
+import styles from "./SignUp.module.css";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
@@ -38,8 +36,13 @@ export function Login() {
      * determines whether 'remember me' is checked
      */
     const [rememberChecked,setRememberRememberChecked] = React.useState(false);
-
+    const [user, loading, error] = useAuthState(auth);
     const [showPass, setShowPass] = React.useState(false);
+
+    useEffect(() => {
+        if (user)
+            navigate('/dashboard');
+    }, [user, navigate]);
 
     //Allows for calling the toast whenever showA is changed (DEPRECATED)
     // useEffect(() => {
@@ -67,13 +70,10 @@ export function Login() {
                 setErrors({password: 'Too many requests, try again later or reset password.'})
             }
         });
-
     };
-
-    const [user, loading, error] = useAuthState(auth);
     //if the user is logged in, redirect them to the dashboard
     if (user) {
-        navigate('/dashboard');
+        // navigate('/dashboard');
         return(<div>
             <h1>REDIRECTING</h1>
         </div>)
@@ -175,7 +175,7 @@ export function Login() {
                                             </Form.Group>
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                             <div className={"d-flex justify-content-center"}>
-                                                <Button disabled={!!errors.email || !!errors.password} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
+                                                <Button disabled={!!errors.email || !!errors.password} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"}
                                                     ${styles.loginButton}`} onClick={() => {handleSubmit()}}>
                                                     Submit
                                                 </Button>
