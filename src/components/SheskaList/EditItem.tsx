@@ -11,7 +11,7 @@ import 'filepond/dist/filepond.min.css';
 import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { Formik } from "formik";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, {ChangeEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { FilePond, registerPlugin } from "react-filepond";
@@ -48,7 +48,9 @@ export function EditItem() {
     let filePondRef :FilePond | null;
     const [imagesToBeDeleted, setImagesToBeDeleted] = useState<string[]>([]);
     const [filePondFileMapping, setFilePondFileMapping] = useState<{ [id: string]: string }>();
-    const [filePondLoading,setFilePondLoading] = useState(false);
+    const [filePondLoading,setFilePondLoading] = useState(true);
+    const [submitDisabled, setSubmitDisabled] = useState(false);
+    const [dataUploaded, setDataUploaded] = useState(false);
     const validationSchema = Yup.object({
     });
 
@@ -204,7 +206,7 @@ export function EditItem() {
         console.log('IMAGES THAT ARE BEING DELETED', imagesToBeDeleted)
 
         filePondRef?.processFiles();
-        uploadImagesOrder(imageOrder, location.state.cardID);
+        // uploadImagesOrder(imageOrder, location.state.cardID);
 
         imagesToBeDeleted.forEach((imageId: string) => {
             deleteImage(imageId, location.state.cardID, setImageOrder, imageOrder)
@@ -212,18 +214,34 @@ export function EditItem() {
 
         uploadCardDescription(location.state.cardID, editor.getHTML());
 
-        const docRef = doc(db, `users/${auth.currentUser?.uid}/sheska_list/${location.state}`);
+        const docRef = doc(db, `users/${auth.currentUser?.uid}/sheska_list/${location.state.cardID}`);
         trackPromise(setDoc(docRef, {
             description: editor.getHTML(),
             title: values.title,
             subtitle: values.subtitle,
+            imageOrder,
         }, {merge: true}).then(() => {
             console.log("Document successfully updated!");
-            navigate(-1);
+            // navigate(-1);
+            setDataUploaded(true);
         }).catch((error) => {
             console.error("Error updating document: ", error);
         }), 'editItem');
     }
+
+    useEffect(() => {
+        if(dataUploaded && !filePondLoading) {
+            console.log('NAVIGATING BACK', dataUploaded, filePondLoading)
+            navigate(-1);
+        }
+
+        if(dataUploaded && files.length === 0) {
+            console.log('NAVIGATING BACK', dataUploaded, filePondLoading, files.length)
+            navigate(-1);
+        }
+
+    }, [dataUploaded, filePondLoading, files.length]);
+
 
 
     if (user) {
@@ -292,8 +310,9 @@ export function EditItem() {
                                         instantUpload={false}
                                         allowMultiple={true}
                                         server={server}
-                                        onprocessfilestart={() => {setFilePondLoading(true)}}
-                                        onprocessfile={() => {setFilePondLoading(false)}}
+                                        onprocessfilestart={() => {setFilePondLoading(true); setSubmitDisabled(true);
+                                            console.log('STARTED PROCESSING FILEs')}}
+                                        onprocessfiles={() => {setFilePondLoading(false); navigate('/sheskalist'); console.log('FINISHED PROCESSING FILEs')}}
 
                                         onremovefile={(error: any, file: FilePondFile) => {
                                             let newFiles: FilePondFile[] = [];
@@ -348,7 +367,7 @@ export function EditItem() {
                                     <EditorContent editor={editor}/>
                                 </div>
 
-                                <Button type={'submit'} disabled={promiseInProgress || filePondLoading} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
+                                <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
 
                             </Form>
@@ -366,16 +385,16 @@ export function EditItem() {
     }
 }
 
-function uploadImagesOrder(imageOrder: string[], cardID: string) {
-    const docRef = doc(db, `users/${auth.currentUser?.uid}/sheska_list/${cardID}`);
-    setDoc(docRef, {
-        imageOrder
-    }, { merge: true }).then(() => {
-        console.log("Document successfully updated!");
-    }).catch((error) => {
-        console.error("Error updating document: ", error);
-    });
-}
+// function uploadImagesOrder(imageOrder: string[], cardID: string) {
+//     const docRef = doc(db, `users/${auth.currentUser?.uid}/sheska_list/${cardID}`);
+//     setDoc(docRef, {
+//         imageOrder
+//     }, { merge: true }).then(() => {
+//         console.log("Document successfully updated!");
+//     }).catch((error) => {
+//         console.error("Error updating document: ", error);
+//     });
+// }
 
 function uploadCardDescription(cardID: string, description: string) {
     const docRef = doc(db, "users/" + auth.currentUser?.uid + "/sheska_list/" + cardID);
