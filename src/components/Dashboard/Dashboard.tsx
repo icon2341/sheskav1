@@ -50,13 +50,7 @@ export function Dashboard() {
     let welcomeSpace;
     console.log("PARTNERSONE", partners)
     if(partners === undefined || partners.length === 0 || loading) {
-        welcomeSpace =
-            // <div className={`${styles.welcomeSpaceSpinner} ${styles.gridItem}`}>
-            //     <Spinner animation="border" role="status">
-            //         <span className="visually-hidden">Loading...</span>
-            //     </Spinner>
-            // </div>
-            <LoadingIndicator />
+        welcomeSpace = <LoadingIndicator />
     } else if(partners[1] === '') {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
             <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Add Name in settings'}!</h1>

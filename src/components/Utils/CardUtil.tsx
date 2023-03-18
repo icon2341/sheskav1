@@ -44,6 +44,8 @@ export async function getCardDescription (cardID: string): Promise<string> {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
+            console.log('GETTING CARD DESC', docSnap.data()?.description, cardID);
+
             if (docSnap.data().description) {
                 return new Promise((resolve, reject) => {
                     resolve(docSnap.data()?.description);

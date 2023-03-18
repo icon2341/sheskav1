@@ -51,8 +51,19 @@ export function EditItem() {
     const [filePondLoading,setFilePondLoading] = useState(true);
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [dataUploaded, setDataUploaded] = useState(false);
-    const validationSchema = Yup.object({
-    });
+    const [cardDescription, setCardDescription] = useState(`<!--TODO use the custom documents system to make this into a placeholder text rather than REAL text like it is rn-->
+              <h2>
+                Hi there,
+              </h2>
+              <p>
+                This is a WYSIWYG editor, meaning what you see is what you (and your guests) will get. Use this as your canvas
+                to describe this item to your hearts content! You can add images, links videos, bullet points and beyond!
+                With the power of WYSIWYG you can create a beautiful and engaging description of your item.
+              </p>
+              <p>Double click on any of the buttons above to apply styles to your text.</p>`
+);
+    const [editorInitialized, setEditorInitialized] = useState(false);
+    const validationSchema = Yup.object({});
 
     const { promiseInProgress } = usePromiseTracker({ area, delay: 0 });
 
@@ -101,7 +112,7 @@ export function EditItem() {
 
     }
 
-    const editor : any | null = useEditor({
+    const editor : any | null= useEditor({
         extensions: [
             Color.configure({ types: [TextStyle.name, ListItem.name] }),
             // @ts-ignore
@@ -113,18 +124,7 @@ export function EditItem() {
                 },
             }),
         ],
-        content: `
-<!--TODO use the custom documents system to make this into a placeholder text rather than REAL text like it is rn-->
-              <h2>
-                Hi there,
-              </h2>
-              <p>
-                This is a WYSIWYG editor, meaning what you see is what you (and your guests) will get. Use this as your canvas
-                to describe this item to your hearts content! You can add images, links videos, bullet points and beyond!
-                With the power of WYSIWYG you can create a beautiful and engaging description of your item.
-              </p>
-              <p>Double click on any of the buttons above to apply styles to your text.</p>
-            `,
+        content: `${cardDescription}`,
     })
 
     useEffect(() => {
@@ -159,8 +159,32 @@ export function EditItem() {
                 setImages(imageMap)
                 setImageOrder(imageOrderInternal);
             })
+
+            getCardDescription(location.state.cardID).then((description) => {
+                setCardDescription(description);
+                editor.commands.setContent(cardDescription);
+                console.log('DESC FOUND USING: ', cardDescription, description);
+
+                setEditorInitialized(true);
+            }).catch((error) => {
+                console.log(error);
+                console.log('DESC NOT FOUND USING: ', cardDescription)
+                if(editor){
+                    editor.setContent(cardDescription);
+                }
+               setEditorInitialized(true);
+            });
+
         }
-    }, [])
+
+    }, [user])
+
+    useEffect(() => {
+        if(editor ) {
+            console.log('EDITOR INITIALIZED, SETTING CONTENT')
+            editor.commands.setContent(cardDescription);
+        }
+    }, [editor, cardDescription])
 
     useEffect(() => {
         setImages((prevImages) => {
@@ -203,6 +227,7 @@ export function EditItem() {
         })
     }, [files])
     const uploadFiles = (values: any, { setErrors } : any) => {
+        setSubmitDisabled(true);
         console.log('IMAGES THAT ARE BEING DELETED', imagesToBeDeleted)
 
         filePondRef?.processFiles();
@@ -364,7 +389,7 @@ export function EditItem() {
 
                                 <div className={styles.textEditor}>
                                     <TipTapMenuBar editor={editor}/>
-                                    <EditorContent editor={editor}/>
+                                    {(editor && (editorInitialized))? <EditorContent editor={editor} /> : <div>Loading...</div>}
                                 </div>
 
                                 <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
