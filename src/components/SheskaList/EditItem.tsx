@@ -27,6 +27,7 @@ import TipTapMenuBar from "./EditorUtil";
 import ImageOrganizer from "./ImageManager/ImageOrganizer";
 import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
+import LoadingScreen from "../LoadingScreen";
 
 registerPlugin(FilePondPluginFileRename)
 const area = 'editCard';
@@ -245,6 +246,7 @@ export function EditItem() {
             title: values.title,
             subtitle: values.subtitle,
             imageOrder,
+            dateUpdated: new Date().toString(),
         }, {merge: true}).then(() => {
             console.log("Document successfully updated!");
             // navigate(-1);
@@ -401,12 +403,10 @@ export function EditItem() {
                 </div>
             </div>
         );
+    } else if(loading) {
+        return (<LoadingScreen/>)
     } else {
-        return (
-            <div>
-                <h1>Not logged in</h1>
-            </div>
-        );
+        return (<LoadingScreen/>)
     }
 }
 

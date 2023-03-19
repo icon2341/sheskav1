@@ -1,12 +1,26 @@
 @import "../../Butler_Webfont/stylesheet.css";
 
+.cardContainer {
+    position: relative;
+    padding-bottom: 20px;
+    margin-top: -20px;
+}
+
+.cardContainer:hover {
+    transition: transform 0.1s;
+    transform: scale(1.01);
+}
+
 .cardImage {
     aspect-ratio: 1 / 1;
     width: 100%;
-    height: 100%;
     border-radius: 10px;
     object-fit: cover;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+    top: 11px;
+    position: relative;
+    margin-top: -34px;
+
 }
 
 .noImageCard {
@@ -62,16 +76,6 @@
     margin: 0 auto;
     height: auto;
     z-index: 1;
-}
-
-.cardContainer {
-    position: relative;
-    padding-bottom: 20px;
-}
-
-.cardContainer:hover {
-    transition: transform 0.1s;
-    transform: scale(1.01);
 }
 
 .cardTitle {

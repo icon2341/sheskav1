@@ -34,50 +34,105 @@ import 'filepond/dist/filepond.min.css';
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import Toast from "react-bootstrap/Toast";
 import "./NewItemUtil.scss";
+import {Formik} from "formik";
+import ImageOrganizer from "./ImageManager/ImageOrganizer";
+import {v4 as uuidv4} from "uuid";
+import * as Yup from "yup";
+import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
-
+const area = 'newCard';
 export function NewItem() {
     const [user, loading, error] = useAuthState(auth);
-
-    const navigate = useNavigate();
-    const [title, setTitle] = React.useState('');
-    const [subtitle, setSubtitle] = React.useState('');
-    const [files, setFiles] = useState<FilePondFile[]>([])
+    const [imagesToBeDeleted, setImagesToBeDeleted] = useState<string[]>([]);
+    const [filePondLoading, setFilePondLoading] = useState<boolean>(true);
+    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const [documentInitialized, setDocumentInitialized] = useState<boolean>(false);
+    const [imageOrder, setImageOrder] = useState<string[]>([]);
+    const [images, setImages] = useState<{ [id: string]: string }>({});
     const [docRef, setDocRef] = useState<DocumentReference>();
-    const [fileUploadingInProgress, setFileUploadingInProgress] = useState(false);
-    const [shownEmptyFilePrompt, setShownEmptyFilePrompt] = useState(false);
-    const [showA, setShowA] = useState(false);
-    const [showB, setShowB] = useState(false);
+    const navigate: NavigateFunction = useNavigate();
+    const [files, setFiles] = useState<FilePondFile[]>([]);
+    const [filePondFileMapping, setFilePondFileMapping] = useState<{ [id: string]: string }>({});
+    const [dataUploaded, setDataUploaded] = useState<boolean>(false);
+    const { promiseInProgress } = usePromiseTracker({ area, delay: 0 });
+    let filePondRef :FilePond | null;
 
-    //initialize potential document reference
-    const handleTitle = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.currentTarget.value);
-        console.log(title);
-    }
-
-    const handleSubtitle = (event: ChangeEvent<HTMLInputElement>) => {
-        setSubtitle(event.currentTarget.value);
-        console.log(subtitle);
-    }
+    const validationSchema = Yup.object({
+        title: Yup.string().required('Title is required').max(50, 'Must be 50 characters or less'),
+        subtitle: Yup.string().required('Subtitle is required').max(100, 'Must be 300 characters or less'),
+    });
 
     useEffect(() => {
-        files.map((file) => {console.log("File: " + file.id, file.file.name, file.origin)})
+        if (user) {
+            // title: "",
+            //                 subtitle: "",
+            //                 images: [],
+            //                 imageOrder: [],
+            //                 dateCreated: new Date().toString(),
+            //                 dateUpdated: new Date().toString(),
 
+            const docRef = doc(collection(db, "users", user.uid, "sheska_list"));
+            setDocRef(docRef);
+            setDocumentInitialized(true);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        setImages((prevImages) => {
+            console.log('FILES CHANGED, UPDATING IMAGES')
+            files.forEach((file) => {
+                console.log(file.file.name);
+
+            })
+            const newImages: { [id: string]: string } = {};
+            const newImageOrder: string[] = [];
+            const newFilePondFileMapping: { [id: string]: string } = {};
+
+            imageOrder.forEach((id) => {
+                if (prevImages) {
+                    newImages[id] = prevImages[id];
+                    newImageOrder.push(id);
+                }
+            })
+
+            files.forEach(
+                (file) => {
+                    newFilePondFileMapping[file.filename] = file.id;
+
+                    if(images){
+                        if(!(file.filename in images)) {
+                            newImages[file.filename] = URL.createObjectURL(file.file);
+                            newImageOrder.push(file.filename);
+                        }
+                    }
+                }
+            )
+
+            setImageOrder(newImageOrder);
+            setFilePondFileMapping(newFilePondFileMapping);
+            // console.log("SIZE OF FILEPOND FILE MAPPING: " + Object.keys(newFilePondFileMapping).length)
+            // console.log('NEW FILE POND FILE MAPPING', newFilePondFileMapping)
+            // console.log("SIZE OF IMAGES " + images?.length);
+            // console.log("SIZE OF IMAGESORDER: " + imageOrder.length);
+            return newImages;
+        })
     }, [files])
 
     useEffect(() => {
-        if(user != null)  {
-            const docRef = doc(collection(db, "users/" + auth.currentUser?.uid + "/sheska_list/"))
-            setDocRef(docRef);
+        if(dataUploaded && !filePondLoading) {
+            console.log('NAVIGATING BACK', dataUploaded, filePondLoading)
+            navigate(-1);
         }
-    }, [user])
 
+        if(dataUploaded && files.length === 0) {
+            console.log('NAVIGATING BACK', dataUploaded, filePondLoading, files.length)
+            navigate(-1);
+        }
 
-    /**
-     * This is the editor that will be used to create the description of the item
-     */
+    }, [dataUploaded, filePondLoading, files.length]);
+
     const editor : any | null = useEditor({
         extensions: [
             Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -104,139 +159,201 @@ export function NewItem() {
             `,
     })
 
+
+    const server = {
+        revert: (uniqueFileId: string, load: any, error: any   ) => {
+            // Should remove the earlier created temp file here
+            // ...
+            const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + docRef?.id + "/" +uniqueFileId);
+            deleteObject(fileRef).then(() => {
+                console.log('file removed:' + uniqueFileId);
+            }).catch((error: any) => {
+                console.log(error);
+            });
+
+            // Can call the error method if something is wrong, should exit after
+
+
+            // Should call the load method when done, no parameters required
+            load();
+        },
+        process: (fieldName: any, file:any, metadata:any, load:any, error:any, progress:any, abort:any, transfer:any, options:any) => {
+            const id = file.name;
+
+            const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + docRef?.id + "/" +file.name);
+
+            uploadBytes(fileRef, file).then((snapshot: any) => {
+                progress(true, 100, 100);
+                load(id);
+
+            });
+
+            return {
+                abort: () => {
+                    // This function is entered if the user has tapped the cancel button
+                    // TODO MAKE SURE TO IMPLEMENT THIS SO THAT THE FILE IS NOT UPLOADED ON FIREBASE, CURERENTLY THIS DOES NOTHING
+                    const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + docRef?.id + "/" +file.name);
+                    deleteObject(fileRef).then(() => {
+                        console.log('file removed:' + file.name);
+                    }).catch((error: any) => {
+                        console.log(error);
+                    });
+                    abort();
+                }
+            }
+        }
+
+    }
+
+
+
+    const uploadFiles = (values: any, { setErrors } : any) => {
+        setSubmitDisabled(true);
+
+        filePondRef?.processFiles();
+        ;
+        trackPromise(postNewSheskaCard(values.title, values.subtitle, docRef, imageOrder, editor).then(() => {setDataUploaded(true)}));
+    }
+
     return (
         <div className={styles.pageContainer}>
-            <div className={`${globalStyles.backButton} ${styles.gridItem}`} title={"Warning this will discard changes"}
-                 onClick={() =>{ navigate('/sheskalist')}}>
-                <svg className={globalStyles.backArrowButton} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={48} color={"#0e2431"}><path fill="#FFFFFF" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
-                <h3 className={`${globalStyles.backButtonText}`}>Return to List</h3>
-            </div>
-
-            <ToastContainer className={styles.toastContainer}>
-                <Toast show={showB} onClose={() => setShowB(false)}>
-                    <Toast.Header>
-                        <strong className="me-auto">ERROR</strong>
-                        <small>just now</small>
-                    </Toast.Header>
-                    <Toast.Body>
-                        Wait till images are uploaded
-                    </Toast.Body>
-                </Toast>
-            </ToastContainer>
-
             <div className={styles.formContainer}>
-                <h1 className={styles.title}>Add New Item</h1>
-                <h2 className={styles.subtitle}>Add the Title</h2>
-                <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
-                    <Form.Control type="text" placeholder="Enter Card Title" onChange={handleTitle}/>
-                </Form.Group>
-            {/*    TODO ADD AN IMAGE TOOL HERE TO SHOWCASE AND ADD IMAGES TO BE UPLOADED*/}
-                <div className={styles.filePond}>
-                    <FilePond
-                        onupdatefiles={setFiles}
-                        allowMultiple={true}
-                        instantUpload={true}
-                        name="files" /* sets the file input name, it's filepond by default */
-                        labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
-                        credits={false}
-                        server={{
-                            revert: (uniqueFileId: string, load: any, error: any   ) => {
-                                // Should remove the earlier created temp file here
-                                // ...
-                                const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + docRef?.id + "/" +uniqueFileId);
-                                deleteObject(fileRef).then(() => {
-                                    console.log('file removed:' + uniqueFileId);
-                                }).catch((error: any) => {
-                                    console.log(error);
-                                });
+                <h1 className={styles.title}>Create a Card</h1>
 
-                                // Can call the error method if something is wrong, should exit after
+                <Formik
+                    validationSchema={validationSchema}
+                    initialValues={{
+                        title: '',
+                        subtitle: '',}}
+                    onSubmit={uploadFiles}
+                >
+                    {({
+                          handleSubmit,
+                          handleChange,
+                          values,
+                          touched,
+                          isValid,
+                          errors,
+                      }) => (
+                        <Form onSubmit={(event) => {
+                            event.preventDefault();
+                            handleSubmit();
+                        }}>
+                            <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
+                                <label className={styles.sectionHeader} >Title</label>
+                                <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Add your card title. (required) </p>
+                                <Form.Control
+                                    type={"text"}
+                                    name={"title"}
+                                    value={values.title}
+                                    placeholder={"Title"}
+                                    onChange={(value) => {
+                                        handleChange(value)
+                                    }}
+                                    isValid={touched.title && !errors.title}
+                                    isInvalid={!!errors.title}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.title}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group controlId={'subtitleForm'} className={"mb-3 w-75 mx-auto"}>
+                                <label className={styles.sectionHeader} >Subtitle</label>
+                                <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Add your subtitle, short but descriptive. (required)</p>
+
+                                <Form.Control
+                                    as={"textarea"}
+                                    type={"text"}
+                                    name={"subtitle"}
+                                    value={values.subtitle}
+                                    onChange={(value) => {
+                                        handleChange(value)
+                                    }}
+                                    placeholder={"Subtitle"}
+                                    isValid={touched.subtitle && !errors.subtitle}
+                                    isInvalid={!!errors.subtitle}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.subtitle}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <label className={`${styles.sectionHeader} mb-3 w-100 mx-auto`}  >Manage Images</label>
+                            <ImageOrganizer images={images} imageOrder={imageOrder} setImageOrder={setImageOrder} setImages={setImages} cardID={docRef?.id}
+                                            setImagesToBeDeleted={setImagesToBeDeleted} imagesToBeDeleted={imagesToBeDeleted}/>
+
+                            <Form.Group controlId={'imageForm'} className={"mb-5 w-75 mx-auto "}>
+                                {/*s s*/}
+                                <FilePond
+
+                                    className={styles.filePond}
+                                    instantUpload={false}
+                                    allowMultiple={true}
+                                    server={server}
+                                    onprocessfilestart={() => {setFilePondLoading(true); setSubmitDisabled(true);
+                                        console.log('STARTED PROCESSING FILEs')}}
+                                    onprocessfiles={() => {setFilePondLoading(false); navigate('/sheskalist'); console.log('FINISHED PROCESSING FILEs')}}
+
+                                    onremovefile={(error: any, file: FilePondFile) => {
+                                        let newFiles: FilePondFile[] = [];
+                                        setImages((prevImages) => {
+                                            // console.log('FILES CHANGED, UPDATING IMAGES')
+
+                                            const newImages: { [id: string]: string } = {};
+                                            const newImageOrder: string[] = [];
 
 
-                                // Should call the load method when done, no parameters required
-                                load();
-                            },
-                            process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                                const id = file.name;
+                                            imageOrder.forEach((id) => {
+                                                if (prevImages) {
+                                                    if(id !== file.filenameWithoutExtension){
 
-                                const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + docRef?.id + "/" +file.name);
+                                                        newImages[id] = prevImages[id];
+                                                        newImageOrder.push(id);
+                                                    }
+                                                }
+                                            })
 
-                                uploadBytes(fileRef, file).then((snapshot) => {
-                                    progress(true, 100, 100);
-                                    load(id);
+                                            setImageOrder(newImageOrder);
 
-                                });
+                                            console.log("SIZE OF IMAGES " + images?.length);
+                                            console.log("SIZE OF IMAGESORDER: " + imageOrder.length);
+                                            return newImages;
+                                        })
 
-                                return {
-                                    abort: () => {
-                                        // This function is entered if the user has tapped the cancel button
-                                        // TODO MAKE SURE TO IMPLEMENT THIS SO THAT THE FILE IS NOT UPLOADED ON FIREBASE, CURERENTLY THIS DOES NOTHING
-                                        const fileRef = ref(storage, "users/"+ auth.currentUser?.uid + "/" + docRef?.id + "/" +file.name);
-                                        deleteObject(fileRef).then(() => {
-                                            console.log('file removed:' + file.name);
-                                        }).catch((error: any) => {
-                                            console.log(error);
-                                        });
-                                        abort();
+                                        files.forEach((fileItem) => {
+                                            if (fileItem.filenameWithoutExtension !== file.filenameWithoutExtension) {
+                                                newFiles.push(fileItem);
+                                            }
+                                        })
+
+                                        setFiles(newFiles);
+
                                     }
-                                }
-                            }
+                                    }
 
-                        }}
-                        acceptedFileTypes={['image/*']}
-                        allowProcess={true}
-                        onprocessfilestart={() =>{
-                            console.log("File upload started")
-                            setFileUploadingInProgress(true);
-                        }
-                        }
-                        onprocessfiles={() =>
-                        {
-                            console.log("Files uploaded")
-                            setFileUploadingInProgress(false);
-                        }}
+                                    onupdatefiles={(fileItems: FilePondFile[]) => {
+                                        setFiles(fileItems);
+                                    }}
 
-                    />
-                </div>
+                                    ref={ref => filePondRef = ref}
+                                    fileRenameFunction={(file) => {
+                                        return `${uuidv4()}${file.extension}`; }}
 
-                {/*TODO MAKE THIS A Paragraph text editor instead of a single line*/}
-                <h2 className={styles.subtitle}>Add a subtitle</h2>
-                <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
-                    <Form.Control type="text" placeholder="Enter Subtitle" onChange={handleSubtitle}/>
-                </Form.Group>
+                                />
+                            </Form.Group>
 
-                <h2 className={styles.subtitle}>Add Event Information</h2>
-                <div className={styles.textEditor}>
-                    <TipTapMenuBar editor={editor}/>
-                    <EditorContent editor={editor}/>
-                </div>
+                            <div className={styles.textEditor}>
+                                <TipTapMenuBar editor={editor}/>
+                                {(editor)? <EditorContent editor={editor} /> : <div>Loading...</div>}
+                            </div>
 
+                            <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
+                                        ${styles.loginButton}`}> Submit</Button>
 
-                <div className={"d-flex"}>
-                    <Button variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
-                                        ${styles.loginButton}`} onClick={() => {
-                                            console.log("SEND BUTTON PRESSED")
-                                            //TODO FIX BUG 001, FILE UPLOADING IN PROGRESS IS NOT WORKING in PROD
-                                            if (fileUploadingInProgress === true) {
-                                                setShowB(true);
-                                                console.log("SEND BUTTON PRESSED BUT FILE UPLOADING")
-                                            } else if(files.length === 0 && shownEmptyFilePrompt === true) {
-                                                postNewSheskaCard(title, subtitle, navigate, docRef, editor)
-                                            } else if (files.length === 0 && shownEmptyFilePrompt === false) {
-                                                setShownEmptyFilePrompt(true);
-                                                setShowA(true);
-                                            } else if (files.length !== 0) {
-                                                postNewSheskaCard(title, subtitle, navigate, docRef, editor)
-                                            }}}>
-                        Submit
-                    </Button>
-                    {/*TODO ADD PREVIEW FUNCTIONALITITY ONCE GUEST WEB IS DONE*/}
-                    <Button variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
-                                        ${styles.previewButton}`} onClick={() => {console.log("SEND BUTTON PRESSED")}}>
-                        Preview
-                    </Button>
-
-                </div>
+                        </Form>
+                    )}
+                </Formik>
             </div>
         </div>
     )
@@ -248,23 +365,32 @@ export default NewItem;
  *
  * @param title the card's title
  * @param subtitle the subtitle data for card
- * @param navigate navigation high order function to move back to sheskalist after completion
  * @param docRef reference to the document being updated in firestore, this is passed in rather then generated
  * at call time because the document reference needs to be created at the parent level because the same ref should be
  * used in firestore and google cloud.
+ * @param imageOrder order of images as they appear in the card
+ * @param editor editor instance with user description code
  */
-async function postNewSheskaCard(title:string, subtitle:string, navigate: NavigateFunction, docRef: any, editor: Editor | null) {
+async function postNewSheskaCard(title:string, subtitle:string, docRef: any, imageOrder: string[],editor: Editor | null) {
     try {
 
         await setDoc(docRef,
             {
                 title: title,
                 subtitle: subtitle,
-                description: editor?.getHTML()
+                description: editor?.getHTML(),
+                imageOrder: imageOrder,
+                dateCreated: new Date().toString(),
+                dateUpdated: new Date().toString(),
             }).then(() => {
-                navigate('/sheskalist');
-        });
+                return new Promise((resolve) => {
+                    resolve("success");
+                });
+        })
     } catch (e) {
         console.log(e);
+        return new Promise((resolve, reject) => {
+            reject("failure: " + e);
+        });
     }
 }

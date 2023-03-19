@@ -20,13 +20,27 @@ export function getCardFromDocData(docData: DocumentData) : SheskaCardDef {
  */
 export async function getSheskaCardImagesUrls(cardID: string, storage: FirebaseStorage, auth: Auth) : Promise<string[]> {
     const pathString = '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/";
-    const pathReference = ref(storage, pathString);
+    const storeRef = await doc(db, 'users/' + auth.currentUser?.uid.toString() + "/sheska_list/" + cardID);
+    const docSnap = await getDoc(storeRef);
     let imageURLs: string[] = [];
-    const response = await listAll(pathReference);
-    await Promise.all(response.items.map(async (itemRef) => {
-        const url = await getDownloadURL(itemRef);
-        imageURLs.push(url);
-    }));
+
+
+    if(docSnap.exists()) {
+        const docData = docSnap.data();
+        if(docData?.imageOrder) {
+            await Promise.all(docData?.imageOrder.map(async (imageName: string) => {
+                const url = await getDownloadURL(ref(storage, pathString + imageName));
+                imageURLs.push(url);
+            }));
+        } else {
+            const pathReference = ref(storage, pathString);
+            const response = await listAll(pathReference);
+            await Promise.all(response.items.map(async (itemRef) => {
+                const url = await getDownloadURL(itemRef);
+                imageURLs.push(url);
+            }));
+        }
+    }
 
     return imageURLs;
 }
@@ -49,7 +63,7 @@ export async function getCardDescription (cardID: string): Promise<string> {
             if (docSnap.data().description) {
                 return new Promise((resolve, reject) => {
                     resolve(docSnap.data()?.description);
-                    console.log(docSnap.data()?.description, 'DESCRIPTION');
+                    // console.log(docSnap.data()?.description, 'DESCRIPTION');
                 });
             } else {
                 return new Promise((resolve, reject) => {

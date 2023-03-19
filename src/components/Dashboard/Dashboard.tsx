@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../index";
 import { LoadingIndicator } from '../LoadingIndicator';
 import styles from './Dashboard.module.css';
+import LoadingScreen from "../LoadingScreen";
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
@@ -116,11 +117,7 @@ export function Dashboard() {
         )
     } else if (loading) {
         return (
-            <div className={"d-flex justify-content-center"}>
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </Spinner>
-            </div>
+            <LoadingScreen/>
         )
     } else if (error) {
         return (

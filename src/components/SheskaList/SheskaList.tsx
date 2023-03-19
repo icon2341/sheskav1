@@ -63,7 +63,7 @@ export function SheskaList() {
                     cardID={card.cardID}
                     subtitle={card.subtitle}
                     removeCard={removeCardDef}
-                    className={styles.card}
+
                 />
             );
         });
