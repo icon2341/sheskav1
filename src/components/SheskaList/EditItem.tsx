@@ -40,7 +40,7 @@ export function EditItem() {
     const [user, loading, error] = useAuthState(auth);
     const [images, setImages] = useState<{ [id: string]: string }>();
     const navigate = useNavigate();
-    const location = useLocation();
+    const location: any = useLocation();
     const [docRef, setDocRef] = useState<DocumentReference>();
     const [title, setTitle] = React.useState(location?.state?.title);
     const [files, setFiles] = useState([] as FilePondFile[]);
