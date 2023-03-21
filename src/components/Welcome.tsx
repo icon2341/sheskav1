@@ -29,7 +29,7 @@ export function Welcome() {
                                 {/*<li><a href="#">Careers</a></li>*/}
                                 {/*<li><a href="#">Blog</a></li>*/}
                                 {/*<li><a href="#">Support</a></li>*/}
-                                <li><a href="#">Coming Summer 2023</a></li>
+                                <li onClick={() =>  {navigate('/product')}} ><a >Coming Summer 2023</a></li>
                                 <li><div className={styles.authButtons}>
                                     <button className={styles.authButtonLight} onClick={() => navigate('/login')}>Log in</button>
                                     <button className={styles.authButton} onClick={() => navigate('/signup')}>Sign Up</button>
@@ -43,7 +43,7 @@ export function Welcome() {
                 <div className={styles.navigationBar}>
                     <div className={styles.logoContainer}>S</div>
                     <div className={styles.navLinksContainer}>
-                        <h2 className={styles.navigationLink}>Coming Summer 2023</h2>
+                        <h2 onClick={() =>  {navigate('/product')}} className={styles.navigationLink}>Coming Summer 2023</h2>
                         {/*<h2 className={styles.navigationLink}>Careers</h2>*/}
                         {/*<h2 className={styles.navigationLink}>Blog</h2>*/}
                         {/*<h2 className={styles.navigationLink}>Support</h2>*/}

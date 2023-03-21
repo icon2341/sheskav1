@@ -17,6 +17,7 @@ import Login from "./components/Authentication/Login";
 import ResetPassword from "./components/Authentication/ResetPassword";
 import EditItem from "./components/SheskaList/EditItem";
 import LoadingScreen from "./components/LoadingScreen";
+import ProductPage from "./components/ProductPage/ProductPage";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path={"/dashboard"} element={<><Nav/> <Dashboard/></>}></Route>
               <Route path={"/sheskalist"} element={<><Nav/> <SheskaList/></>}></Route>
               <Route path={"/onboarding"} element={<><Onboarding/></>}></Route>
+              <Route path={"/product"} element={<><ProductPage/></>}></Route>
               <Route path={"/loading"} element={<><LoadingScreen/></>}></Route>
           </Routes>
       </Router>
