@@ -55,7 +55,7 @@ export function SheskaList() {
     ]);
     const handleCardsFound = (): ReactNode[] => {
         const cards: ReactNode[] = [];
-        Object.entries(cardDefs).forEach(([id, card], index) => {
+        Object.entries(cardDefs).forEach(([id, card]) => {
             cards.push(
                 <MiniCard key={id}
                     title={card.title}
@@ -63,7 +63,6 @@ export function SheskaList() {
                     cardID={card.cardID}
                     subtitle={card.subtitle}
                     removeCard={removeCardDef}
-
                 />
             );
         });
@@ -75,12 +74,10 @@ export function SheskaList() {
         else if (!promiseInProgress) {
             return handleCardsFound();
         }
-
         return [];
     }
 
     const cards = assembleCards();
-
     if (user) {
         return (
             <SheskaListContent loading={promiseInProgress || loading} cards={cards} />

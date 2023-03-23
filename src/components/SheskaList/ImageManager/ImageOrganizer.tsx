@@ -1,7 +1,4 @@
-import React, {useState} from "react";
-import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
-import {Box} from "grommet";
-import imageMangerStyles from "./ImageManager.module.css";
+import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
     arrayMove,
     rectSortingStrategy,
@@ -9,10 +6,12 @@ import {
     sortableKeyboardCoordinates,
     useSortable
 } from "@dnd-kit/sortable";
-import {CSS} from "@dnd-kit/utilities";
+import { CSS } from "@dnd-kit/utilities";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Box } from "grommet";
+import { useState } from "react";
 import imageManagerStyles from "./ImageManager.module.css";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
 
 export function ImageOrganizer({setImages, images, imageOrder, setImageOrder, cardID, setImagesToBeDeleted, imagesToBeDeleted}: any) {
     const sensors = useSensors(
@@ -55,7 +54,7 @@ export function ImageOrganizer({setImages, images, imageOrder, setImageOrder, ca
                 flex={true}
                 wrap={true}
                 direction="row"
-                className={imageMangerStyles.imageContainer}
+                className={imageManagerStyles.imageContainer}
             >
 
                 <SortableContext items={imageOrder} strategy={rectSortingStrategy}>

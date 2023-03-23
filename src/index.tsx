@@ -1,17 +1,17 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { connectStorageEmulator, getStorage } from "firebase/storage";
+import 'font-awesome/css/font-awesome.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
+import { firebaseConfig } from './credentials';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {firebaseConfig} from './credentials'
-import { getStorage, connectStorageEmulator} from "firebase/storage";
-import 'font-awesome/css/font-awesome.min.css';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator} from "firebase/auth";
-import {getFirestore, connectFirestoreEmulator} from 'firebase/firestore'
+import { connectAuthEmulator, getAuth } from "firebase/auth";
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
