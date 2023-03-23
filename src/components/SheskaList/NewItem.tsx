@@ -39,6 +39,11 @@ import ImageOrganizer from "./ImageManager/ImageOrganizer";
 import {v4 as uuidv4} from "uuid";
 import * as Yup from "yup";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import SheskaCardGuestView from "../GuestView/SheskaCardGuestView/SheskaCardGuestView";
+import SheskaCard from "../Utils/SheskaCardDef";
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import imageManagerStyles from "./ImageManager/ImageManager.module.css";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
@@ -58,6 +63,7 @@ export function NewItem() {
     const [dataUploaded, setDataUploaded] = useState<boolean>(false);
     const { promiseInProgress } = usePromiseTracker({ area, delay: 0 });
     let filePondRef :FilePond | null;
+    const [previewCard, setPreviewCard] = useState<boolean>(false);
 
     const validationSchema = Yup.object({
         title: Yup.string().required('Title is required').max(50, 'Must be 50 characters or less'),
@@ -159,7 +165,6 @@ export function NewItem() {
             `,
     })
 
-
     const server = {
         revert: (uniqueFileId: string, load: any, error: any   ) => {
             // Should remove the earlier created temp file here
@@ -204,8 +209,19 @@ export function NewItem() {
         }
 
     }
+    useEffect(() => {
+        console.log('imagesDel', imagesToBeDeleted)
+        console.log('filePondFileMapping', filePondFileMapping)
 
-
+        imagesToBeDeleted.forEach((imageId: string) => {
+                if(filePondRef?.getFile(filePondFileMapping![imageId]) != null){
+                    filePondRef?.removeFile(filePondFileMapping![imageId])
+                    setImagesToBeDeleted(imagesToBeDeleted.filter((id: string) => id !== imageId))
+                }
+            }
+        )
+        console.log('FILE POND REF', filePondRef)
+    }, [imagesToBeDeleted, setImagesToBeDeleted])
 
     const uploadFiles = (values: any, { setErrors } : any) => {
         setSubmitDisabled(true);
@@ -217,6 +233,8 @@ export function NewItem() {
 
     return (
         <div className={styles.pageContainer}>
+
+
             <div className={styles.formContainer}>
                 <h1 className={styles.title}>Create a Card</h1>
 
@@ -239,6 +257,13 @@ export function NewItem() {
                             event.preventDefault();
                             handleSubmit();
                         }}>
+
+                            {previewCard && <div className={styles.previewCardContainer}>
+                                <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false); console.log('setPreviewFalse')}}/>
+                                <SheskaCardGuestView sheskaCardDef={new SheskaCard(docRef?.id.toString() || "",
+                                    values.title, values.subtitle, editor.getHTML(), imageOrder)} cardImages={images}/>
+                            </div>}
+
                             <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
                                 <label className={styles.sectionHeader} >Title</label>
                                 <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Add your card title. (required) </p>
@@ -348,8 +373,12 @@ export function NewItem() {
                                 {(editor)? <EditorContent editor={editor} /> : <div>Loading...</div>}
                             </div>
 
-                            <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
+                            <div className={styles.submitButtonContainer}>
+                                <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
+                                <Button type={'button'}  disabled={promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
+                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('setpreviewtrue')}}> Preview</Button>
+                            </div>
 
                         </Form>
                     )}

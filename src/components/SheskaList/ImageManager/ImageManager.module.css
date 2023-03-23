@@ -14,7 +14,7 @@
     color: #fefefe;
     position: absolute;
     box-shadow: black;
-    z-index: 20000;
+    z-index: 4;
     top: 10%;
     right: 10%;
 }
@@ -32,6 +32,7 @@
 
 .draggableImageContainer {
     position: relative;
+    z-index: 1;
 }
 
 .smallImage {
@@ -48,7 +49,7 @@
     border-radius: 10px;
     margin: 10px;
     box-shadow: rgba(0, 0, 0, 0.37) 0px 0px 10px;
-    z-index: 1000;
+    z-index: 3;
 }
 
 

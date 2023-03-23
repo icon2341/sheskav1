@@ -10,6 +10,15 @@
     box-shadow: 0 0 1px rgba(0, 0, 0, 0);
     padding-bottom: 20px;
     margin: 50px auto 40px;
+    height: 100%;
+}
+
+.submitButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin: 0 auto;
+    width: 75%;
 }
 
 .title {
@@ -58,6 +67,32 @@
 }
 
 .loginButton {
-    margin-left: 12%;
-    margin-right: 20px;
+    margin: 10px;
 }
+
+.previewCardContainer {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 110%;
+    backdrop-filter: blur(6px);
+    z-index: 2;
+}
+
+.previewCloseIcon {
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    font-size: 1.5vw;
+    cursor: pointer;
+    z-index: 3;
+    color: gray;
+    scale: 200%;
+}
+.previewCloseIcon:hover {
+    color: black;
+    scale: 250%;
+}
+

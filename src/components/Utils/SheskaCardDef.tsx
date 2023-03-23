@@ -74,6 +74,14 @@ class SheskaCard {
         this._description = value;
     }
 
+    get imageOrder(): string[] | undefined{
+        return this._imageOrder;
+    }
+
+    set imageOrder(value: string[] | undefined) {
+        this._imageOrder = value;
+    }
+
 }
 
 export default SheskaCard;

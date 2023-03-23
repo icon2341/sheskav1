@@ -1,0 +1,39 @@
+.cardContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+
+    background-color: #FDFDFD;
+    border-radius: 10px;
+    border: #E2E2E2 solid 1px;
+    z-index: 4;
+    width: 60%;
+    margin: auto auto;
+}
+.textPane {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    justify-content: left;
+}
+
+.cardTitle {
+    font-family: Inter, serif;
+    display: block;
+    font-size: 2.8vw;
+    text-align: center;
+    color: black;
+    z-index: 5;
+}
+.slideShowImage {
+    position: relative;
+    width: 200px;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+}
+
+.slideShowImageContainer {
+    width: 200px;
+
+}
