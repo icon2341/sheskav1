@@ -1,3 +1,5 @@
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Editor, Extension } from '@tiptap/core';
 import { Color } from "@tiptap/extension-color";
 import Document from '@tiptap/extension-document';
@@ -16,7 +18,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import 'filepond/dist/filepond.min.css';
 import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
-import { Formik } from "formik";
+import { Formik, Formik } from "formik";
 import React, { ChangeEvent, MutableRefObject, useEffect, useRef, useState } from "react";
 import { Carousel, ToastContainer } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
@@ -24,16 +26,21 @@ import Form from "react-bootstrap/Form";
 import Toast from "react-bootstrap/Toast";
 import { FilePond, registerPlugin } from 'react-filepond';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { trackPromise, usePromiseTracker } from "react-promise-tracker";
+import { trackPromise, trackPromise, usePromiseTracker, usePromiseTracker } from "react-promise-tracker";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, v4 as uuidv4 } from "uuid";
+import * as Yup from "yup";
 import * as Yup from "yup";
 import globalStyles from "../../App.module.css";
 import { auth, db, storage } from "../../index";
+import SheskaCardGuestView from "../GuestView/SheskaCardGuestView/SheskaCardGuestView";
+import SheskaCard from "../Utils/SheskaCardDef";
 import TipTapMenuBar from "./EditorUtil";
-import ImageOrganizer from "./ImageManager/ImageOrganizer";
+import imageManagerStyles from "./ImageManager/ImageManager.module.css";
+import { default as ImageOrganizer, default as ImageOrganizer } from "./ImageManager/ImageOrganizer";
 import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
+
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
 const area = 'newCard';
@@ -42,18 +49,22 @@ export function NewItem() {
     const [imagesToBeDeleted, setImagesToBeDeleted] = useState<string[]>([]);
     const [filePondLoading, setFilePondLoading] = useState<boolean>(true);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const [documentInitialized, setDocumentInitialized] = useState<boolean>(false);
     const [imageOrder, setImageOrder] = useState<string[]>([]);
     const [images, setImages] = useState<{ [id: string]: string }>({});
     const [docRef, setDocRef] = useState<DocumentReference>();
     const [files, setFiles] = useState<FilePondFile[]>([]);
+    const [filePondFileMapping, setFilePondFileMapping] = useState<{ [id: string]: string }>({});
     const [dataUploaded, setDataUploaded] = useState<boolean>(false);
     const { promiseInProgress } = usePromiseTracker({ area, delay: 0 });
     const navigate: NavigateFunction = useNavigate();
     let filePondRef: FilePond | null;
+    const [previewCard, setPreviewCard] = useState<boolean>(false);
+
 
     const validationSchema = Yup.object({
         title: Yup.string().required('Title is required').max(50, 'Must be 50 characters or less'),
-        subtitle: Yup.string().required('Subtitle is required').max(100, 'Must be 300 characters or less'),
+        subtitle: Yup.string().required('Subtitle is required').max(300, 'Must be 300 characters or less'),
     });
 
     useEffect(() => {
@@ -94,6 +105,7 @@ export function NewItem() {
             })
 
             setImageOrder(newImageOrder);
+            setFilePondFileMapping(newFilePondFileMapping);
             prevImagesRef.current = newImages;
             prevImageOrderRef.current = newImageOrder;
             return newImages;
@@ -136,7 +148,6 @@ export function NewItem() {
               <p>Double-click on any of the buttons above to apply styles to your text.</p>
             `,
     })
-
 
     const server = {
         revert: (uniqueFileId: string, load: any, error: any   ) => {
@@ -182,6 +193,19 @@ export function NewItem() {
         }
 
     }
+    useEffect(() => {
+        console.log('imagesDel', imagesToBeDeleted)
+        console.log('filePondFileMapping', filePondFileMapping)
+
+        imagesToBeDeleted.forEach((imageId: string) => {
+                if(filePondRef?.getFile(filePondFileMapping![imageId]) != null){
+                    filePondRef?.removeFile(filePondFileMapping![imageId])
+                    setImagesToBeDeleted(imagesToBeDeleted.filter((id: string) => id !== imageId))
+                }
+            }
+        )
+        console.log('FILE POND REF', filePondRef)
+    }, [imagesToBeDeleted, setImagesToBeDeleted])
 
     const uploadFiles = (values: any, { setErrors } : any) => {
         setSubmitDisabled(true);
@@ -195,7 +219,9 @@ export function NewItem() {
     };
 
     return (
-        <div className={styles.pageContainer}>
+        <div className={styles.pageContainer} id={'pageContainerNewItem'}>
+
+
             <div className={styles.formContainer}>
                 <h1 className={styles.title}>Create a Card</h1>
 
@@ -218,6 +244,13 @@ export function NewItem() {
                             event.preventDefault();
                             handleSubmit();
                         }}>
+
+                            {previewCard && <div className={styles.previewCardContainer}>
+                                <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false); console.log('setPreviewFalse')}}/>
+                                <SheskaCardGuestView sheskaCardDef={new SheskaCard(docRef?.id.toString() || "",
+                                    values.title, values.subtitle, editor.getHTML(), imageOrder)} cardImages={images}/>
+                            </div>}
+
                             <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
                                 <label className={styles.sectionHeader} >Title</label>
                                 <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Add your card title. (required) </p>
@@ -239,7 +272,7 @@ export function NewItem() {
 
                             <Form.Group controlId={'subtitleForm'} className={"mb-3 w-75 mx-auto"}>
                                 <label className={styles.sectionHeader} >Subtitle</label>
-                                <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Add your subtitle, short but descriptive. (required)</p>
+                                <p className={` ${styles.sectionSubheader} text-muted`}>Add your subtitle, short but descriptive. (required)</p>
 
                                 <Form.Control
                                     as={"textarea"}
@@ -327,8 +360,12 @@ export function NewItem() {
                                 {(editor)? <EditorContent editor={editor} /> : <div>Loading...</div>}
                             </div>
 
-                            <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
+                            <div className={styles.submitButtonContainer}>
+                                <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
+                                <Button type={'button'}  disabled={promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
+                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('setpreviewtrue')}}> Preview</Button>
+                            </div>
 
                         </Form>
                     )}

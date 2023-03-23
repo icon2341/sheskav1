@@ -161,7 +161,7 @@ export function Onboarding() {
                                                             setNextDisabled(false);
                                                         }
                                                     }}
-                                                    placeholder={"First Name"}
+                                                    placeholder={"Last name"}
                                                     isValid={touched.lastname && !errors.lastname}
                                                     isInvalid={!!errors.lastname}
                                                 />

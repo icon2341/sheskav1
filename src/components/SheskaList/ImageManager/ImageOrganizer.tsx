@@ -85,7 +85,7 @@ function SortableItem(props: any) {
     let style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        zIndex: 1000,
+        zIndex: 1,
     };
 
     return (
