@@ -18,7 +18,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import 'filepond/dist/filepond.min.css';
 import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
-import { Formik, Formik } from "formik";
+import { Formik } from "formik";
 import React, { ChangeEvent, MutableRefObject, useEffect, useRef, useState } from "react";
 import { Carousel, ToastContainer } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
@@ -26,10 +26,9 @@ import Form from "react-bootstrap/Form";
 import Toast from "react-bootstrap/Toast";
 import { FilePond, registerPlugin } from 'react-filepond';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { trackPromise, trackPromise, usePromiseTracker, usePromiseTracker } from "react-promise-tracker";
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import { v4 as uuidv4, v4 as uuidv4 } from "uuid";
-import * as Yup from "yup";
+import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
 import globalStyles from "../../App.module.css";
 import { auth, db, storage } from "../../index";
@@ -37,7 +36,7 @@ import SheskaCardGuestView from "../GuestView/SheskaCardGuestView/SheskaCardGues
 import SheskaCard from "../Utils/SheskaCardDef";
 import TipTapMenuBar from "./EditorUtil";
 import imageManagerStyles from "./ImageManager/ImageManager.module.css";
-import { default as ImageOrganizer, default as ImageOrganizer } from "./ImageManager/ImageOrganizer";
+import { default as ImageOrganizer } from "./ImageManager/ImageOrganizer";
 import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
 
@@ -49,7 +48,6 @@ export function NewItem() {
     const [imagesToBeDeleted, setImagesToBeDeleted] = useState<string[]>([]);
     const [filePondLoading, setFilePondLoading] = useState<boolean>(true);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-    const [documentInitialized, setDocumentInitialized] = useState<boolean>(false);
     const [imageOrder, setImageOrder] = useState<string[]>([]);
     const [images, setImages] = useState<{ [id: string]: string }>({});
     const [docRef, setDocRef] = useState<DocumentReference>();
@@ -58,9 +56,8 @@ export function NewItem() {
     const [dataUploaded, setDataUploaded] = useState<boolean>(false);
     const { promiseInProgress } = usePromiseTracker({ area, delay: 0 });
     const navigate: NavigateFunction = useNavigate();
-    let filePondRef: FilePond | null;
+    let filePondRef: FilePond | null = null;
     const [previewCard, setPreviewCard] = useState<boolean>(false);
-
 
     const validationSchema = Yup.object({
         title: Yup.string().required('Title is required').max(50, 'Must be 50 characters or less'),
@@ -194,24 +191,22 @@ export function NewItem() {
 
     }
     useEffect(() => {
-        console.log('imagesDel', imagesToBeDeleted)
-        console.log('filePondFileMapping', filePondFileMapping)
+        console.log('imagesDel', imagesToBeDeleted);
+        console.log('filePondFileMapping', filePondFileMapping);
 
         imagesToBeDeleted.forEach((imageId: string) => {
-                if(filePondRef?.getFile(filePondFileMapping![imageId]) != null){
-                    filePondRef?.removeFile(filePondFileMapping![imageId])
-                    setImagesToBeDeleted(imagesToBeDeleted.filter((id: string) => id !== imageId))
-                }
+            if(filePondRef?.getFile(filePondFileMapping[imageId]) != null) {
+                filePondRef?.removeFile(filePondFileMapping[imageId])
+                setImagesToBeDeleted(imagesToBeDeleted.filter((id: string) => id !== imageId));
             }
-        )
-        console.log('FILE POND REF', filePondRef)
-    }, [imagesToBeDeleted, setImagesToBeDeleted])
+        });
+        console.log('FILE POND REF', filePondRef);
+    }, [imagesToBeDeleted, setImagesToBeDeleted, filePondFileMapping, filePondRef])
 
     const uploadFiles = (values: any, { setErrors } : any) => {
         setSubmitDisabled(true);
 
         filePondRef?.processFiles();
-        ;
         trackPromise(
             postNewSheskaCard(values.title, values.subtitle, docRef, imageOrder, editor)
             .then(() => setDataUploaded(true))
