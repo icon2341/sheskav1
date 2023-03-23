@@ -65,6 +65,7 @@ export function NewItem() {
     let filePondRef :FilePond | null;
     const [previewCard, setPreviewCard] = useState<boolean>(false);
 
+
     const validationSchema = Yup.object({
         title: Yup.string().required('Title is required').max(50, 'Must be 50 characters or less'),
         subtitle: Yup.string().required('Subtitle is required').max(100, 'Must be 300 characters or less'),
@@ -232,7 +233,7 @@ export function NewItem() {
     }
 
     return (
-        <div className={styles.pageContainer}>
+        <div className={styles.pageContainer} id={'pageContainerNewItem'}>
 
 
             <div className={styles.formContainer}>

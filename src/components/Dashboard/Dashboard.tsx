@@ -54,12 +54,12 @@ export function Dashboard() {
         welcomeSpace = <LoadingIndicator />
     } else if(partners[1] === '') {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-            <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Add Name in settings'}!</h1>
+            <h1 id={styles["hello-message"]}> Welcome, {partners[0] ?? 'Add Name in settings'}!</h1>
             <h2 id={styles["start-here-message"]}> Start Here.</h2>
         </div>
     }  else {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-            <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Add Name in settings'} and {partners[1] ?? 'Ashar'}!</h1>
+            <h1 id={styles["hello-message"]}> Welcome, {partners[0] ?? 'Add Name in settings'} {partners[1] ? `and ${partners[1]}` : ''}!</h1>
             <h2 id={styles["start-here-message"]}> Start Here.</h2>
         </div>
     }

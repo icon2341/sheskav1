@@ -16,6 +16,8 @@ class SheskaCard {
     private _subtitle: string;
     private _description?: string;
     private _imageOrder?: string[];
+    private _amountRequested: any;
+    private _amountRaised: any;
 
     constructor(cardID: string, title: string, subtitle: string, description?: string, imageOrder?: string[],) {
         this._cardID = cardID;
@@ -82,6 +84,22 @@ class SheskaCard {
         this._imageOrder = value;
     }
 
+
+    get amountRequested(): any {
+        return this._amountRequested;
+    }
+
+    set amountRequested(value: any) {
+        this._amountRequested = value;
+    }
+
+    get amountRaised(): any {
+        return this._amountRaised;
+    }
+
+    set amountRaised(value: any) {
+        this._amountRaised = value;
+    }
 }
 
 export default SheskaCard;
