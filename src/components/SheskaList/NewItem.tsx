@@ -460,6 +460,7 @@ export function NewItem() {
                                 <Button type={'button'}  disabled={promiseInProgress || submitDisabled || !isValid || !dirty} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
                                         ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('setpreviewtrue')}}> Preview</Button>
                             </div>
+
                         </Form>
                     )}
                 </Formik>
