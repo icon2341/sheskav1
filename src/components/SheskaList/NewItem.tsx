@@ -24,6 +24,7 @@ import "./SwitchSection/bootstrapSwitch.css";
 //TODO - update sheskaCardDef to include new features
 //TODO - update sheskaCardpreview to include new features
 //TODO this includes updating the object to include said features.
+//TODO update postSheskaCard docs to include new features
 
 
 // Import FilePond styles

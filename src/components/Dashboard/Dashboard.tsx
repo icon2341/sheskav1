@@ -19,13 +19,17 @@ export function Dashboard() {
     const navigate = useNavigate();
     const [partners, setPartners] = useState<string[]>([]);
 
-    async function getPartners(uid: string | undefined) {
+    async function getPartnersAndCheckOnboarding(uid: string | undefined) {
         const docRef = doc(db, "users", uid + "" );
         console.log('getting partners')
         //docSnapShopt
         await getDoc(docRef).then(doc => {
             if(doc.exists()) {
                 console.log("Document data:", doc.data());
+
+                if(doc.data().passedOnboarding === false || doc.data().passedOnboarding === undefined) {
+                    navigate('/onboarding')
+                }
                 if(doc.data().partners !== undefined) {
                     setPartners(doc.data().partners)
                 } else {
@@ -41,7 +45,7 @@ export function Dashboard() {
     useEffect(() => {
         if(user !== null){
             console.log('Attempt to get partners ' + user)
-            getPartners(user?.uid).then(r => {
+            getPartnersAndCheckOnboarding(user?.uid).then(r => {
                 console.log('partner data: ' + r);
             });
         }
