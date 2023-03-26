@@ -21,10 +21,8 @@ import TipTapMenuBar from "./EditorUtil";
 import styles from "./NewItem.module.css";
 import "./SwitchSection/bootstrapSwitch.css";
 
-//TODO - update sheskaCardDef to include new features
 //TODO - update sheskaCardpreview to include new features
-//TODO this includes updating the object to include said features.
-//TODO update postSheskaCard docs to include new features
+//TODO in many places you use a SINGLE zero stirng for the ['0','0'] currency value, you should use a double string by default to represent cents
 
 
 // Import FilePond styles
@@ -52,6 +50,7 @@ import imageManagerStyles from "./ImageManager/ImageManager.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import CurrencyInput from "react-currency-input-field";
 import {bool} from "yup";
+import SheskaCardDef from "../Utils/SheskaCardDef";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
@@ -252,6 +251,19 @@ export function NewItem() {
         trackPromise(postNewSheskaCard(values, docRef, imageOrder, editor).then(() => {setDataUploaded(true)}));
     }
 
+    const processCurrencyForTesting = (value: string) => {
+        if(value === ''){
+            return ['0','0']
+        } else {
+            if(value.includes('.')){
+                const split = value.split('.');
+                return [split[0], split[1]]
+            } else {
+                return [value, '0']
+            }
+        }
+    }
+
     return (
         <div className={styles.pageContainer} id={'pageContainerNewItem'}>
 
@@ -294,8 +306,8 @@ export function NewItem() {
 
                             {previewCard && <div className={styles.previewCardContainer}>
                                 <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false); console.log('setPreviewFalse')}}/>
-                                <SheskaCardGuestView sheskaCardDef={new SheskaCard(docRef?.id.toString() || "",
-                                    values.title, values.subtitle, editor.getHTML(), imageOrder)} cardImages={images}/>
+                                <SheskaCardGuestView sheskaCardDef={new SheskaCardDef(docRef?.id ?? '', values.title, values.subtitle, editor.getHTML(), imageOrder,
+                                                                                        processCurrencyForTesting(values.expectedAmount), processCurrencyForTesting(values.goal), ['0', '00'])} cardImages={images}/>
                             </div>}
 
                             <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
@@ -515,7 +527,8 @@ async function postNewSheskaCard(values: {title: string, subtitle: string, goal:
                 description: editor?.getHTML(),
                 imageOrder: imageOrder,
                 goal: processedGoal,
-                expected: expectedAmount,
+                expectedAverage: expectedAmount,
+                amountRaised: ['0','0'], //TODO PLACEHOLDER
                 guestsAbsorbFees: values.GuestsAbsorbFees,
                 dateCreated: new Date().toString(),
                 dateUpdated: new Date().toString(),

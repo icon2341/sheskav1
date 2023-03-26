@@ -9,7 +9,9 @@ import { default as SheskaCardDef, default as sheskaCardDef } from "./SheskaCard
  * @param docData the DocumentData object to convert
  */
 export function getCardFromDocData(docData: DocumentData) : SheskaCardDef {
-    return new SheskaCardDef(docData.id, docData.title, docData.subtitle, docData.description, docData.imageURLs);
+    return new SheskaCardDef(docData.id, docData.title, docData.subtitle, docData.description, docData.imageOrder,
+        docData.expectedAverage, docData.goal, docData.amountRaised, docData.guestsAbsorbFees, docData.dateCreated,
+        docData.dateUpdated);
 }
 
 /**

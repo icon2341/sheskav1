@@ -61,16 +61,18 @@ export function SheskaCardGuestView(props: {sheskaCardDef: SheskaCard, cardImage
                 </style>
 
                 {/*TODO MAKE THIS THE CORRECT COLOR @COLLIN*/}
-                <ProgressBar now={34} className={styles.itemProgressBar} variant={"standard"}/>
+                //TODO MAKE IT SO THAT THE BAR DOES NOT SHOW IF IT IS ON INFINITY
+                {props.sheskaCardDef.goal === ['0','0'] && <ProgressBar now={convertCurrenctToDouble(props.sheskaCardDef.amountRaised)} max={convertCurrenctToDouble(props.sheskaCardDef.goal)} className={styles.itemProgressBar} variant={"standard"}/>
+                }
                 <div className={styles.progressBarHeaders}>
                     <div className={styles.progressBarHeaderSub} >
                         <h3 className={styles.progressBarHeader}>Amount Raised</h3>
-                        <h3 className={styles.progressBarHeaderNumber}>$5,622</h3>
+                        <h3 className={styles.progressBarHeaderNumber}>{convertCurrencyToString(props.sheskaCardDef.amountRaised)}</h3>
 
                     </div>
                     <div className={styles.progressBarHeaderSub}>
                         <h3 className={styles.progressBarHeader}>Amount Left</h3>
-                        <h3 className={`${styles.progressBarHeaderNumber} ${styles.progressBarHeaderNumberTwo}`}> {(props.sheskaCardDef.amountRequested - props.sheskaCardDef.amountRaised) || '$4,222'} </h3>
+                        <h3 className={`${styles.progressBarHeaderNumber} ${styles.progressBarHeaderNumberTwo}`}> {(convertCurrenctToDouble(props.sheskaCardDef.goal) - convertCurrenctToDouble(props.sheskaCardDef.amountRaised) || '$4,222')} </h3>
                     </div>
                 </div>
 
@@ -89,3 +91,12 @@ export function SheskaCardGuestView(props: {sheskaCardDef: SheskaCard, cardImage
 }
 
 export default SheskaCardGuestView;
+
+
+function convertCurrencyToString(currency: string[]) {
+    return ("$" + currency[0] + "." + currency[1])
+}
+
+function convertCurrenctToDouble(currency: string[]) {
+    return (parseFloat(currency[0] + "." + currency[1]))
+}
