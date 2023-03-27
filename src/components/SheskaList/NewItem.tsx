@@ -41,6 +41,7 @@ import imageManagerStyles from "./ImageManager/ImageManager.module.css";
 import { default as ImageOrganizer } from "./ImageManager/ImageOrganizer";
 import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
+import SheskaCardDef from "../Utils/SheskaCardDef";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
@@ -234,6 +235,20 @@ export function NewItem() {
             return yupToFormErrors(err);
         }
     }
+
+    const processCurrencyForTesting = (value: string) => {
+        if(value === ''){
+            return ['0','0']
+        } else {
+            if(value.includes('.')){
+                const split = value.split('.');
+                return [split[0], split[1]]
+            } else {
+                return [value, '0']
+            }
+        }
+    }
+
     return (
         <div className={styles.pageContainer} id={'pageContainerNewItem'}>
             <div className={styles.formContainer}>
@@ -267,8 +282,8 @@ export function NewItem() {
 
                             {previewCard && <div className={styles.previewCardContainer}>
                                 <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false); console.log('setPreviewFalse')}}/>
-                                <SheskaCardGuestView sheskaCardDef={new SheskaCard(docRef?.id.toString() || "",
-                                    values.title, values.subtitle, editor.getHTML(), imageOrder)} cardImages={images}/>
+                                <SheskaCardGuestView sheskaCardDef={new SheskaCardDef(docRef?.id ?? '', values.title, values.subtitle, editor.getHTML(), imageOrder,
+                                    processCurrencyForTesting(values.expectedAmount), processCurrencyForTesting(values.goal), ['0', '00'])} cardImages={images}/>
                             </div>}
 
                             <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
