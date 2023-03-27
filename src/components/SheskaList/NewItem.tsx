@@ -465,18 +465,18 @@ async function postNewSheskaCard(values: { title: string, subtitle: string, goal
     console.log(values)
     try {
         let processedGoal: number[];
-        if(values.goal === ''){
+        if (values.goal === '') {
             processedGoal = [0,0]
-        } else if(values.goal.includes('.')){
-            processedGoal = values.goal.split('.').map((value) => {return parseInt(value)})
+        } else if(values.goal.includes('.')) {
+            processedGoal = values.goal.split('.').map((value) => parseInt(value))
         } else {
             processedGoal = [parseInt(values.goal), 0]
         }
         let expectedAmount: number[];
-        if(values.expectedAmount === ''){
+        if (values.expectedAmount === '') {
             expectedAmount = [0,0]
-        } else if (values.expectedAmount.includes('.')){
-            expectedAmount = values.expectedAmount.split('.').map((value) => {return parseInt(value)})
+        } else if (values.expectedAmount.includes('.')) {
+            expectedAmount = values.expectedAmount.split('.').map((value) => parseInt(value))
         } else {
             expectedAmount = [parseInt(values.expectedAmount), 0]
         }
