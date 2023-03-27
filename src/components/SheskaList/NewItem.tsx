@@ -18,12 +18,13 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import 'filepond/dist/filepond.min.css';
 import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
-import { Formik } from "formik";
+import { Formik, validateYupSchema, yupToFormErrors } from "formik";
 import React, { ChangeEvent, MutableRefObject, useEffect, useRef, useState } from "react";
 import { Carousel, ToastContainer } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Toast from "react-bootstrap/Toast";
+import CurrencyInput from 'react-currency-input-field';
 import { FilePond, registerPlugin } from 'react-filepond';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { trackPromise, usePromiseTracker } from "react-promise-tracker";
@@ -33,6 +34,7 @@ import * as Yup from "yup";
 import globalStyles from "../../App.module.css";
 import { auth, db, storage } from "../../index";
 import SheskaCardGuestView from "../GuestView/SheskaCardGuestView/SheskaCardGuestView";
+import { DisplayFormikState } from "../Utils/DisplayFormikState";
 import SheskaCard from "../Utils/SheskaCardDef";
 import TipTapMenuBar from "./EditorUtil";
 import imageManagerStyles from "./ImageManager/ImageManager.module.css";
@@ -61,7 +63,19 @@ export function NewItem() {
 
     const validationSchema = Yup.object({
         title: Yup.string().required('Title is required').max(50, 'Must be 50 characters or less'),
-        subtitle: Yup.string().required('Subtitle is required').max(300, 'Must be 300 characters or less'),
+        subtitle: Yup.string().required('Subtitle is required').max(100, 'Must be 300 characters or less'),
+        goal: Yup.number().typeError('Goal must be a number'),
+        expectedAmount: Yup.number().test(
+            'Expected amount must be less than goal',
+            'Expected amount must be less than goal',
+            (_value, { parent: formState }) => {
+                console.log('running test', formState.goal, formState.expectedAmount);
+                if(formState.goal && formState.expectedAmount){
+                    return formState.expectedAmount < formState.goal;
+                }
+                return true;
+            },
+        ),
     });
 
     useEffect(() => {
@@ -208,33 +222,44 @@ export function NewItem() {
 
         filePondRef?.processFiles();
         trackPromise(
-            postNewSheskaCard(values.title, values.subtitle, docRef, imageOrder, editor)
-            .then(() => setDataUploaded(true))
+            postNewSheskaCard(values, docRef, imageOrder, editor)
+            .then(() => {setDataUploaded(true)})
         );
     };
 
+    const validateForm = (values: any) => {
+        try {
+            validateYupSchema(values, validationSchema, true);
+        } catch (err) {
+            return yupToFormErrors(err);
+        }
+    }
     return (
         <div className={styles.pageContainer} id={'pageContainerNewItem'}>
-
-
             <div className={styles.formContainer}>
                 <h1 className={styles.title}>Create a Card</h1>
-
                 <Formik
-                    validationSchema={validationSchema}
+                    validate={validateForm}
                     initialValues={{
                         title: '',
-                        subtitle: '',}}
+                        subtitle: '',
+                        goal: '',
+                        expectedAmount: '',
+                        guestsAbsorbFees: false,
+                    }}
                     onSubmit={uploadFiles}
                 >
-                    {({
+                    {props => {
+                        const {
                           handleSubmit,
                           handleChange,
+                          handleBlur,
                           values,
                           touched,
-                          isValid,
+                          dirty,
                           errors,
-                      }) => (
+                      } = props;
+                      return (
                         <Form onSubmit={(event) => {
                             event.preventDefault();
                             handleSubmit();
@@ -248,15 +273,14 @@ export function NewItem() {
 
                             <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
                                 <label className={styles.sectionHeader} >Title</label>
-                                <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Add your card title. (required) </p>
+                                <p className={` ${styles.sectionSubheader} text-muted`}>Add your card title. (required) </p>
                                 <Form.Control
                                     type={"text"}
                                     name={"title"}
                                     value={values.title}
                                     placeholder={"Title"}
-                                    onChange={(value) => {
-                                        handleChange(value)
-                                    }}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
                                     isValid={touched.title && !errors.title}
                                     isInvalid={!!errors.title}
                                 />
@@ -270,19 +294,18 @@ export function NewItem() {
 
                             <Form.Group controlId={'subtitleForm'} className={"mb-3 w-75 mx-auto"}>
                                 <label className={styles.sectionHeader} >Subtitle</label>
-                                <p className={` ${styles.sectionSubheader} text-muted`}>Add your subtitle, short but descriptive. (required)</p>
+                                <p className={`${styles.sectionSubheader} text-muted`}>Add your subtitle, short but descriptive. (required)</p>
 
                                 <Form.Control
                                     as={"textarea"}
                                     type={"text"}
                                     name={"subtitle"}
                                     value={values.subtitle}
-                                    onChange={(value) => {
-                                        handleChange(value)
-                                    }}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder={"Subtitle"}
                                     isValid={touched.subtitle && !errors.subtitle}
-                                    isInvalid={!!errors.subtitle}
+                                    isInvalid={touched.subtitle && !!errors.subtitle}
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.subtitle}
@@ -357,16 +380,67 @@ export function NewItem() {
                                 <TipTapMenuBar editor={editor}/>
                                 {(editor)? <EditorContent editor={editor} /> : <div>Loading...</div>}
                             </div>
-
-                            <div className={styles.submitButtonContainer}>
-                                <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
-                                        ${styles.loginButton}`}> Submit</Button>
-                                <Button type={'button'}  disabled={promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
-                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('setpreviewtrue')}}> Preview</Button>
+                            <div className={styles.cardEventSettingsContainer}>
+                                <div className={styles.cardFinancials}>
+                                    <h3 className={styles.sectionHeader}>Financials</h3>
+                                    <label className={`${styles.sectionHeader} ${styles.financialHeader}`} >Goal</label>
+                                    <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Specify your goal. Leave blank if you don't require a limit. ($USD)</p>
+                                    <Form.Group>
+                                        <CurrencyInput
+                                            prefix={'$'}
+                                            id="goal"
+                                            name="goal"
+                                            placeholder="∞"
+                                            decimalsLimit={2}
+                                            onValueChange={(value: any) => handleChange({target: {name: 'goal', value}})}
+                                            className={"form-control w-75"}
+                                        />
+                                    </Form.Group>
+                                    <label className={`${styles.sectionHeader} ${styles.financialHeader}`} >Expected Amount</label>
+                                    <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Specify the average donation you expect. Should be less than goal. (optional) ($USD)</p>
+                                    <Form.Group>
+                                        <>
+                                            <CurrencyInput
+                                                prefix={'$'}
+                                                id="expectedAmount"
+                                                name="expectedAmount"
+                                                placeholder="0.00"
+                                                decimalsLimit={2}
+                                                onValueChange={(value: any) => handleChange({target: {name: 'expectedAmount', value}})}
+                                                className={"form-control w-75"}
+                                            />
+                                            <div className={"invalid-feedback d-block"}>{errors.expectedAmount}</div>
+                                        </>
+                                    </Form.Group>
+                                    <label className={`${styles.sectionHeader} ${styles.financialHeader}`} >Linked Account</label>
+                                    <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Specify which of your added accounts this card should funnel into. (placeholder)</p>
+                                    <img src={require('../../images/Screenshot_20230304_094522.png')}/>
+                                </div>
+                                <div className={styles.cardEventSettings}>
+                                    <h3 className={styles.sectionHeader}>Event Settings</h3>
+                                    <div className={styles.itemSetting}>
+                                        <div className={styles.itemSettingName}>
+                                            <div className={styles.settingName}>Guests absorb fees</div>
+                                            <div className={styles.settingSubtitle}>
+                                                Service Fees total to roughly 7%' +
+                                                ' including transaction fees by banks that are not in control of Sheska.' +
+                                                'Guests can absorb this 7% frictionlessly.
+                                                </div>
+                                            <Form.Check defaultChecked={false} className="form-switch-lg" type="switch" id='guestsAbsorbFees' onChange={handleChange}/>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
+                            <div className={styles.submitButtonContainer}>
+                                <Button type={'submit'}  disabled={!dirty || promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
+                                        ${styles.loginButton}`}> Submit</Button>
+                                <Button type={'button'}  disabled={!dirty || promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
+                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('setpreviewtrue')}}> Preview</Button>
+                            </div>
+                            <DisplayFormikState {...props} />
                         </Form>
-                    )}
+                    )}}
                 </Formik>
             </div>
         </div>
@@ -379,28 +453,52 @@ export default NewItem;
  *
  * @param title the card's title
  * @param subtitle the subtitle data for card
+ * @param goal goal amount for card, can be empty string will be converted to 0
+ * @param expected expected amount for card, can be empty string will be converted to 0
  * @param docRef reference to the document being updated in firestore, this is passed in rather then generated
  * at call time because the document reference needs to be created at the parent level because the same ref should be
  * used in firestore and google cloud.
  * @param imageOrder order of images as they appear in the card
  * @param editor editor instance with user description code
  */
-async function postNewSheskaCard(title: string, subtitle: string, docRef: any, imageOrder: string[], editor: Editor | null) {
+async function postNewSheskaCard(values: { title: string, subtitle: string, goal: string, expectedAmount: string, guestsAbsorbFees: boolean }, docRef: any, imageOrder: string[], editor: Editor | null) {
+    console.log(values)
     try {
-        const currentISOTimestamp = new Date().toISOString();
+        let processedGoal: number[];
+        if(values.goal === ''){
+            processedGoal = [0,0]
+        } else if(values.goal.includes('.')){
+            processedGoal = values.goal.split('.').map((value) => {return parseInt(value)})
+        } else {
+            processedGoal = [parseInt(values.goal), 0]
+        }
+        let expectedAmount: number[];
+        if(values.expectedAmount === ''){
+            expectedAmount = [0,0]
+        } else if (values.expectedAmount.includes('.')){
+            expectedAmount = values.expectedAmount.split('.').map((value) => {return parseInt(value)})
+        } else {
+            expectedAmount = [parseInt(values.expectedAmount), 0]
+        }
+
         await setDoc(docRef,
             {
-                title,
-                subtitle,
+                title: values.title,
+                subtitle: values.subtitle,
                 description: editor?.getHTML(),
                 imageOrder,
-                dateCreated: currentISOTimestamp,
-                dateUpdated: currentISOTimestamp,
+                goal: processedGoal,
+                expectedAverage: expectedAmount,
+                amountRaised: [0,0], // TODO PLACEHOLDER
+                guestsAbsorbFees: values.guestsAbsorbFees,
+                dateCreated: new Date().toISOString(),
+                dateUpdated: new Date().toISOString(),
             }
-        );
-        return 'Success';
+        ).then(() => {
+            return Promise.resolve("success");
+        });
     } catch (e) {
-        console.error(e);
-        throw new Error(`Failed to create new card: ${e}`);
+        console.log(e);
+        return Promise.reject(`failure: ${e}`);
     }
 }
