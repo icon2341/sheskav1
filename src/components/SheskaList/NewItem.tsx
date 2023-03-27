@@ -263,6 +263,9 @@ export function NewItem() {
                                 <Form.Control.Feedback type="invalid">
                                     {errors.title}
                                 </Form.Control.Feedback>
+                                <Form.Control.Feedback>
+                                    {errors.title}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group controlId={'subtitleForm'} className={"mb-3 w-75 mx-auto"}>
