@@ -9,7 +9,9 @@ import { default as SheskaCardDef, default as sheskaCardDef } from "./SheskaCard
  * @param docData the DocumentData object to convert
  */
 export function getCardFromDocData(docData: DocumentData) : SheskaCardDef {
-    return new SheskaCardDef(docData.id, docData.title, docData.subtitle, docData.description, docData.imageURLs);
+    return new SheskaCardDef(docData.id, docData.title, docData.subtitle, docData.description, docData.imageOrder,
+        docData.expectedAverage, docData.goal, docData.amountRaised, docData.guestsAbsorbFees, docData.dateCreated,
+        docData.dateUpdated);
 }
 
 /**
@@ -87,21 +89,21 @@ export async function getCardDescription (cardID: string): Promise<string> {
 export async function deleteCardImages (cardID: string) {
     const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
     listAll(pathReference)
-    .then((res) => {
-        res.items.forEach((itemRef) => {
-            deleteObject(itemRef)
-            .catch((error) => {
-                console.log(error)
-            })
-        });
-    }).catch((error) => {
+        .then((res) => {
+            res.items.forEach((itemRef) => {
+                deleteObject(itemRef)
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            });
+        }).catch((error) => {
         console.error(error);
     });
 }
 
 export async function deleteCard(cardID: string) {
     await deleteDoc(doc(db, 'users/' + auth.currentUser?.uid.toString() + "/sheska_list", cardID))
-    .catch((error) => {
-        console.error(error);
-    });
+        .catch((error) => {
+            console.error(error);
+        });
 }
