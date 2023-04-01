@@ -1,0 +1,47 @@
+@import '../../../common/constants/globalVariables.scss';
+
+.navbarContainer{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 65px;
+    background-color: rgba(247, 249, 255, 0.53);
+    color: #fff;
+    //background: $base-color;
+    padding: 0 .5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    align-items: center;
+    transition: width .1s ease-in-out;
+    z-index: 10;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 0px 15px 0px;
+
+}
+
+.navbarExtended {
+    width: 175px;
+    transition: width .1s ease-in-out;
+}
+
+.navbarLogo {
+    font-family: 'Butler', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    border-bottom: whitesmoke 1px solid;
+    color: $base-color;
+    //color: white;
+}
+
+.navbarButtonsContainer {
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s ease-in-out;
+    z-index: 1;
+
+}
+
+.navButtonIcon {
+    font-size: 2rem;
+    padding: 10px 0;
+}

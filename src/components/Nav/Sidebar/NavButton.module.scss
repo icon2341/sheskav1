@@ -1,0 +1,32 @@
+@import "../../../common/constants/globalVariables.scss";
+
+.navButton {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+
+}
+
+.selectedButton {
+  //border: rgba(128, 128, 128, 0.46) 1px solid;
+  background-color: #eaeaea;
+}
+
+.navButton:hover {
+  //background-color: #f1f1f1;
+    border: whitesmoke 1px solid;
+}
+
+.navButtonText {
+  //color: white;
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  padding: 0 10px;
+  margin-bottom: 0;
+  font-size: 1rem;
+}
