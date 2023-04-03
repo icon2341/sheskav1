@@ -12,14 +12,22 @@ import reportWebVitals from './reportWebVitals';
 import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import {initializeAppCheck, ReCaptchaV3Provider} from "firebase/app-check";
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 export const db = getFirestore(app)
-
 // Initialize Cloud Storage and get a reference to the service
 export const storage = getStorage(app);
+//app check for ReCaptcha and API verification
+const appCheck = initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider('6LfjpU8kAAAAAIJ0S9qr18OzybHKZosUTKwoozq0'),
+    isTokenAutoRefreshEnabled: true
+
+})
+
+
 
 connectAuthEmulator(auth, "http://localhost:9099")
 connectFirestoreEmulator(db, 'localhost', 8081);
