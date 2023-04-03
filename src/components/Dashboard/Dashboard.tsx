@@ -69,11 +69,6 @@ export function Dashboard() {
         console.log("FINAL PARTNERS", partners)
         return (
             <Box id={styles['box']}>
-                {/*<style> @import url('https://fonts.googleapis.com/css2?family=Pavanam&display=swap');</style>*/}
-                {/*<style> @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');*/}
-                {/*</style>*/}
-                {/*<link rel="stylesheet"*/}
-                {/*      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>*/}
                 <h1 id={styles["email-display"]}>{user?.email} Dashboard Pre-Alpha v0.2</h1>
                 <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles.grid}>
                     {welcomeSpace}

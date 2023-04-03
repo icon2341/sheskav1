@@ -3,7 +3,7 @@ import styles from './Sidebar.module.scss';
 import ToggleNavSize from "./ToggleNavSize";
 import {CSS} from "@dnd-kit/utilities";
 import {NavButton} from "./NavButton";
-import {Home} from 'react-feather';
+import {Home, List, AlertCircle, LogOut, Settings} from "react-feather";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {signOutUser} from "../../Authentication/Utils/AuthUtils";
 import AuthBar from "../AuthBar/AuthBar";
@@ -21,13 +21,15 @@ export function Sidebar(props: { navigateFunction: NavigateFunction }) {
             <div className={`${styles.navbarContainer} ${isOpen ? styles.navbarExtended : ''}`} onMouseEnter={() => {setIsOpen(true)}} onMouseLeave={() => {if(!manuallyLocked){setIsOpen(false)}}}>
                 <h1 className={styles.navbarLogo}>S{isOpen ? 'heska' : ''}</h1>
                 <div className={styles.navigationGroup}>
-                    <NavButton icon={'home'} text={'Dashboard'} location={'/dashboard'} selected={'/dashboard' === currentRelPath} isSidebarOpen={isOpen}/>
-                    <NavButton icon={'list'} text={'Sheska List'} location={'/sheskalist'} selected={'/sheskalist' === currentRelPath} isSidebarOpen={isOpen}/>
+                    <NavButton icon={Home} text={'Dashboard'} location={'/dashboard'} selected={'/dashboard' === currentRelPath} isSidebarOpen={isOpen}/>
+                    <NavButton icon={List} text={'Sheska List'} location={'/sheskalist'} selected={'/sheskalist' === currentRelPath} isSidebarOpen={isOpen}/>
                 </div>
                 <div className={styles.settingGroup}>
-                    <NavButton icon={'settings'} text={"Account"} location={undefined} selected={false} isSidebarOpen={isOpen}/>
-                    <div onClick={() => {signOutUser(props.navigateFunction).then(r => {console.log('signed out user!')}).catch(reason => {console.log('failed to sign out user')})}}>
-                        <NavButton icon={'log-out'} text={'Sign Out'} selected={false} isSidebarOpen={isOpen} location={undefined}/>
+                    <NavButton icon={Settings} text={"Account"} location={undefined} selected={false} isSidebarOpen={isOpen}/>
+                    <div onClick={() => {signOutUser(props.navigateFunction)
+                        .then(r => {console.log('signed out user!')})
+                        .catch(reason => {console.log('failed to sign out user')})}}>
+                        <NavButton icon={LogOut} text={'Sign Out'} selected={false} isSidebarOpen={isOpen} location={undefined}/>
                     </div>
                 </div>
                     {/*TODO need to add vertical header*/}

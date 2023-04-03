@@ -37,50 +37,14 @@ class SheskaCard {
         this._cardID = cardID;
         this._title = title;
         this._subtitle = subtitle;
-        if(description) {
-            this._description = description;
-        } else {
-            this._description = '';
-        }
-        if(imageOrder) {
-            this._imageOrder = imageOrder;
-        } else {
-            this._imageOrder = [];
-        }
-        if(goal) {
-            this._amountRequested = goal;
-        } else {
-            this._amountRequested = [0,0];
-        }
-        if(amountRaised) {
-            this._amountRaised = amountRaised;
-        } else {
-            this._amountRaised = [0,0];
-        }
-        if(expectedAverage) {
-            this._expectedAverage = expectedAverage;
-        } else {
-            this._expectedAverage = [0,0];
-        }
-
-        if(guestsAbsorbFees) {
-            this._guestsAbsorbFees = guestsAbsorbFees;
-        } else {
-            this._guestsAbsorbFees = false;
-        }
-
-        if(dateCreated) {
-            this._dateCreated = dateCreated;
-        } else {
-            this._dateCreated = '';
-        }
-
-        if(dateUpdated) {
-            this._dateUpdated = dateUpdated;
-        } else {
-            this._dateUpdated = '';
-        }
-
+        this._description = description || '';
+        this._imageOrder = imageOrder || [];
+        this._amountRaised = amountRaised || [0,0];
+        this._amountRequested = goal || [0,0];
+        this._expectedAverage = expectedAverage || [0,0];
+        this._guestsAbsorbFees = guestsAbsorbFees || false;
+        this._dateCreated = dateCreated || '';
+        this._dateUpdated = dateUpdated || '';
     }
 
 

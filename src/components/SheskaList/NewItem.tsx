@@ -453,7 +453,7 @@ export function NewItem() {
                                 <Button type={'button'}  disabled={!dirty || promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
                                         ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('setpreviewtrue')}}> Preview</Button>
                             </div>
-                            <DisplayFormikState {...props} />
+                            {/*<DisplayFormikState {...props} />*/}
                         </Form>
                     )}}
                 </Formik>

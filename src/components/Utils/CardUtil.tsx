@@ -87,7 +87,7 @@ export async function getCardDescription (cardID: string): Promise<string> {
 
 
 export async function deleteCardImages (cardID: string) {
-    const pathReference = ref(storage, '/users/'+ auth.currentUser?.uid.toString() + "/" + cardID + "/");
+    const pathReference = ref(storage, `/users/${auth.currentUser?.uid.toString()}/${cardID}/`)
     listAll(pathReference)
         .then((res) => {
             res.items.forEach((itemRef) => {
@@ -102,7 +102,7 @@ export async function deleteCardImages (cardID: string) {
 }
 
 export async function deleteCard(cardID: string) {
-    await deleteDoc(doc(db, 'users/' + auth.currentUser?.uid.toString() + "/sheska_list", cardID))
+    await deleteDoc(doc(db, `users/${auth.currentUser?.uid.toString()}/sheska_list`, cardID))
         .catch((error) => {
             console.error(error);
         });
