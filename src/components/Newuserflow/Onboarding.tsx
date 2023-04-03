@@ -11,6 +11,8 @@ import {doc, getDoc, setDoc} from "firebase/firestore";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import * as Yup from "yup";
 import {Formik} from "formik";
+import {updateProfile} from "@firebase/auth";
+import firebase from "firebase/compat";
 // Core modules imports are same as usual
 // Direct React component imports
 //TODO add email verification or phone number protocol
@@ -220,9 +222,14 @@ async function sendUserOnboardingData(navigate : NavigateFunction, txtUserFirstn
         // take the partner data and send it to the user, take the name information, set isOnboarded to true,
         // and send the user to the home page.
         const userRef = doc(db, 'users', user.uid);
-        setDoc(userRef, { partners: [txtUserFirstname, txtPartnerFirstname],
+        await setDoc(userRef, { partners: [txtUserFirstname, txtPartnerFirstname],
                                 full_name: [txtUserFirstname,txtUserLastname],
-                                passedOnboarding: true}, { merge: true });
+                                passedOnboarding: true}, { merge: true }).then(() => {
+                                    updateProfile(user, {
+                                        displayName: txtUserFirstname,
+                                    });
+
+        })
 
         navigate('/dashboard')
     }

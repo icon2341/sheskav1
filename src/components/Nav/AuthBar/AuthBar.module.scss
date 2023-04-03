@@ -1,0 +1,59 @@
+@import "src/common/constants/globalVariables.scss";
+@import '../common/localNavStyles.scss';
+
+.authbarContainer {
+  position: fixed;
+  float: right;
+  top: 0;
+  right: 0;
+  color: black;
+  background-color: $navbar-background-color-desktop;
+  height: 59px;
+  z-index: 11;
+  display: flex;
+  justify-content: center;
+    align-items: center;
+
+  border-bottom: #d7d7d7 solid 1px;
+  border-left: #d7d7d7 solid 2px;
+
+  transition: left .1s ease-in-out;
+  -webkit-transition: left .1s ease-in-out;
+  -moz-transition: left .1s ease-in-out;
+  -o-transition: left .1s ease-in-out;
+
+  width: -webkit-calc(100% - $closed-desktop-nav-width);
+  width:    -moz-calc(100% - $closed-desktop-nav-width);
+  width:         calc(100% - $closed-desktop-nav-width);
+}
+
+.authbarExtended {
+  left: $open-desktop-nav-width;
+  width: -webkit-calc(100% - $open-desktop-nav-width);
+  width:    -moz-calc(100% - $open-desktop-nav-width);
+  width:         calc(100% - $open-desktop-nav-width);
+}
+
+.username {
+  font-size: 1.2rem;
+  margin: 0 0.5rem;
+  font-weight: 300;
+  font-family: Roboto, 'Open Sans', sans-serif;
+}
+
+.authbarContent {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 80%;
+  margin-left: auto;
+  margin-right: 60px;
+}
+
+.dropdownButton {
+  border-radius: 5px;
+}
+
+.dropdownButton:hover {
+  background-color: #f1f1f1;
+}

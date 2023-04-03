@@ -18,10 +18,4 @@ export function Nav() {
     )
 }
 
-async function signOutUser(navigate : NavigateFunction) {
-    await signOut(auth)
-    console.log("User is Signed out")
-    navigate("/");
-}
-
 export default Nav
