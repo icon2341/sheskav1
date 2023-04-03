@@ -8,9 +8,10 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../index";
-import { LoadingIndicator } from '../LoadingIndicator';
-import LoadingScreen from "../LoadingScreen";
+import { LoadingIndicator } from '../LoadingUtils/LoadingIndicator';
+import LoadingScreen from "../LoadingUtils/LoadingScreen";
 import styles from './Dashboard.module.scss';
+import {checkIfUserHasPassedOnboarding} from "../Authentication/Utils/AuthUtils";
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
@@ -40,10 +41,14 @@ export function Dashboard() {
 
     useEffect(() => {
         if(user !== null){
-            console.log('Attempt to get partners ' + user)
-            getPartners(user?.uid).then(r => {
-                console.log('partner data: ' + r);
-            });
+            checkIfUserHasPassedOnboarding(navigate).then(
+                () => {
+                    console.log('Attempt to get partners ' + user)
+                    getPartners(user?.uid).then(r => {
+                        console.log('partner data: ' + r);
+                    });
+                }
+            )
         }
 
     }, [user]);

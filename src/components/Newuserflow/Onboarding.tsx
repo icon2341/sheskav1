@@ -1,5 +1,5 @@
 
-import styles from "./Onboarding.module.css"
+import styles from "./Onboarding.module.scss"
 import React, {ChangeEvent, useEffect, useState} from "react";
 import Form from "react-bootstrap/Form";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import {updateProfile} from "@firebase/auth";
 import firebase from "firebase/compat";
+import {checkIfUserHasPassedOnboarding} from "../Authentication/Utils/AuthUtils";
 // Core modules imports are same as usual
 // Direct React component imports
 //TODO add email verification or phone number protocol
@@ -20,7 +21,7 @@ import firebase from "firebase/compat";
 function SlideNextButton(props: { disability: boolean;} ) {
     const swiper = useSwiper();
     return (
-        <button disabled={props.disability} className={styles.navigationButton} onClick={() => {swiper.slideNext()
+        <button type={'button'} disabled={props.disability} className={styles.navigationButton} onClick={() => {swiper.slideNext()
                                                                             console.log('NEXT PRESSED')}}>Next</button>
     );
 }
@@ -28,7 +29,7 @@ function SlideNextButton(props: { disability: boolean;} ) {
 function SlidePreviousButton() {
     const swiper = useSwiper();
     return (
-        <button className={styles.navigationButton} onClick={() => swiper.slidePrev()}>Prev</button>
+        <button type={'button'} className={styles.navigationButton} onClick={() => swiper.slidePrev()}>Prev</button>
     );
 }
 
@@ -52,7 +53,6 @@ export function Onboarding() {
     const [txtPartnerFirstname, setTxtPartnerFirstname] = useState('');
     const [txtUserFirstname, setTxtUserFirstname] = useState('');
     const [txtUserLastname, setTxtUserLastname] = useState('');
-    const [nextDisabled, setNextDisabled] = useState(true);
     const handlePartnerLastname = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setTxtPartnerLastname(event.currentTarget.value);
         console.log(txtPartnerLastname);
@@ -74,7 +74,7 @@ export function Onboarding() {
 
     //CHECKS IF USER HAS PASSED ONBOARDING ALREADY, IF SO, REDIRECTS TO DASHBOARD
     useEffect(() => {
-        checkIfUserHasPassedOnboarding(navigate);
+        checkIfUserHasPassedOnboarding(navigate).then(r => console.log(r));
         console.log('CHECKING IF USER HAS PASSED ONBOARDING')
     }, [user]);
 
@@ -115,6 +115,7 @@ export function Onboarding() {
                                         touched,
                                         isValid,
                                         errors,
+                                        dirty
                                     }) => (
                                         <Form>
                                             <Form.Group controlId={'nameForm'} className={"mb-3 w-75 mx-auto"}>
@@ -126,11 +127,6 @@ export function Onboarding() {
                                                         handleChange(value)
                                                         handleUserFirstname(value)
                                                         console.log(values.firstname);
-                                                        if(errors.lastname) {
-                                                            setNextDisabled(true);
-                                                        } else {
-                                                            setNextDisabled(false);
-                                                        }
                                                     }}
                                                     placeholder={"First Name"}
                                                     isValid={touched.firstname && !errors.firstname}
@@ -149,11 +145,6 @@ export function Onboarding() {
                                                         handleChange(value)
                                                         handleUserLastname(value)
                                                         console.log(values.lastname);
-                                                        if(!isValid) {
-                                                            setNextDisabled(true);
-                                                        } else {
-                                                            setNextDisabled(false);
-                                                        }
                                                     }}
                                                     placeholder={"Last name"}
                                                     isValid={touched.lastname && !errors.lastname}
@@ -163,13 +154,14 @@ export function Onboarding() {
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.lastname}</Form.Control.Feedback>
 
                                             </Form.Group>
+                                            <div className={styles.navigationButtonsContainer}>
+                                                <SlidePreviousButton/>
+                                                <SlideNextButton disability={!!errors.lastname || !!errors.firstname || !dirty}/>
+                                            </div>
                                         </Form>
                                     )}
+
                                 </Formik>
-                                <div className={styles.navigationButtonsContainer}>
-                                    <SlidePreviousButton/>
-                                    <SlideNextButton disability={nextDisabled}/>
-                                </div>
                             </div>
                         </SwiperSlide>
                         <SwiperSlide>
@@ -177,10 +169,12 @@ export function Onboarding() {
                                 <h1 className={styles.questionPaneTitle}>Do you have a partner?</h1>
                                 <Form>
                                     <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">
-                                        <Form.Control placeholder="Partner first name" onChange={handlePartnerFirstname}/>
+                                        <Form.Control placeholder="Partner first name" type={"text"}
+                                                      name={"firstname"} onChange={handlePartnerFirstname}/>
                                     </Form.Group>
                                     <Form.Group className={"mb-3 w-75 mx-auto"}>
-                                        <Form.Control  placeholder="Partner last name" onChange={handlePartnerLastname}/>
+                                        <Form.Control  placeholder="Partner last name" type={"text"}
+                                                       name={"lastname"} onChange={handlePartnerLastname}/>
                                     </Form.Group>
                                 </Form>
                                 <div className={styles.navigationButtonsContainer}>
@@ -214,36 +208,18 @@ async function sendUserOnboardingData(navigate : NavigateFunction, txtUserFirstn
         // take the partner data and send it to the user, take the name information, set isOnboarded to true,
         // and send the user to the home page.
         const userRef = doc(db, 'users', user.uid);
-        await setDoc(userRef, { partners: [txtUserFirstname, txtPartnerFirstname],
-                                full_name: [txtUserFirstname,txtUserLastname],
-                                passedOnboarding: true}, { merge: true }).then(() => {
-                                    updateProfile(user, {
-                                        displayName: txtUserFirstname,
-                                    });
+        await setDoc(userRef, {
+            partners: [txtUserFirstname, txtPartnerFirstname],
+            full_name: [txtUserFirstname, txtUserLastname],
+            passedOnboarding: true
+        }, {merge: true}).then(() => {
+            updateProfile(user, {
+                displayName: txtUserFirstname,
+            });
+            auth.currentUser?.getIdToken(true)
 
         })
 
         navigate('/dashboard')
     }
-}
-
-async function checkIfUserHasPassedOnboarding(navigate : NavigateFunction) {
-    const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
-    //determines where to redirect user
-    await getDoc(userRef).then(doc => {
-        if (doc.exists()) {
-            console.log("doc exists, check onboarding", doc.data())
-            // make sure user has passed onboarding, redirects them accordingly
-            if(doc.data()?.passedOnboarding === false ||
-                doc.data()?.passedOnboarding === undefined) {
-                console.log("user has not passed onboarding")
-                return;
-            } else {
-                navigate('/dashboard')
-            }
-        } else {
-            throw new Error("User does not exist")
-
-        }
-    })
 }

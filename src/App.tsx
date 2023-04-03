@@ -16,7 +16,7 @@ import NewItem from "./components/SheskaList/NewItem";
 import Login from "./components/Authentication/Login";
 import ResetPassword from "./components/Authentication/ResetPassword";
 import EditItem from "./components/SheskaList/EditItem";
-import LoadingScreen from "./components/LoadingScreen";
+import LoadingScreen from "./components/LoadingUtils/LoadingScreen";
 import ProductPage from "./components/ProductPage/ProductPage";
 
 function App() {

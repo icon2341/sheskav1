@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 import { BsFillPlusSquareFill as AddButton } from 'react-icons/bs';
 import { useNavigate } from 'react-router';
-import { LoadingIndicator } from '../LoadingIndicator';
+import { LoadingIndicator } from '../LoadingUtils/LoadingIndicator';
 import { BackButton } from './BackButton';
 import styles from './SheskaList.module.css';
 
