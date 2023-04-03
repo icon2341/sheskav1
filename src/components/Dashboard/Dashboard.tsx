@@ -9,8 +9,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../index";
 import { LoadingIndicator } from '../LoadingIndicator';
-import styles from './Dashboard.module.css';
 import LoadingScreen from "../LoadingScreen";
+import styles from './Dashboard.module.scss';
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
@@ -54,12 +54,12 @@ export function Dashboard() {
         welcomeSpace = <LoadingIndicator />
     } else if(partners[1] === '') {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-            <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Add Name in settings'}!</h1>
+            <h1 id={styles["hello-message"]}> Welcome, {partners[0] ?? 'Add Name in settings'}!</h1>
             <h2 id={styles["start-here-message"]}> Start Here.</h2>
         </div>
     }  else {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-            <h1 id={styles["hello-message"]}> Welcome {partners[0] ?? 'Add Name in settings'} and {partners[1] ?? 'Ashar'}!</h1>
+            <h1 id={styles["hello-message"]}> Welcome, {partners[0] ?? 'Add Name in settings'} {partners[1] ? `and ${partners[1]}` : ''}!</h1>
             <h2 id={styles["start-here-message"]}> Start Here.</h2>
         </div>
     }
@@ -69,13 +69,8 @@ export function Dashboard() {
         console.log("FINAL PARTNERS", partners)
         return (
             <Box id={styles['box']}>
-                <style> @import url('https://fonts.googleapis.com/css2?family=Pavanam&display=swap');</style>
-                <style> @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
-                </style>
-                <link rel="stylesheet"
-                      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
                 <h1 id={styles["email-display"]}>{user?.email} Dashboard Pre-Alpha v0.2</h1>
-                <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles['grid']}>
+                <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles.grid}>
                     {welcomeSpace}
                     <div className={`${styles.largeFeatureCard}`}>
                         <h2>Guest List</h2>
@@ -104,15 +99,13 @@ export function Dashboard() {
                     </div>
                     <div className={`${styles.simpleFeatureCard} ${styles.gridItem}`}>
                         <h2>User Profile</h2>
-                        <p>Mange your profile, accounting, and aesthetics.</p>
+                        <p>Manage your profile, accounting, and aesthetics.</p>
                     </div>
                     <div className={`${styles.simpleFeatureCard} ${styles.gridItem}`}>
                         <h2>Dashboard</h2>
                         <p>View your event analytics and manage your event.</p>
                     </div>
                 </Masonry>
-
-
             </Box>
         )
     } else if (loading) {

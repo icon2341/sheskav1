@@ -1,0 +1,26 @@
+@import "src/common/constants/globalVariables.scss";
+
+
+.notifNumber {
+    background-color: $base-color;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    border-radius: 25%;
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+    text-align: center;
+    line-height: 20px;
+    z-index: 1;
+}
+
+.number {
+  margin: 0 0;
+  font-family: 'open sans', sans-serif;
+    font-weight: lighter;
+    font-size: 1.2rem;
+}

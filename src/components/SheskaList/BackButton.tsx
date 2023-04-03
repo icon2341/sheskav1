@@ -7,7 +7,7 @@ export const BackButton = (props: { location: string, text: string }) => {
 
     return (
         <div className={`${styles.pointerCursor} ${styles.miniCardButton}`} onClick={() => { navigate(props.location) }}>
-            <FaArrowLeft size={'3em'} className={styles.backIcon} />
+            <FaArrowLeft size={'2em'} className={styles.backIcon} />
             <h3 className={`${styles.miniCardButtonText} ${styles.backButtonText}`}>{props.text}</h3>
         </div>
     );

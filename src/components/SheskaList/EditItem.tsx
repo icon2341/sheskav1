@@ -11,7 +11,7 @@ import 'filepond/dist/filepond.min.css';
 import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { Formik } from "formik";
-import React, {ChangeEvent, SetStateAction, useEffect, useRef, useState} from "react";
+import React, { ChangeEvent, SetStateAction, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { FilePond, registerPlugin } from "react-filepond";
@@ -22,12 +22,12 @@ import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
 import { auth, db, storage } from "../../index";
 import { LoadingIndicator } from "../LoadingIndicator";
+import LoadingScreen from "../LoadingScreen";
 import { getCardDescription, getSheskaCardImagesUrls } from "../Utils/CardUtil";
 import TipTapMenuBar from "./EditorUtil";
 import ImageOrganizer from "./ImageManager/ImageOrganizer";
 import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
-import LoadingScreen from "../LoadingScreen";
 
 registerPlugin(FilePondPluginFileRename)
 const area = 'editCard';
@@ -58,10 +58,10 @@ export function EditItem() {
               </h2>
               <p>
                 This is a WYSIWYG editor, meaning what you see is what you (and your guests) will get. Use this as your canvas
-                to describe this item to your hearts content! You can add images, links videos, bullet points and beyond!
-                With the power of WYSIWYG you can create a beautiful and engaging description of your item.
+                to describe this item to your heart's content! You can add images, links, videos, bullet points, and beyond!
+                With the power of WYSIWYG, you can create a beautiful and engaging description of your item.
               </p>
-              <p>Double click on any of the buttons above to apply styles to your text.</p>`
+              <p>Double-click on any of the buttons above to apply styles to your text.</p>`
 );
     const [editorInitialized, setEditorInitialized] = useState(false);
     const validationSchema = Yup.object({});
@@ -246,7 +246,7 @@ export function EditItem() {
             title: values.title,
             subtitle: values.subtitle,
             imageOrder,
-            dateUpdated: new Date().toString(),
+            dateUpdated: new Date().toISOString(),
         }, {merge: true}).then(() => {
             console.log("Document successfully updated!");
             // navigate(-1);

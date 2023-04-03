@@ -1,0 +1,47 @@
+@import "../../../common/constants/globalVariables.scss";
+
+.navButton {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  border: hidden;
+  border-collapse: collapse;
+  cursor: pointer;
+}
+
+.selectedButton {
+  //border: rgba(128, 128, 128, 0.46) 1px solid;
+  background-color: $base-color;
+  .navButtonText {
+    color: white;
+  }
+}
+
+.navButton:hover {
+  //background-color: #f1f1f1;
+    outline: #c0c0c0 1px solid;
+    box-sizing: border-box;
+
+}
+
+.navButtonText {
+  //color: white;
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  padding: 0 10px;
+  margin-bottom: 0;
+  font-size: 1rem;
+  white-space: nowrap;
+  margin: auto;
+}
+
+.iconContainer{
+  margin: auto;
+}

@@ -1,0 +1,52 @@
+@import '../../../common/constants/globalVariables.scss';
+@import '../common/localNavStyles.scss';
+
+.navbarContainer{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: $closed-desktop-nav-width;
+    background-color: $navbar-background-color-desktop;
+    color: #fff;
+    //background: $base-color;
+    padding: 0 .5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    align-items: center;
+    transition: width .1s ease-in-out;
+    z-index: 10;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 0px 15px 0px;
+
+}
+
+.navbarExtended {
+    width: $open-desktop-nav-width;
+    transition: width .1s ease-in-out;
+}
+
+.navbarLogo {
+    font-family: 'Butler', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    border-bottom: #a9a9a9 1px solid;
+    color: $base-color;
+    //color: white;
+}
+
+.navbarButtonsContainer {
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s ease-in-out;
+    z-index: 1;
+
+}
+
+.navigationGroup {
+    border-bottom: #a9a9a9 1px solid;
+}
+
+.navButtonIcon {
+    font-size: 2rem;
+    padding: 10px 0;
+}

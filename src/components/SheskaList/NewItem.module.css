@@ -10,6 +10,16 @@
     box-shadow: 0 0 1px rgba(0, 0, 0, 0);
     padding-bottom: 20px;
     margin: 50px auto 40px;
+    height: 100%;
+}
+
+.submitButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin: 0 auto;
+    width: 75%;
+    margin-top: 5vh;
 }
 
 .title {
@@ -22,7 +32,7 @@
 
 .sectionHeader {
     font-family: Inter, serif;
-    font-size: 1.5vw;
+    font-size: 1.7rem;
     margin: 0 auto;
     text-align: center;
 }
@@ -53,11 +63,133 @@
     border-radius: 10px;
     border: #E2E2E2 solid 1px;
     margin: 0 auto;
-    margin-bottom: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 0px;
+    margin-bottom: 40px;
 }
 
 .loginButton {
-    margin-left: 12%;
-    margin-right: 20px;
+    margin: 10px;
 }
+
+.previewCardContainer {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 110%;
+    backdrop-filter: blur(6px) brightness(0.4);
+    z-index: 2;
+}
+
+.previewCloseIcon {
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    font-size: 1.5vw;
+    cursor: pointer;
+    z-index: 6;
+    color: gray;
+    scale: 200%;
+}
+.previewCloseIcon:hover {
+    color: black;
+    scale: 250%;
+}
+
+.cardEventSettingsContainer {
+    display: flex;
+    flex-direction: row;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.cardFinancials {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-bottom:25px;
+}
+
+.cardEventSettings {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-bottom:25px;
+}
+
+.financialHeader {
+    margin: 0;
+    margin-right: auto;
+    margin-top: 15px;
+
+}
+
+.itemSetting {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    /*border: #e8e8e8 solid 3px;*/
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.settingName {
+    font-family: Inter, serif;
+    font-size: 1.7rem;
+    text-align: left;
+}
+
+.settingSubtitle {
+    font-family: Roboto, serif;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: left;
+    color: gray;
+    padding-bottom: 15px;
+}
+
+
+
+
+@media screen and (max-width: 700px){
+    .previewCardContainer {
+        display: flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: auto;
+        backdrop-filter: blur(6px);
+        z-index: 2;
+    }
+
+    .pageContainer {
+        max-width: 90%;
+    }
+    .title {
+        font-size: 5vw;
+    }
+    .sectionHeader {
+        font-size: 3vw;
+    }
+    .sectionSubheader {
+        font-size: 2vw;
+    }
+    .previewCloseIcon {
+        right: 20px;
+        top: 20px;
+        font-size: 3vw;
+    }
+    .submitButtonContainer {
+        width: 90%;
+    }
+}
+

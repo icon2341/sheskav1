@@ -1,0 +1,22 @@
+.navigationToggle {
+    position: fixed;
+    top: 8%;
+    left: 80px;
+    width: 35px;
+    height: 35px;
+    outline: none;
+    cursor: pointer;
+    z-index: 11;
+    background: white;
+    border-color: gray;
+    border-radius: 50%;
+    box-shadow: black 0px 0px 2px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: left .1s ease-in-out;
+}
+
+.extended {
+    left: 190px
+}
