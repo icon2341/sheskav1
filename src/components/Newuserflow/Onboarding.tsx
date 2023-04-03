@@ -102,14 +102,6 @@ export function Onboarding() {
                         the fancy bootstrap column crap*/}
                             <div className={styles.questionPane}>
                                 <h1 className={styles.questionPaneTitle}>Just the essentials.</h1>
-                                {/*<Form>*/}
-                                {/*    <Form.Group className={"mb-3 w-75 mx-auto"} controlId="formBasicEmail">*/}
-                                {/*        <Form.Control placeholder="Your First Name" onChange={handleUserFirstname}/>*/}
-                                {/*    </Form.Group>*/}
-                                {/*    <Form.Group className={"mb-3 w-75 mx-auto"}>*/}
-                                {/*        <Form.Control  placeholder="Your Last Name" onChange={handleUserLastname}/>*/}
-                                {/*    </Form.Group>*/}
-                                {/*</Form>*/}
                                 <Formik validationSchema={validationSchema}
                                         initialValues={{
                                             firstname: '',
