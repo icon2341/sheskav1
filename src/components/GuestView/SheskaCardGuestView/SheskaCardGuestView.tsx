@@ -26,6 +26,8 @@ export function SheskaCardGuestView(props: {sheskaCardDef: SheskaCard, cardImage
     })
 
     editor?.setEditable(false)
+    console.log(props, )
+
 
     return (
         <div className={styles.cardContainer}>
@@ -51,18 +53,10 @@ export function SheskaCardGuestView(props: {sheskaCardDef: SheskaCard, cardImage
                     </div>
                 }
 
-                <style type="text/css">
-                    {`
-                        .progress-bar-standard
-                          background-color: purple;
-                          color: purple;
-                        }
-                    `}
-                </style>
-
                 {/*TODO MAKE THIS THE CORRECT COLOR @COLLIN*/}
                 {/*//TODO MAKE IT SO THAT THE BAR DOES NOT SHOW IF IT IS ON INFINITY*/}
-                {props.sheskaCardDef.amountRequested === ['0','0'] && <ProgressBar now={convertCurrenctToDouble(props.sheskaCardDef.amountRaised)} max={convertCurrenctToDouble(props.sheskaCardDef.amountRequested)} className={styles.itemProgressBar} variant={"standard"}/>
+
+                {(props.sheskaCardDef.amountRequested[0] != 0 || props.sheskaCardDef.amountRequested[1] != 0)  && <ProgressBar now={convertCurrenctToDouble(props.sheskaCardDef.amountRaised)} max={convertCurrenctToDouble(props.sheskaCardDef.amountRequested)} className={styles.itemProgressBar} variant={"standard"}/>
                 }
                 <div className={styles.progressBarHeaders}>
                     <div className={styles.progressBarHeaderSub} >

@@ -86,13 +86,8 @@ export function NewItem() {
         setDocRef(docRef);
     }, [user]);
 
-    const prevImagesRef: MutableRefObject<null | { [id: string]: string }> = useRef(null);
-    const prevImageOrderRef: MutableRefObject<null | string[]> = useRef(null);
     useEffect(() => {
-        if (prevImagesRef.current === images && prevImageOrderRef.current === imageOrder)
-            return;
         setImages((prevImages) => {
-            console.log('FILES CHANGED, UPDATING IMAGES')
             files.forEach((file) => {
                 console.log(file.file.name);
             })
@@ -114,15 +109,15 @@ export function NewItem() {
                     newImages[file.filename] = URL.createObjectURL(file.file);
                     newImageOrder.push(file.filename);
                 }
+
             })
 
             setImageOrder(newImageOrder);
             setFilePondFileMapping(newFilePondFileMapping);
-            prevImagesRef.current = newImages;
-            prevImageOrderRef.current = newImageOrder;
+
             return newImages;
         });
-    }, [files, imageOrder, images])
+    }, [files])
 
     useEffect(() => {
         if (!dataUploaded)
@@ -206,16 +201,12 @@ export function NewItem() {
 
     }
     useEffect(() => {
-        console.log('imagesDel', imagesToBeDeleted);
-        console.log('filePondFileMapping', filePondFileMapping);
-
         imagesToBeDeleted.forEach((imageId: string) => {
             if(filePondRef?.getFile(filePondFileMapping[imageId]) != null) {
                 filePondRef?.removeFile(filePondFileMapping[imageId])
                 setImagesToBeDeleted(imagesToBeDeleted.filter((id: string) => id !== imageId));
             }
         });
-        console.log('FILE POND REF', filePondRef);
     }, [imagesToBeDeleted, setImagesToBeDeleted, filePondFileMapping, filePondRef])
 
     const uploadFiles = (values: any, { setErrors } : any) => {
@@ -281,7 +272,7 @@ export function NewItem() {
                         }}>
 
                             {previewCard && <div className={styles.previewCardContainer}>
-                                <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false); console.log('setPreviewFalse')}}/>
+                                <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false);}}/>
                                 <SheskaCardGuestView sheskaCardDef={new SheskaCardDef(docRef?.id ?? '', values.title, values.subtitle, editor.getHTML(), imageOrder,
                                     processCurrencyForTesting(values.expectedAmount), processCurrencyForTesting(values.goal), ['0', '00'])} cardImages={images}/>
                             </div>}
@@ -341,20 +332,22 @@ export function NewItem() {
                                     server={server}
                                     onprocessfilestart={() => {setFilePondLoading(true); setSubmitDisabled(true);
                                         console.log('STARTED PROCESSING FILEs')}}
-                                    onprocessfiles={() => {setFilePondLoading(false); navigate('/sheskalist'); console.log('FINISHED PROCESSING FILEs')}}
+                                    onprocessfiles={() => {setFilePondLoading(false); navigate('/sheskalist');}}
 
                                     onremovefile={(error: any, file: FilePondFile) => {
+                                        console.log('FILE BEING REMOVED: ', file.filenameWithoutExtension)
+
                                         let newFiles: FilePondFile[] = [];
                                         setImages((prevImages) => {
-                                            // console.log('FILES CHANGED, UPDATING IMAGES')
 
                                             const newImages: { [id: string]: string } = {};
                                             const newImageOrder: string[] = [];
 
 
                                             imageOrder.forEach((id) => {
+                                                console.log('ID: ', id, ' FILENAME: ', file.filenameWithoutExtension)
                                                 if (prevImages) {
-                                                    if(id !== file.filenameWithoutExtension){
+                                                    if(id !== file.filename){
 
                                                         newImages[id] = prevImages[id];
                                                         newImageOrder.push(id);
@@ -363,9 +356,6 @@ export function NewItem() {
                                             })
 
                                             setImageOrder(newImageOrder);
-
-                                            console.log("SIZE OF IMAGES " + images?.length);
-                                            console.log("SIZE OF IMAGESORDER: " + imageOrder.length);
                                             return newImages;
                                         })
 
@@ -382,6 +372,7 @@ export function NewItem() {
 
                                     onupdatefiles={(fileItems: FilePondFile[]) => {
                                         setFiles(fileItems);
+                                        console.log('FILES CHANGED', fileItems)
                                     }}
 
                                     ref={ref => filePondRef = ref}
@@ -451,7 +442,7 @@ export function NewItem() {
                                 <Button type={'submit'}  disabled={!dirty || promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
                                 <Button type={'button'}  disabled={!dirty || promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
-                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('setpreviewtrue')}}> Preview</Button>
+                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); }}> Preview</Button>
                             </div>
                             {/*<DisplayFormikState {...props} />*/}
                         </Form>
@@ -477,7 +468,6 @@ export default NewItem;
  * @param editor editor instance with user description code
  */
 async function postNewSheskaCard(values: { title: string, subtitle: string, goal: string, expectedAmount: string, guestsAbsorbFees: boolean }, docRef: any, imageOrder: string[], editor: Editor | null) {
-    console.log(values)
     try {
         let processedGoal: number[];
         if (values.goal === '') {

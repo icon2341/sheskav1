@@ -84,8 +84,8 @@
 
 .previewCloseIcon {
     position: absolute;
-    right: 50px;
-    top: 50px;
+    right: 12%;
+    top: 12%;
     font-size: 1.5vw;
     cursor: pointer;
     z-index: 6;

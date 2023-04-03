@@ -210,9 +210,9 @@ export function EditItem() {
                     newFilePondFileMapping[file.filenameWithoutExtension] = file.id;
 
                     if(images){
-                        if(!(file.filenameWithoutExtension in images)) {
-                            newImages[file.filenameWithoutExtension] = URL.createObjectURL(file.file);
-                            newImageOrder.push(file.filenameWithoutExtension);
+                        if(!(file.filename in images)) {
+                            newImages[file.filename] = URL.createObjectURL(file.file);
+                            newImageOrder.push(file.filename);
                         }
                     }
                 }
