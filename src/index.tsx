@@ -4,7 +4,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { firebaseConfig } from './credentials';
+import { firebaseConfig, RECAPTCHA_CONFIG } from './credentials';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
 
@@ -22,16 +22,13 @@ export const db = getFirestore(app)
 export const storage = getStorage(app);
 //app check for ReCaptcha and API verification
 const appCheck = initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider('6LfjpU8kAAAAAIJ0S9qr18OzybHKZosUTKwoozq0'),
+    provider: new ReCaptchaV3Provider(RECAPTCHA_CONFIG.PRODUCTION),
     isTokenAutoRefreshEnabled: true
-
 })
 
-
-
-connectAuthEmulator(auth, "http://localhost:9099")
-connectFirestoreEmulator(db, 'localhost', 8081);
-connectStorageEmulator(storage, "localhost", 9199);
+// connectAuthEmulator(auth, "http://localhost:9099")
+// connectFirestoreEmulator(db, 'localhost', 8081);
+// connectStorageEmulator(storage, "localhost", 9199);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

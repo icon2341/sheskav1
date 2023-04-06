@@ -12,6 +12,7 @@ import { LoadingIndicator } from '../LoadingUtils/LoadingIndicator';
 import LoadingScreen from "../LoadingUtils/LoadingScreen";
 import styles from './Dashboard.module.scss';
 import {checkIfUserHasPassedOnboarding} from "../Authentication/Utils/AuthUtils";
+import {sendEmailVerification} from "firebase/auth";
 
 export function Dashboard() {
     // TODO CLEAN THIS UP, ADD LINKS ETC.
@@ -41,6 +42,7 @@ export function Dashboard() {
 
     useEffect(() => {
         if(user !== null){
+
             checkIfUserHasPassedOnboarding(navigate).then(
                 () => {
                     console.log('Attempt to get partners ' + user)

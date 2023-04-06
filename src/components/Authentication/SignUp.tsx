@@ -1,6 +1,6 @@
 import {
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence
+    signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence, sendEmailVerification
 } from 'firebase/auth';
 import React from 'react'
 import {NavigateFunction, useNavigate} from "react-router-dom";
@@ -13,7 +13,6 @@ import {InputGroup} from "react-bootstrap";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {Formik} from "formik";
 import * as Yup from 'yup';
-
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
 
@@ -220,6 +219,8 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
         await createUserWithEmailAndPassword(auth, email, password).then((cred) => {
             console.log(cred)
             sessionStorage.setItem('Auth Token', cred.user.refreshToken)
+
+            sendEmailVerification(cred.user)
 
             const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
             console.log("adding to doc...")
