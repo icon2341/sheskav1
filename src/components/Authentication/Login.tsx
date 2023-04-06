@@ -1,4 +1,9 @@
-import { browserLocalPersistence, browserSessionPersistence, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+    browserLocalPersistence,
+    browserSessionPersistence,
+    sendEmailVerification,
+    signInWithEmailAndPassword
+} from 'firebase/auth';
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { Formik } from "formik";
 import React, { useEffect, useState } from 'react';
@@ -176,7 +181,7 @@ export function Login() {
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                             <div className={"d-flex justify-content-center"}>
                                                 <Button disabled={!!errors.email || !!errors.password} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"}
-                                                    ${styles.loginButton}`} onClick={() => {handleSubmit()}}>
+                                                    ${styles.loginButton}`}>
                                                     Submit
                                                 </Button>
                                             </div>
@@ -227,7 +232,13 @@ async function loginUser(txtEmail : string, txtPassword : string, navigate : Nav
 
     try {
         // tries to sign in user with email and password auth
-        await signInWithEmailAndPassword(auth, email, password)
+        await signInWithEmailAndPassword(auth, email, password).then((cred)=> {
+            console.log('checking if email is verified')
+            if(!cred.user.emailVerified) {
+                console.log('email not verified, sending verification email')
+                sendEmailVerification(cred.user)
+            }
+        })
         // console.log("signed in my friend")
         const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
         //determines where to redirect user
