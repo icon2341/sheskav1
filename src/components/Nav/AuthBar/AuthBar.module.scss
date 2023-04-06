@@ -57,3 +57,20 @@
 .dropdownButton:hover {
   background-color: #f1f1f1;
 }
+
+@media screen and (max-width: 768px) {
+  .authbarContainer {
+    width: 100%;
+  }
+
+  .authbarExtended {
+    left: $open-desktop-nav-width;
+    width: -webkit-calc(100% - $open-desktop-nav-width);
+    width:    -moz-calc(100% - $open-desktop-nav-width);
+    width:         calc(100% - $open-desktop-nav-width);
+  }
+
+  .authbarContent {
+    margin-right: 10px;
+  }
+}
