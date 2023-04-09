@@ -28,7 +28,7 @@ export function Sidebar(props: { navigateFunction: NavigateFunction }) {
                     <NavButton icon={List} text={'Sheska List'} location={'/sheskalist'} selected={'/sheskalist' === currentRelPath} isSidebarOpen={isOpen}/>
                 </div>
                 <div className={styles.settingGroup}>
-                    <NavButton icon={Settings} text={"Account"} location={undefined} selected={false} isSidebarOpen={isOpen}/>
+                    <NavButton icon={Settings} text={"Account"} location={'/accountsettings'} selected={'/accountsettings' === currentRelPath} isSidebarOpen={isOpen}/>
                     <div onClick={() => {signOutUser(props.navigateFunction)
                         .then(r => {console.log('signed out user!')})
                         .catch(reason => {console.log('failed to sign out user')})}}>

@@ -18,7 +18,7 @@ import ResetPassword from "./components/Authentication/ResetPassword";
 import EditItem from "./components/SheskaList/EditItem";
 import LoadingScreen from "./components/LoadingUtils/LoadingScreen";
 import ProductPage from "./components/ProductPage/ProductPage";
-import AccountPreferences from "./AccountPreferences/AccountPreferences";
+import AccountPreferences from "./components/AccountPreferences/AccountPreferences";
 
 function App() {
   return (
