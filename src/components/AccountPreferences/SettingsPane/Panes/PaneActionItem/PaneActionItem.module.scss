@@ -1,0 +1,22 @@
+@import "src/common/constants/globalVariables.scss";
+
+
+.actionItemContainer {
+  border: solid 1px rgb(246, 246, 246);
+  width: 95%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+
+
+.actionItemTitle {
+    font-family: Inter, serif;
+    font-size: 1.5rem;
+    color: black;
+    font-weight: 400;
+    align-self: flex-start;
+}

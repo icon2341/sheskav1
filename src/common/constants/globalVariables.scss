@@ -13,3 +13,12 @@ $base-background-color-light: #f3f3f3;
 
 //IDEAL SPACINGS
 $content-margin-top-desktop: 5%;
+
+
+//BUTTON TRANSITION CRUVES
+@mixin button-transition {
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+}

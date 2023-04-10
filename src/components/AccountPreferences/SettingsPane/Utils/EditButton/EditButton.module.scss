@@ -1,0 +1,36 @@
+@import "src/common/constants/globalVariables.scss";
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100px;
+    height: 45px;
+    margin: 10px;
+
+    border-radius: 25px;
+    padding: 4px 8px;
+    border: $base-color 2px solid;
+    @include button-transition;
+}
+
+.container:hover, .container:focus, .container:active {
+    background-color: #2F5D7A;
+    color: white;
+}
+
+.container:hover > * {
+    color: white;
+}
+
+
+
+.title {
+    font-family: Roboto, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: gray;
+    margin: 0;
+    padding: 5px;
+}
