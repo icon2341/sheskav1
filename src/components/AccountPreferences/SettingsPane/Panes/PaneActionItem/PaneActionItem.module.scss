@@ -3,20 +3,20 @@
 
 .actionItemContainer {
   border: solid 1px rgb(246, 246, 246);
-  width: 95%;
   border-radius: 10px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  min-height: 150px;
+  //justify-content: space-between;
 }
 
 .actionItemContainerNonEditable {
   pointer-events: none;
-  filter: blur(3px);
-
+  filter: opacity(0.5);
 }
 
 .actionItemContainerEditable {
+
 
 }
 

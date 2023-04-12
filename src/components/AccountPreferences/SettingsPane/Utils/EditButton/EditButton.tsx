@@ -5,7 +5,7 @@ export function EditButton(props: { setEditMode: any, editMode: boolean }) {
     return (
         <div className={styles.container} onClick={() => {
             props.setEditMode(!props.editMode)
-            console.log(props.editMode, 'editMode')}
+            }
         }>
             <h4 className={styles.title}>Edit</h4>
             <Edit2 color={'gray'} size={30}/>

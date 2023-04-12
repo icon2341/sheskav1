@@ -5,6 +5,7 @@ import {EditButton} from "../../Utils/EditButton/EditButton";
 import UserProfileItem from "./UserProfileItem/UserProfileItem";
 
 export function ProfilePane() {
+
     return (
         <div className={styles.actionItemsContainer}>
             <div className={styles.actionItemContent}>
