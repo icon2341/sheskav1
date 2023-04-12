@@ -10,6 +10,16 @@
   justify-content: space-between;
 }
 
+.actionItemContainerNonEditable {
+  pointer-events: none;
+  filter: blur(3px);
+
+}
+
+.actionItemContainerEditable {
+
+}
+
 
 
 
