@@ -5,6 +5,10 @@ import {useState} from "react";
 import SettingsPaneSwticher from "./SettingsPane/SettingsPaneSwticher";
 
 
+/**
+ * AccountPreferences is a component that is used to display the account preferences page. Contains the logic for the settings pane. and navigation
+ * @constructor
+ */
 export function AccountPreferences(){
     const [currentSettingPane, setCurrentSettingPane] = useState('My Profile');
 

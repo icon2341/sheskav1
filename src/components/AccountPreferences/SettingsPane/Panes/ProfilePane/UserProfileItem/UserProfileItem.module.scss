@@ -17,7 +17,14 @@
     padding: 2px;
     margin: 10px;
 
+  stroke: $base-color;
     border: $base-color 3px solid;
+}
+
+.profilePictureEdit:hover {
+  cursor: pointer;
+  background-color: #dedede;
+  transform: scale(1.05);
 }
 
 .additionalDetails {
@@ -71,3 +78,18 @@
 .saveButton {
   margin-left: 5px;
 }
+
+.modalContainer {
+  width: 300px;
+  margin: auto;
+  margin-top: 50vh;
+}
+
+
+
+@media screen and (max-width: 800px) {
+  .container {
+    flex-direction: column;
+  }
+}
+

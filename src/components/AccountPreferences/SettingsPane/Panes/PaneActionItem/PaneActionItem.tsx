@@ -5,6 +5,13 @@ import React, {useEffect} from "react";
 import {bool} from "yup";
 
 
+/**
+ * PaneActionItem is a component that is used to display a single action item in the settings pane.
+ * It passes the editMode prop to its children.
+ * It also contains an edit button that allows the user to edit the action item.
+ * @param props - the props of the component contains children
+ * @constructor - the constructor of the component
+ */
 export function PaneActionItem(props: any) {
     const [editMode, setEditMode] = React.useState(false);
 

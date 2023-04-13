@@ -1,7 +1,12 @@
 import {Auth} from "firebase/auth";
 import firebase from "firebase/compat";
 import {updateProfile} from "@firebase/auth";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 
+/**
+ * Gets the profile picture of the current user
+ * @param auth firebase auth ref
+ */
 export function getProfilePicture(auth: Auth) {
     return auth.currentUser?.photoURL || null;
 }
@@ -14,15 +19,19 @@ export function getProfilePicture(auth: Auth) {
  * @param storage firebase storage ref
  */
 export function setProfilePicture(newprofile: File, auth: Auth, storage: any) {
-    const storageRef = storage.ref();
-    const profileRef = storageRef.child(`users/${auth.currentUser?.uid}/profilePicture`);
+    const storageRef = ref(storage,`users/${auth.currentUser?.uid}/profilePicture`);
 
-    profileRef.put(newprofile).then((snapshot: any) => {
+    uploadBytes(storageRef, newprofile).then((snapshot: any) => {
         console.log('Uploaded a blob or file!');
-        snapshot.ref.getDownloadURL().then((url : any) => {
+        getDownloadURL(storageRef).then((url : any) => {
             if (auth.currentUser) {
                 updateProfile(auth.currentUser, {
                     photoURL: url
+                }).then(r => {
+                    console.log('uploaded files')
+                    console.log(url)
+                    auth.currentUser?.reload();
+                    return Promise.resolve(url);
                 })
             }
 
@@ -32,6 +41,11 @@ export function setProfilePicture(newprofile: File, auth: Auth, storage: any) {
     return Promise.resolve();
 }
 
+/**
+ * Sets the display name of the current user
+ * @param newName new display name
+ * @param auth firebase auth ref
+ */
 export function setDisplayName(newName: string, auth: Auth) {
     if (auth.currentUser) {
         updateProfile(auth.currentUser, {

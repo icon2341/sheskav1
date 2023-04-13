@@ -42,6 +42,7 @@ import { default as ImageOrganizer } from "./ImageManager/ImageOrganizer";
 import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
 import SheskaCardDef from "../Utils/SheskaCardDef";
+import {upload} from "@testing-library/user-event/dist/upload";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 

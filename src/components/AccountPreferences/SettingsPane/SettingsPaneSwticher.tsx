@@ -2,6 +2,11 @@ import ProfilePane from "./Panes/ProfilePane/ProfilePane";
 import switcherStyles from './SettingsPaneSwithcer.module.scss';
 import {PANE_SUBTITLES} from "./PANE_SUBTITLES";
 
+/**
+ * SettingsPaneSwticher is a component that is used to switch between the different settings panes. contains the logic
+ * @param props - the props of the component contains the active page
+ * @constructor - returns a react component
+ */
 export function SettingsPaneSwticher(props: {activePage: string}) {
     const activePage = () => {
         switch (props.activePage) {

@@ -4,6 +4,10 @@ import React from "react";
 import {EditButton} from "../../Utils/EditButton/EditButton";
 import UserProfileItem from "./UserProfileItem/UserProfileItem";
 
+/**
+ * ProfilePane is a component that is used to display the profile pane in the settings pane. Contains all user profile action items.
+ * @constructor - returns a react component
+ */
 export function ProfilePane() {
 
     return (

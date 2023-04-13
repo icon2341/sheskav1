@@ -1,8 +1,12 @@
 import styles from './UserProfileItem.module.scss';
 import React, {useEffect, useState} from "react";
-import {getProfilePicture, setDisplayName} from "../../../../../../api/User/ProfilePicture/ProfilePicture";
+import {
+    getProfilePicture,
+    setDisplayName,
+    setProfilePicture
+} from "../../../../../../api/User/ProfilePicture/ProfilePicture";
 import {auth} from "../../../../../../index";
-import {Check, X} from "react-feather"
+import {Check, X, Plus} from "react-feather"
 import {useAuthState} from "react-firebase-hooks/auth";
 import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingSecondaryIndicator";
 import {Formik} from "formik";
@@ -10,6 +14,12 @@ import Form from "react-bootstrap/Form";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import {sendEmailVerification} from "firebase/auth";
+import {Box, Modal} from "@mui/material";
+import {FilePond} from "react-filepond";
+import {ref, uploadBytes} from "firebase/storage";
+import firebase from "firebase/compat";
+import {storage} from "../../../../../../index";
+import {v4 as uuidv4} from "uuid";
 
 /**
  * Contains formik form to edit display name
@@ -83,22 +93,57 @@ export function UserProfileItem(props: {editMode?: boolean}) {
     const [currentProfilePicture, setCurrentProfilePicture] = useState<string | null>(null);
     const [user, loading, error] = useAuthState(auth);
     const [verificationEmailSent, setVerificationEmailSent] = useState(false);
+    const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
 
 
     useEffect(() => {
         if(user){
             setCurrentProfilePicture(getProfilePicture(auth));
+            console.log('Current Profile Pictuer', currentProfilePicture)
         }
 
     }, [user])
+
+    const server = {
+        process: (fieldName: any, file:any, metadata:any, load:any, error:any, progress:any, abort:any, transfer:any, options:any) => {
+            setProfilePicture(file, auth, storage).then(r => {
+                console.log('FILE UPLAODED')
+                progress(true, 100, 100);
+                load(r);
+                auth.currentUser?.reload();
+            });
+        }
+
+    }
 
 
     if(user) {
         if(props.editMode) {
             return (
                 <div className={styles.container}>
-                    {currentProfilePicture ? <img src={currentProfilePicture}  className={styles.profilePicture}/> : null}
+                    <Modal open={uploadModalOpen} onClose={() => {setUploadModalOpen(false)}}>
+                            <Box className={styles.modalContainer}>
+                                <FilePond
+                                    allowMultiple={false}
+                                    acceptedFileTypes={['image/png', 'image/jpeg']}
+                                    instantUpload={true}
+                                    allowRevert={false}
+                                    server={server}
+                                    fileRenameFunction={(file) => {
+                                        return `${uuidv4()}${file.extension}`; }}
+                                    onprocessfiles={() => {
+                                        setUploadModalOpen(false);
+                                        auth.currentUser?.reload();
+                                        setCurrentProfilePicture(getProfilePicture(auth));
+                                    }}
+                                />
+                            </Box>
+                    </Modal>
+
+                    <div onClick={() => {setUploadModalOpen(true)}}>
+                        {currentProfilePicture ? <img src={currentProfilePicture}  className={styles.profilePicture}/> : <Plus className={`${styles.profilePicture} ${styles.profilePictureEdit}`}/> }
+                    </div>
                     <div className={styles.additionalDetails}>
                         {editForm()}
                         <h5 className={styles.email}>{user.email}</h5>
@@ -120,7 +165,7 @@ export function UserProfileItem(props: {editMode?: boolean}) {
             // if not in edit mode, read only
             return (
                 <div className={styles.container}>
-                    {currentProfilePicture ? <img src={currentProfilePicture}  className={styles.profilePicture}/> : null}
+                    {currentProfilePicture ? <img src={currentProfilePicture}  className={styles.profilePicture}/> : <img src={require("../../../../../../images/DefaultImages/defaultProfile.png")} className={styles.profilePicture} />}
                     <div className={styles.additionalDetails}>
                         <h4 className={styles.name}>{user.displayName}</h4>
                         <h5 className={styles.email}>{user.email}</h5>
