@@ -14,6 +14,7 @@ import {Formik} from "formik";
 import {updateProfile} from "@firebase/auth";
 import firebase from "firebase/compat";
 import {checkIfUserHasPassedOnboarding} from "../Authentication/Utils/AuthUtils";
+import {setProfilePicture} from "../../api/User/ProfilePicture/ProfilePicture";
 // Core modules imports are same as usual
 // Direct React component imports
 //TODO add email verification or phone number protocol
@@ -209,7 +210,7 @@ async function sendUserOnboardingData(navigate : NavigateFunction, txtUserFirstn
         // and send the user to the home page.
         const userRef = doc(db, 'users', user.uid);
         await setDoc(userRef, {
-            partners: [txtUserFirstname, txtPartnerFirstname],
+            partner_full_name: [txtPartnerFirstname, txtPartnerLastname],
             full_name: [txtUserFirstname, txtUserLastname],
             passedOnboarding: true
         }, {merge: true}).then(() => {

@@ -15,12 +15,11 @@ import {checkIfUserHasPassedOnboarding} from "../Authentication/Utils/AuthUtils"
 import {sendEmailVerification} from "firebase/auth";
 
 export function Dashboard() {
-    // TODO CLEAN THIS UP, ADD LINKS ETC.
-    //TODO FIX BUG WHERE IT DOES NOT LOAD THIS COMPONENT IF PARTNER DATA IS MISSING. ADD NULL CHECK
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
     const [partners, setPartners] = useState<string[]>([]);
 
+    //TODO replace with new api
     async function getPartners(uid: string | undefined) {
         const docRef = doc(db, "users", uid + "" );
         console.log('getting partners')
@@ -28,8 +27,8 @@ export function Dashboard() {
         await getDoc(docRef).then(doc => {
             if(doc.exists()) {
                 console.log("Document data:", doc.data());
-                if(doc.data().partners !== undefined) {
-                    setPartners(doc.data().partners)
+                if(doc.data().partner_full_name !== undefined) {
+                    setPartners(doc.data().partner_full_name)
                 } else {
                     console.log("No partners found");
                     setPartners(partners => [...partners, doc.data().name])
@@ -61,12 +60,12 @@ export function Dashboard() {
         welcomeSpace = <LoadingIndicator />
     } else if(partners[1] === '') {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-            <h1 id={styles["hello-message"]}> Welcome, {partners[0] ?? 'Add Name in settings'}!</h1>
+            <h1 id={styles["hello-message"]}> Welcome, {auth.currentUser?.displayName}!</h1>
             <h2 id={styles["start-here-message"]}> Start Here.</h2>
         </div>
     }  else {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-            <h1 id={styles["hello-message"]}> Welcome, {partners[0] ?? 'Add Name in settings'} {partners[1] ? `and ${partners[1]}` : ''}!</h1>
+            <h1 id={styles["hello-message"]}> Welcome, {auth.currentUser?.displayName} {partners[0] ? `and ${partners[0]}` : ''}!</h1>
             <h2 id={styles["start-here-message"]}> Start Here.</h2>
         </div>
     }

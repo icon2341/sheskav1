@@ -3,6 +3,7 @@ import PaneActionItem from "../PaneActionItem/PaneActionItem";
 import React from "react";
 import {EditButton} from "../../Utils/EditButton/EditButton";
 import UserProfileItem from "./UserProfileItem/UserProfileItem";
+import UserPartnerItem from "./UserPartnerItem/UserPartnerItem";
 
 /**
  * ProfilePane is a component that is used to display the profile pane in the settings pane. Contains all user profile action items.
@@ -15,6 +16,10 @@ export function ProfilePane() {
             <div className={styles.actionItemContent}>
                 <PaneActionItem>
                     <UserProfileItem/>
+                </PaneActionItem>
+
+                <PaneActionItem>
+                    <UserPartnerItem/>
                 </PaneActionItem>
             </div>
 

@@ -1,0 +1,115 @@
+@import "src/common/constants/globalVariables.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  height: 100%;
+  align-items: start;
+  padding-top: 10px;
+}
+
+.profilePicture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 2px;
+    margin: 10px;
+
+  stroke: $base-color;
+    border: $base-color 3px solid;
+}
+
+.profilePictureEdit:hover {
+  cursor: pointer;
+  background-color: #dedede;
+  transform: scale(1.05);
+}
+
+.additionalDetails {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  justify-content: start;
+}
+
+.name {
+    font-family: Inter, serif;
+    font-size: 1.5rem;
+    color: black;
+    align-items: start;
+}
+
+.email {
+    font-family: Inter, serif;
+    font-size: 1.2rem;
+    color: #a1a1a1;
+    font-weight: 400;
+}
+
+.verified {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+}
+
+.verifiedText {
+  font-family: Roboto, sans-serif;
+    font-size: 1.2rem;
+    color: gray;
+    font-weight: 400;
+    margin: 0;
+    padding-right: 5px;
+}
+
+.verifiedButton {
+  margin-left: 10px;
+}
+
+.editDisplayNameContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+  margin-bottom: 10px;
+}
+
+.saveButton {
+  margin-left: 5px;
+}
+
+.modalContainer {
+  width: 300px;
+  margin: auto;
+  margin-top: 50vh;
+}
+
+.title {
+    font-family: Roboto, serif;
+    font-size: 1.4rem;
+    color: black;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-family: Roboto, serif;
+    font-size: 1rem;
+    color: black;
+    font-weight: 400;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 800px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
