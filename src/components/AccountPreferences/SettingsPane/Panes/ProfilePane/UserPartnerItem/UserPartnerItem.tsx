@@ -17,7 +17,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {InputGroup} from "react-bootstrap";
 
-const editForm = (partnerFirstName :string, partnerLastName :string) => {
+const editForm = (partnerFirstName :string, partnerLastName :string, setPartnerName: any) => {
     const validationSchema = {
         partnerFirstName: Yup.string(),
         partnerLastName: Yup.string(),
@@ -38,7 +38,10 @@ const editForm = (partnerFirstName :string, partnerLastName :string) => {
                 setSubmitting(true);
                 setUserData(db, auth, {
                     partner_full_name: [values.partnerFirstName, values.partnerLastName]
-                })
+                }).then(r => {
+                        setPartnerName([values.partnerFirstName, values.partnerLastName]);
+                    }
+                )
             }}
         >
             {props => {
@@ -123,7 +126,7 @@ export function UserPartnerItem(props: {editMode?: boolean}) {
                 <div className={styles.container}>
                     <div className={styles.additionalDetails}>
                         <h2 className={styles.title}>Edit Partner</h2>
-                        {partnerName ? editForm(partnerName[0], partnerName[1]) : editForm("", "")}
+                        {partnerName ? editForm(partnerName[0], partnerName[1], setPartnerName) : editForm("", "", setPartnerName)}
                     </div>
                 </div>
             )

@@ -65,7 +65,7 @@ export function Dashboard() {
         </div>
     }  else {
         welcomeSpace = <div className={`${styles.welcomeSpace} ${styles.gridItem}`}>
-            <h1 id={styles["hello-message"]}> Welcome, {auth.currentUser?.displayName} {partners[0] ? `and ${partners[0]}` : ''}!</h1>
+            <h1 id={styles["hello-message"]}> Welcome, {auth.currentUser?.displayName}{partners[0] ? '' : '!'} {partners[0] ? `and ${partners[0]}!` : ''}</h1>
             <h2 id={styles["start-here-message"]}> Start Here.</h2>
         </div>
     }
