@@ -1,0 +1,38 @@
+@import "src/common/constants/globalVariables.scss";
+
+
+.actionItemContainer {
+  border: solid 1px rgb(246, 246, 246);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  min-height: 100px;
+  margin: 20px 0;
+
+  //justify-content: space-between;
+}
+
+.actionItemContainerNonEditable {
+  pointer-events: none;
+  filter: opacity(0.5);
+}
+
+.actionItemContainerEditable {
+}
+
+
+
+
+.actionItemTitle {
+    font-family: Inter, serif;
+    font-size: 1.5rem;
+    color: black;
+    font-weight: 400;
+    align-self: flex-start;
+}
+
+@media screen and (max-width: 1000px) {
+  .actionItemContainer {
+    flex-direction: column;
+  }
+}

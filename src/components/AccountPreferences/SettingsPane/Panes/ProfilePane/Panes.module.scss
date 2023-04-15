@@ -1,0 +1,9 @@
+@import "src/common/constants/globalVariables.scss";
+
+.actionItemsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    width: 100%;
+    padding: 10px;
+}

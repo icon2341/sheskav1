@@ -18,6 +18,7 @@ import ResetPassword from "./components/Authentication/ResetPassword";
 import EditItem from "./components/SheskaList/EditItem";
 import LoadingScreen from "./components/LoadingUtils/LoadingScreen";
 import ProductPage from "./components/ProductPage/ProductPage";
+import AccountPreferences from "./components/AccountPreferences/AccountPreferences";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               <Route path={"/onboarding"} element={<><Onboarding/></>}></Route>
               <Route path={"/product"} element={<><ProductPage/></>}></Route>
               <Route path={"/loading"} element={<><LoadingScreen/></>}></Route>
+              <Route path={"/accountsettings"} element={<><Nav/><AccountPreferences/></>}></Route>
           </Routes>
       </Router>
   );

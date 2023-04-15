@@ -15,14 +15,19 @@
     left: 0;
     align-items: center;
     transition: width .1s ease-in-out;
+    -webkit-transition: width .1s ease-in-out;
+    -moz-transition: width .1s ease-in-out;
+    -o-transition: width .1s ease-in-out;
     z-index: 10;
     box-shadow: rgba(0, 0, 0, 0.18) 0px 0px 15px 0px;
+    transition: left .1s ease-in-out;
 
 }
 
 .navbarExtended {
     width: $open-desktop-nav-width;
     transition: width .1s ease-in-out;
+    transition: left .1s ease-in-out;
 }
 
 .navbarLogo {
@@ -49,4 +54,14 @@
 .navButtonIcon {
     font-size: 2rem;
     padding: 10px 0;
+}
+
+@media screen and (max-width: 768px) {
+    .navbarContainer {
+        left: $closed-desktop-nav-width * (-1);
+    }
+
+    .navbarExtended {
+        left: 0;
+    }
 }

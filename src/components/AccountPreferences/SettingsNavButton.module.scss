@@ -1,0 +1,40 @@
+@import "src/common/constants/globalVariables.scss";
+
+.buttonContainer {
+  background: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10px;
+  justify-content: left;
+  padding: 10px;
+  margin: 5px 0;
+    cursor: pointer;
+}
+
+.buttonContainer:hover {
+  outline: rgba(128, 128, 128, 0.44) solid 1px;
+}
+
+.buttonContainerActive {
+  background: $base-color;
+}
+
+.navIcon {
+
+}
+
+.navText {
+    font-family: Inter;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+    margin-left: 10px;
+    font-weight: 400;
+}
+
+.navTextActive {
+    font-family: Inter;
+    font-size: 1.5vw;
+    color: black;
+    margin-bottom: 0;
+}

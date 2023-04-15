@@ -1,0 +1,17 @@
+@import "src/common/constants/globalVariables.scss";
+
+.paneTitle {
+    font-family: Inter, serif;
+    font-size: 2rem;
+    color: black;
+    font-weight: bold;
+    align-self: flex-start;
+}
+
+.paneSubtitle {
+    font-family: Roboto, serif;
+    font-size: 1.3rem;
+    color: black;
+    font-weight: 300;
+    align-self: flex-start;
+}

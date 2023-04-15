@@ -1,3 +1,6 @@
+@import "src/common/constants/globalVariables.scss";
+@import '../common/localNavStyles.scss';
+
 .navigationToggle {
     position: fixed;
     top: 8%;
@@ -19,4 +22,14 @@
 
 .extended {
     left: 190px
+}
+
+@media screen and (max-width: 768px) {
+    .navigationToggle {
+        left: 10px;
+    }
+
+    .extended {
+        left: $open-desktop-nav-width + 10px;
+    }
 }

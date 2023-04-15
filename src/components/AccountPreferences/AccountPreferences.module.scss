@@ -1,0 +1,52 @@
+@import "src/common/constants/globalVariables.scss";
+
+
+.pageContainer {
+    background: $base-background-color-light;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.pageTitle {
+    font-family: Inter, serif;
+    font-size: 2.5rem;
+    color: black;
+    font-weight: 400;
+    align-self: flex-start;
+}
+
+.contentContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+
+}
+
+.settingsContainer {
+    background: white;
+    border-radius: 10px;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.navBox {
+    display: flex;
+    flex-direction: column;
+    max-width: 18%;
+    min-width: 225px;
+    border-right: whitesmoke solid 1.5px;
+    padding-right: 10px;
+}
+
+.settingsBox {
+    margin: 0 10px;
+    width: 100%;
+}
