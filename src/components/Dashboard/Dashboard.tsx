@@ -22,19 +22,19 @@ export function Dashboard() {
     //TODO replace with new api
     async function getPartners(uid: string | undefined) {
         const docRef = doc(db, "users", uid + "" );
-        console.log('getting partners')
+        // console.log('getting partners')
         //docSnapShopt
         await getDoc(docRef).then(doc => {
             if(doc.exists()) {
-                console.log("Document data:", doc.data());
+                // console.log("Document data:", doc.data());
                 if(doc.data().partner_full_name !== undefined) {
                     setPartners(doc.data().partner_full_name)
                 } else {
-                    console.log("No partners found");
+                    // console.log("No partners found");
                     setPartners(partners => [...partners, doc.data().name])
                 }
             } else {
-                console.log("No such document!");
+                // console.log("No such document!");
             }
         })
     }
@@ -44,9 +44,9 @@ export function Dashboard() {
 
             checkIfUserHasPassedOnboarding(navigate).then(
                 () => {
-                    console.log('Attempt to get partners ' + user)
+                    // console.log('Attempt to get partners ' + user)
                     getPartners(user?.uid).then(r => {
-                        console.log('partner data: ' + r);
+                        // console.log('partner data: ' + r);
                     });
                 }
             )
@@ -55,7 +55,7 @@ export function Dashboard() {
     }, [user]);
 
     let welcomeSpace;
-    console.log("PARTNERSONE", partners)
+    // console.log("PARTNERSONE", partners)
     if(partners === undefined || partners.length === 0 || loading) {
         welcomeSpace = <LoadingIndicator />
     } else if(partners[1] === '') {
@@ -72,7 +72,7 @@ export function Dashboard() {
 
     if (user && partners) {
 
-        console.log("FINAL PARTNERS", partners)
+        // console.log("FINAL PARTNERS", partners)
         return (
             <Box id={styles['box']}>
                 <h1 id={styles["email-display"]}>{user?.email} Dashboard Pre-Alpha v0.2</h1>
