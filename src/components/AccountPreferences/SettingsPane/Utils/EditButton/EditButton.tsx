@@ -12,7 +12,7 @@ export function EditButton(props: { setEditMode: any, editMode: boolean }) {
             props.setEditMode(!props.editMode)
             }
         }>
-            <h4 className={styles.title}>Edit</h4>
+            <h4 className={styles.title}>{props.editMode ? 'Done' : 'Edit'}</h4>
             <Edit2 color={'gray'} size={30}/>
         </div>
     )

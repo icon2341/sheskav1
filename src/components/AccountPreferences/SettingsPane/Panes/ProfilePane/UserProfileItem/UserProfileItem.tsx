@@ -20,6 +20,7 @@ import {ref, uploadBytes} from "firebase/storage";
 import firebase from "firebase/compat";
 import {storage} from "../../../../../../index";
 import {v4 as uuidv4} from "uuid";
+import {toast, Toaster} from "react-hot-toast";
 
 /**
  * Contains formik form to edit display name
@@ -122,6 +123,7 @@ export function UserProfileItem(props: {editMode?: boolean}) {
         if(props.editMode) {
             return (
                 <div className={styles.container}>
+                    <div><Toaster/></div>
                     <Modal open={uploadModalOpen} onClose={() => {setUploadModalOpen(false)}}>
                             <Box className={styles.modalContainer}>
                                 <FilePond
@@ -136,6 +138,7 @@ export function UserProfileItem(props: {editMode?: boolean}) {
                                         setUploadModalOpen(false);
                                         auth.currentUser?.reload();
                                         setCurrentProfilePicture(getProfilePicture(auth));
+                                        toast.success("Profile Picture Updated")
                                     }}
                                 />
                             </Box>
@@ -155,6 +158,7 @@ export function UserProfileItem(props: {editMode?: boolean}) {
                                                                             onClick={() => {
                                                                                 sendEmailVerification(auth.currentUser!).then(r =>
                                                                                     setVerificationEmailSent(true));
+                                                                                    toast.success("Verification Email Sent")
                                                                             }}
                                                                             disabled={verificationEmailSent} type={'button'}> Send Verification Email </Button>}
                         </div>

@@ -103,8 +103,8 @@ export function Dashboard() {
                         <h2>Event Preferences</h2>
                         <p>Set up your event preferences and customize your event.</p>
                     </div>
-                    <div className={`${styles.simpleFeatureCard} ${styles.gridItem}`}>
-                        <h2>User Profile</h2>
+                    <div className={`${styles.simpleFeatureCard} ${styles.gridItem}`} onClick={() => {navigate('/accountsettings')}}>
+                        <h2>Account Settings</h2>
                         <p>Manage your profile, accounting, and aesthetics.</p>
                     </div>
                     <div className={`${styles.simpleFeatureCard} ${styles.gridItem}`}>

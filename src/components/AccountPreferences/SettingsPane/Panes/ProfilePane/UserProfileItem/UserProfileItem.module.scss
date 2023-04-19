@@ -21,6 +21,12 @@
     border: $base-color 3px solid;
 }
 
+.profilePicture:hover {
+  cursor: pointer;
+  background-color: #dedede;
+  transform: scale(1.05);
+}
+
 .profilePictureEdit:hover {
   cursor: pointer;
   background-color: #dedede;

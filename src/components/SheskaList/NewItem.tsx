@@ -43,6 +43,7 @@ import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
 import SheskaCardDef from "../Utils/SheskaCardDef";
 import {upload} from "@testing-library/user-event/dist/upload";
+import {toast, Toaster} from "react-hot-toast";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
 
@@ -216,7 +217,7 @@ export function NewItem() {
         filePondRef?.processFiles();
         trackPromise(
             postNewSheskaCard(values, docRef, imageOrder, editor)
-            .then(() => {setDataUploaded(true)})
+            .then(() => {setDataUploaded(true); toast.success('Card successfully created!');})
         );
     };
 
@@ -244,6 +245,7 @@ export function NewItem() {
     return (
         <div className={styles.pageContainer} id={'pageContainerNewItem'}>
             <div className={styles.formContainer}>
+                <div><Toaster/></div>
                 <h1 className={styles.title}>Create a Card</h1>
                 <Formik
                     validate={validateForm}

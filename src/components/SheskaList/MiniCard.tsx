@@ -9,6 +9,7 @@ import { auth, db, storage } from "../../index";
 import { deleteCard, deleteCardImages, getSheskaCardImagesUrls } from "../Utils/CardUtil";
 import miniCardStyles from "./MiniCard.module.css";
 import sheskaListStyles from "./SheskaList.module.css";
+import {toast} from "react-hot-toast";
 
 const area = 'miniCard';
 export function MiniCard(props: any) {
@@ -50,7 +51,7 @@ export function MiniCard(props: any) {
     };
 
     const deleteButton = (
-        <button style={{ backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }} onClick={handleDeleteClick} disabled={promiseInProgress} >
+        <button style={{ backgroundColor: 'transparent', border: 'none', boxShadow: 'none' }} onClick={(e)=> {handleDeleteClick(e); toast.success('Card Deleted')}} disabled={promiseInProgress} >
             <DeleteIcon className={miniCardStyles.deleteIcon} size={48} />
         </button>
     )
