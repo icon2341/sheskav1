@@ -10,8 +10,8 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import 'filepond/dist/filepond.min.css';
 import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
-import { Formik } from "formik";
-import React, { ChangeEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import {Formik, validateYupSchema, yupToFormErrors} from "formik";
+import React, {ChangeEvent, ReactNode, SetStateAction, useEffect, useRef, useState} from "react";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { FilePond, registerPlugin } from "react-filepond";
@@ -28,6 +28,8 @@ import TipTapMenuBar from "./EditorUtil";
 import ImageOrganizer from "./ImageManager/ImageOrganizer";
 import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
+import CurrencyInput from "react-currency-input-field";
+import {currencyNumberToString, currencyStringToNumber} from "../../api/Currency/Utils/CurrencyUtils";
 
 registerPlugin(FilePondPluginFileRename)
 const area = 'editCard';
@@ -52,6 +54,7 @@ export function EditItem() {
     const [filePondLoading,setFilePondLoading] = useState(true);
     const [submitDisabled, setSubmitDisabled] = useState(false);
     const [dataUploaded, setDataUploaded] = useState(false);
+    const [previewCard, setPreviewCard] = useState<React.ReactNode>();
     const [cardDescription, setCardDescription] = useState(`<!--TODO use the custom documents system to make this into a placeholder text rather than REAL text like it is rn-->
               <h2>
                 Hi there,
@@ -64,7 +67,22 @@ export function EditItem() {
               <p>Double-click on any of the buttons above to apply styles to your text.</p>`
 );
     const [editorInitialized, setEditorInitialized] = useState(false);
-    const validationSchema = Yup.object({});
+    const validationSchema = Yup.object({
+        title: Yup.string().required('Title is required').max(50, 'Must be 50 characters or less'),
+        subtitle: Yup.string().required('Subtitle is required').max(100, 'Must be 300 characters or less'),
+        expectedAverage: Yup.number().test(
+            'Expected amount must be less than goal',
+            'Expected amount must be less than goal',
+            (_value, { parent: formState }) => {
+                console.log('running test', formState.goal, formState.expectedAverage);
+                if(formState.goal && formState.expectedAverage){
+                    return formState.expectedAverage < formState.goal;
+                }
+                return true;
+            },
+        ),
+        goal: Yup.number().typeError('Goal must be a number'),
+    });
 
     const { promiseInProgress } = usePromiseTracker({ area, delay: 0 });
 
@@ -129,8 +147,8 @@ export function EditItem() {
     })
 
     useEffect(() => {
-        console.log('imagesDel', imagesToBeDeleted)
-        console.log('filePondFileMapping', filePondFileMapping)
+        // console.log('imagesDel', imagesToBeDeleted)
+        // console.log('filePondFileMapping', filePondFileMapping)
 
         imagesToBeDeleted.forEach((imageId: string) => {
             if(filePondRef?.getFile(filePondFileMapping![imageId]) != null){
@@ -139,7 +157,7 @@ export function EditItem() {
             }
             }
         )
-        console.log('FILE POND REF', filePondRef)
+        // console.log('FILE POND REF', filePondRef)
     }, [imagesToBeDeleted, setImagesToBeDeleted])
 
     useEffect(() => {
@@ -150,7 +168,6 @@ export function EditItem() {
                 const imageMap: { [id: string]: string } = {};
                 const imageOrderInternal: string[] = [];
                 urls.forEach((url) => {
-
                     const id = ref(storage, url).name;
                     console.log(id)
                     imageMap[id] = url;
@@ -164,7 +181,7 @@ export function EditItem() {
             getCardDescription(location.state.cardID).then((description) => {
                 setCardDescription(description);
                 editor.commands.setContent(cardDescription);
-                console.log('DESC FOUND USING: ', cardDescription, description);
+                // console.log('DESC FOUND USING: ', cardDescription, description);
 
                 setEditorInitialized(true);
             }).catch((error) => {
@@ -247,6 +264,9 @@ export function EditItem() {
             subtitle: values.subtitle,
             imageOrder,
             dateUpdated: new Date().toISOString(),
+            guestsAbsorbFees: values.guestsAbsorbFees,
+            goal: values.goal === '' ? [0,0] : currencyNumberToString(values.goal),
+            expectedAverage: values.expectedAverage === '' ? [0,0] : currencyNumberToString(values.expectedAverage),
         }, {merge: true}).then(() => {
             console.log("Document successfully updated!");
             // navigate(-1);
@@ -269,7 +289,15 @@ export function EditItem() {
 
     }, [dataUploaded, filePondLoading, files.length]);
 
+    const validateForm = (values: any) => {
+        try {
+            validateYupSchema(values, validationSchema, true);
+        } catch (err) {
+            return yupToFormErrors(err);
+        }
+    }
 
+    console.log("LOCATION", location.state)
 
     if (user) {
         // @ts-ignore
@@ -279,10 +307,13 @@ export function EditItem() {
                     <h1 className={styles.title}>Edit Card</h1>
 
                     <Formik
-                        validationSchema={validationSchema}
+                        validate={validateForm}
                         initialValues={{
                             title: location.state.title,
-                            subtitle: location.state.subtitle,}}
+                            subtitle: location.state.subtitle,
+                            goal:   location.state.goal === [0,0] ? '' : currencyStringToNumber(location.state.goal as number[]),
+                            expectedAverage: location.state.expectedAverage === [0,0] ? '' : currencyStringToNumber(location.state.expectedAverage as number[]) ,
+                            guestsAbsorbFees: location.state.guestsAbsorbFees,}}
                         onSubmit={uploadFiles}
                     >
                         {({
@@ -292,6 +323,7 @@ export function EditItem() {
                                 touched,
                                 isValid,
                                 errors,
+                                dirty
                         }) => (
                             <Form onSubmit={(event) => {
                                 event.preventDefault();
@@ -394,8 +426,66 @@ export function EditItem() {
                                     {(editor && (editorInitialized))? <EditorContent editor={editor} /> : <div>Loading...</div>}
                                 </div>
 
-                                <Button type={'submit'}  disabled={promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-50 text-center"}
+                                <div className={styles.cardEventSettingsContainer}>
+                                    <div className={styles.cardFinancials}>
+                                        <h3 className={styles.sectionHeader}>Financials</h3>
+                                        <label className={`${styles.sectionHeader} ${styles.financialHeader}`} >Goal</label>
+                                        <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Specify your goal. Leave blank if you don't require a limit. ($USD)</p>
+                                        <Form.Group>
+                                            <CurrencyInput
+                                                prefix={'$'}
+                                                id="goal"
+                                                name="goal"
+                                                placeholder={'∞'}
+                                                value={values.goal as string}
+                                                decimalsLimit={2}
+                                                onValueChange={(value: any) => handleChange({target: {name: 'goal', value}})}
+                                                className={"form-control w-75"}
+                                            />
+                                        </Form.Group>
+                                        <label className={`${styles.sectionHeader} ${styles.financialHeader}`} >Expected Amount</label>
+                                        <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Specify the average donation you expect. Should be less than goal. (optional) ($USD)</p>
+                                        <Form.Group>
+                                            <>
+                                                <CurrencyInput
+                                                    prefix={'$'}
+                                                    id="expectedAverage"
+                                                    name="expectedAverage"
+                                                    placeholder={'None'}
+                                                    value={values.expectedAverage as string}
+                                                    decimalsLimit={2}
+                                                    onValueChange={(value: any) => handleChange({target: {name: 'expectedAverage', value}})}
+                                                    className={"form-control w-75"}
+                                                />
+                                                <div className={"invalid-feedback d-block"}>{errors.expectedAverage as ReactNode}</div>
+                                            </>
+                                        </Form.Group>
+                                        <label className={`${styles.sectionHeader} ${styles.financialHeader}`} >Linked Account</label>
+                                        <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Specify which of your added accounts this card should funnel into. (placeholder)</p>
+                                        <img src={require('../../images/Screenshot_20230304_094522.png')}/>
+                                    </div>
+                                    <div className={styles.cardEventSettings}>
+                                        <h3 className={styles.sectionHeader}>Event Settings</h3>
+                                        <div className={styles.itemSetting}>
+                                            <div className={styles.itemSettingName}>
+                                                <div className={styles.settingName}>Guests absorb fees</div>
+                                                <div className={styles.settingSubtitle}>
+                                                    Service Fees total to roughly 7%' +
+                                                    ' including transaction fees by banks that are not in control of Sheska.' +
+                                                    'Guests can absorb this 7% frictionlessly.
+                                                </div>
+                                                <Form.Check defaultChecked={location.state.guestsAbsorbFees} className="form-switch-lg" type="switch" id='guestsAbsorbFees' onChange={handleChange}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={styles.submitButtonContainer}>
+                                    <Button type={'submit'}  disabled={!dirty || promiseInProgress || submitDisabled || !!errors.expectedAverage} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
+                                    <Button type={'button'}  disabled={promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
+                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); }}> Preview</Button>
+                                </div>
 
                             </Form>
                         )}

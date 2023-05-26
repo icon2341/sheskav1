@@ -16,7 +16,6 @@ export function MiniCard(props: any) {
     const [slideImages, setSlideImages] = useState([] as string[]);
     const navigate = useNavigate();
     const { promiseInProgress } = usePromiseTracker({ area, delay: 0 })
-
     const toEditPage = () => {
         if (promiseInProgress)
             return;
@@ -24,7 +23,10 @@ export function MiniCard(props: any) {
             state: {
                 cardID: props.cardID,
                 title: props.title,
-                subtitle: props.subtitle
+                subtitle: props.subtitle,
+                goal: props.goal ? props.goal : [0,0],
+                expectedAverage: props.expectedAverage ? props.expectedAverage : [0,0],
+                guestsAbsorbFees: props.guestsAbsorbFees
             }
         });
     }
