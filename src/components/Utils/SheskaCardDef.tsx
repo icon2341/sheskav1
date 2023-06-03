@@ -1,5 +1,6 @@
 import React from "react";
 import MiniCard from "../SheskaList/MiniCard";
+import {number} from "yup";
 
 /**
  * SheskaCard is a class that defines a card object.
@@ -10,10 +11,10 @@ import MiniCard from "../SheskaList/MiniCard";
  * @param subtitle the subtitle of the card
  * @param description the description of the card
  * @param imageOrder the order of the images in the card
- * @param expectedAverage the expected average of the card default is [0,0]
- * @param goal the goal of the card default is [0,0]
- * @param amountRaised the amount raised of the card default is [0,0]
- * @param guestsAbsorbFees whether or not guests absorb fees default is [0,0]
+ * @param expectedAverage the expected average of the card default is 0
+ * @param goal the goal of the card default is 0
+ * @param amountRaised the amount raised of the card default is 0
+ * @param guestsAbsorbFees whether or not guests absorb fees default is 0
  * @param dateCreated the date the card was created
  * @param dateUpdated the date the card was last updated
  */
@@ -32,16 +33,16 @@ class SheskaCard {
 
 
 
-    constructor(cardID: string, title: string, subtitle: string, description?: string, imageOrder?: string[], expectedAverage? : string[],
-                goal?: string[], amountRaised?: string[], guestsAbsorbFees?: boolean, dateCreated?: string, dateUpdated?: string) {
+    constructor(cardID: string, title: string, subtitle: string, description?: string, imageOrder?: string[], expectedAverage? : number | string,
+                goal?: number | string, amountRaised?: number | string, guestsAbsorbFees?: boolean, dateCreated?: string, dateUpdated?: string) {
         this._cardID = cardID;
         this._title = title;
         this._subtitle = subtitle;
         this._description = description || '';
         this._imageOrder = imageOrder || [];
-        this._amountRaised = amountRaised || [0,0];
-        this._amountRequested = goal || [0,0];
-        this._expectedAverage = expectedAverage || [0,0];
+        this._amountRaised = amountRaised as number || 0;
+        this._amountRequested = goal as number || 0;
+        this._expectedAverage = expectedAverage as number || 0;
         this._guestsAbsorbFees = guestsAbsorbFees || false;
         this._dateCreated = dateCreated || '';
         this._dateUpdated = dateUpdated || '';

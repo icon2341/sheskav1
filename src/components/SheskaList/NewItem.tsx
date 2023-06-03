@@ -276,7 +276,7 @@ export function NewItem() {
                             {previewCard && <div className={styles.previewCardContainer}>
                                 <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false);}}/>
                                 <SheskaCardGuestView sheskaCardDef={new SheskaCardDef(docRef?.id ?? '', values.title, values.subtitle, editor.getHTML(), imageOrder,
-                                    processCurrencyForTesting(values.expectedAmount), processCurrencyForTesting(values.goal), ['0', '00'])} cardImages={images}/>
+                                    values.expectedAmount, values.goal, 0)} cardImages={images}/>
                             </div>}
 
                             <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
@@ -471,21 +471,17 @@ export default NewItem;
  */
 async function postNewSheskaCard(values: { title: string, subtitle: string, goal: string, expectedAmount: string, guestsAbsorbFees: boolean }, docRef: any, imageOrder: string[], editor: Editor | null) {
     try {
-        let processedGoal: number[];
+        let processedGoal: number;
         if (values.goal === '') {
-            processedGoal = [0,0]
-        } else if(values.goal.includes('.')) {
-            processedGoal = values.goal.split('.').map((value) => parseInt(value))
-        } else {
-            processedGoal = [parseInt(values.goal), 0]
+            processedGoal = 0
+        }  else {
+            processedGoal = 100 * (values.goal as unknown as number)
         }
-        let expectedAmount: number[];
+        let expectedAmount: number;
         if (values.expectedAmount === '') {
-            expectedAmount = [0,0]
-        } else if (values.expectedAmount.includes('.')) {
-            expectedAmount = values.expectedAmount.split('.').map((value) => parseInt(value))
+            expectedAmount = 0
         } else {
-            expectedAmount = [parseInt(values.expectedAmount), 0]
+            expectedAmount = 100 * (values.expectedAmount as unknown as number)
         }
 
 
@@ -498,7 +494,7 @@ async function postNewSheskaCard(values: { title: string, subtitle: string, goal
                 imageOrder,
                 goal: processedGoal,
                 expectedAverage: expectedAmount,
-                amountRaised: [0,0], // TODO PLACEHOLDER
+                amountRaised: 0, // TODO PLACEHOLDER
                 guestsAbsorbFees: values.guestsAbsorbFees,
                 dateCreated: new Date().toISOString(),
                 dateUpdated: new Date().toISOString(),

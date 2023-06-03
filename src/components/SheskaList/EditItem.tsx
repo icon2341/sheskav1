@@ -30,6 +30,10 @@ import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
 import CurrencyInput from "react-currency-input-field";
 import {currencyNumberToString, currencyStringToNumber} from "../../api/Currency/Utils/CurrencyUtils";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import SheskaCardGuestView from "../GuestView/SheskaCardGuestView/SheskaCardGuestView";
+import SheskaCardDef from "../Utils/SheskaCardDef";
 
 registerPlugin(FilePondPluginFileRename)
 const area = 'editCard';
@@ -265,8 +269,9 @@ export function EditItem() {
             imageOrder,
             dateUpdated: new Date().toISOString(),
             guestsAbsorbFees: values.guestsAbsorbFees,
-            goal: values.goal === '' ? [0,0] : currencyNumberToString(values.goal),
-            expectedAverage: values.expectedAverage === '' ? [0,0] : currencyNumberToString(values.expectedAverage),
+            goal: values.goal === '' ? 0 : values.goal as number * 100,
+            expectedAverage: values.expectedAverage === '' ? 0 : values.expectedAverage as number * 100,
+            amountRaised: 0,
         }, {merge: true}).then(() => {
             console.log("Document successfully updated!");
             // navigate(-1);
@@ -311,8 +316,8 @@ export function EditItem() {
                         initialValues={{
                             title: location.state.title,
                             subtitle: location.state.subtitle,
-                            goal:   location.state.goal === [0,0] ? '' : currencyStringToNumber(location.state.goal as number[]),
-                            expectedAverage: location.state.expectedAverage === [0,0] ? '' : currencyStringToNumber(location.state.expectedAverage as number[]) ,
+                            goal:   location.state.goal === 0 ? '' : location.state.goal as number / 100,
+                            expectedAverage: location.state.expectedAverage === 0 ? '' : location.state.expectedAverage as number / 100 ,
                             guestsAbsorbFees: location.state.guestsAbsorbFees,}}
                         onSubmit={uploadFiles}
                     >
@@ -329,6 +334,11 @@ export function EditItem() {
                                 event.preventDefault();
                                 handleSubmit();
                             }}>
+                                {previewCard && <div className={styles.previewCardContainer}>
+                                    <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false);}}/>
+                                    <SheskaCardGuestView sheskaCardDef={new SheskaCardDef(docRef?.id ?? '', values.title, values.subtitle, editor.getHTML(), imageOrder,
+                                        values.expectedAverage, values.goal, '0')} cardImages={images as {[id: string]: string}}/>
+                                </div>}
                                 <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
                                     <label className={styles.sectionHeader} >Title</label>
                                     <p className={` ${styles.sectionSubheader} ${'text-muted'}`}>Edit your card title. (optional) </p>
@@ -484,7 +494,7 @@ export function EditItem() {
                                     <Button type={'submit'}  disabled={!dirty || promiseInProgress || submitDisabled || !!errors.expectedAverage} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
                                     <Button type={'button'}  disabled={promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
-                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); }}> Preview</Button>
+                                        ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('PREVIEW CARD TRUE', previewCard) }}> Preview</Button>
                                 </div>
 
                             </Form>

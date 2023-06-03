@@ -61,12 +61,12 @@ export function SheskaCardGuestView(props: {sheskaCardDef: SheskaCard, cardImage
                 <div className={styles.progressBarHeaders}>
                     <div className={styles.progressBarHeaderSub} >
                         <h3 className={styles.progressBarHeader}>Amount Raised</h3>
-                        <h3 className={styles.progressBarHeaderNumber}>{convertCurrencyToString(props.sheskaCardDef.amountRaised)}</h3>
+                        <h3 className={styles.progressBarHeaderNumber}>{props.sheskaCardDef.amountRaised}</h3>
 
                     </div>
                     <div className={styles.progressBarHeaderSub}>
                         <h3 className={styles.progressBarHeader}>Amount Left</h3>
-                        <h3 className={`${styles.progressBarHeaderNumber} ${styles.progressBarHeaderNumberTwo}`}> {'$' + (convertCurrenctToDouble(props.sheskaCardDef.amountRequested) - convertCurrenctToDouble(props.sheskaCardDef.amountRaised) || '4,222')} </h3>
+                        <h3 className={`${styles.progressBarHeaderNumber} ${styles.progressBarHeaderNumberTwo}`}> {'$' + Number((props.sheskaCardDef.amountRequested - props.sheskaCardDef.amountRaised || '4,222')).toFixed(2) as string} </h3>
                     </div>
                 </div>
 
