@@ -78,7 +78,6 @@ export function EditItem() {
             'Expected amount must be less than goal',
             'Expected amount must be less than goal',
             (_value, { parent: formState }) => {
-                console.log('running test', formState.goal, formState.expectedAverage);
                 if(formState.goal && formState.expectedAverage){
                     return formState.expectedAverage < formState.goal;
                 }
@@ -132,7 +131,6 @@ export function EditItem() {
                 }
             }
         }
-
     }
 
     const editor : any | null= useEditor({
@@ -404,8 +402,8 @@ export function EditItem() {
 
                                                 setImageOrder(newImageOrder);
 
-                                                console.log("SIZE OF IMAGES " + images?.length);
-                                                console.log("SIZE OF IMAGESORDER: " + imageOrder.length);
+                                                // console.log("SIZE OF IMAGES " + images?.length);
+                                                // console.log("SIZE OF IMAGESORDER: " + imageOrder.length);
                                                 return newImages;
                                             })
 
@@ -422,6 +420,7 @@ export function EditItem() {
 
                                         onupdatefiles={(fileItems: FilePondFile[]) => {
                                             setFiles(fileItems);
+                                            setSubmitDisabled(false);
                                         }}
 
                                         ref={ref => filePondRef = ref}
@@ -491,7 +490,7 @@ export function EditItem() {
                                 </div>
 
                                 <div className={styles.submitButtonContainer}>
-                                    <Button type={'submit'}  disabled={!dirty || promiseInProgress || submitDisabled || !!errors.expectedAverage} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
+                                    <Button type={'submit'}  disabled={promiseInProgress || submitDisabled || !!errors.expectedAverage} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
                                     <Button type={'button'}  disabled={promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
                                         ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('PREVIEW CARD TRUE', previewCard) }}> Preview</Button>
