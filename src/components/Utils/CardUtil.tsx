@@ -30,10 +30,10 @@ export async function getSheskaCardImagesUrls(cardID: string, storage: FirebaseS
     if(docSnap.exists()) {
         const docData = docSnap.data();
         if(docData?.imageOrder) {
-            await Promise.all(docData?.imageOrder.map(async (imageName: string) => {
+            for (const imageName of docData?.imageOrder) {
                 const url = await getDownloadURL(ref(storage, pathString + imageName));
                 imageURLs.push(url);
-            }));
+            }
         } else {
             const pathReference = ref(storage, pathString);
             const response = await listAll(pathReference);
