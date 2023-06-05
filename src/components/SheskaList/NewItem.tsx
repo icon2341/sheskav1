@@ -1,12 +1,8 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Editor, Extension } from '@tiptap/core';
+import { Editor} from '@tiptap/core';
 import { Color } from "@tiptap/extension-color";
-import Document from '@tiptap/extension-document';
 import ListItem from '@tiptap/extension-list-item';
-import Paragraph from '@tiptap/extension-paragraph';
-import { Placeholder } from "@tiptap/extension-placeholder";
-import Text from '@tiptap/extension-text';
 import TextStyle from '@tiptap/extension-text-style';
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -16,14 +12,12 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import 'filepond/dist/filepond.min.css';
-import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/firestore";
+import { collection, doc, DocumentReference, setDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { Formik, validateYupSchema, yupToFormErrors } from "formik";
-import React, { ChangeEvent, MutableRefObject, useEffect, useRef, useState } from "react";
-import { Carousel, ToastContainer } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Toast from "react-bootstrap/Toast";
 import CurrencyInput from 'react-currency-input-field';
 import { FilePond, registerPlugin } from 'react-filepond';
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -31,18 +25,23 @@ import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
+import SheskaCard from "../Utils/SheskaCardDef";
+import Toast from "react-bootstrap/Toast";
+import Paragraph from '@tiptap/extension-paragraph';
+import { Placeholder } from "@tiptap/extension-placeholder";
+import Text from '@tiptap/extension-text';
+import { Carousel, ToastContainer } from "react-bootstrap";
+import Document from '@tiptap/extension-document';
 import globalStyles from "../../App.module.css";
+import imageManagerStyles from "./ImageManager/ImageManager.module.css";
+import { DisplayFormikState } from "../Utils/DisplayFormikState";
 import { auth, db, storage } from "../../index";
 import SheskaCardGuestView from "../GuestView/SheskaCardGuestView/SheskaCardGuestView";
-import { DisplayFormikState } from "../Utils/DisplayFormikState";
-import SheskaCard from "../Utils/SheskaCardDef";
 import TipTapMenuBar from "./EditorUtil";
-import imageManagerStyles from "./ImageManager/ImageManager.module.css";
 import { default as ImageOrganizer } from "./ImageManager/ImageOrganizer";
 import styles from "./NewItem.module.css";
 import "./NewItemUtil.scss";
 import SheskaCardDef from "../Utils/SheskaCardDef";
-import {upload} from "@testing-library/user-event/dist/upload";
 import {toast, Toaster} from "react-hot-toast";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType)
@@ -277,7 +276,7 @@ export function NewItem() {
                             {previewCard && <div className={styles.previewCardContainer}>
                                 <FontAwesomeIcon icon={faXmark} className={styles.previewCloseIcon} onClick={() => {setPreviewCard(false);}}/>
                                 <SheskaCardGuestView sheskaCardDef={new SheskaCardDef(docRef?.id ?? '', values.title, values.subtitle, editor.getHTML(), imageOrder,
-                                    processCurrencyForTesting(values.expectedAmount), processCurrencyForTesting(values.goal), ['0', '00'])} cardImages={images}/>
+                                    values.expectedAmount, values.goal, 0)} cardImages={images}/>
                             </div>}
 
                             <Form.Group controlId={'titleForm'} className={"mb-3 w-75 mx-auto"}>
@@ -472,23 +471,21 @@ export default NewItem;
  */
 async function postNewSheskaCard(values: { title: string, subtitle: string, goal: string, expectedAmount: string, guestsAbsorbFees: boolean }, docRef: any, imageOrder: string[], editor: Editor | null) {
     try {
-        let processedGoal: number[];
+        let processedGoal: number;
         if (values.goal === '') {
-            processedGoal = [0,0]
-        } else if(values.goal.includes('.')) {
-            processedGoal = values.goal.split('.').map((value) => parseInt(value))
-        } else {
-            processedGoal = [parseInt(values.goal), 0]
+            processedGoal = 0
+        }  else {
+            processedGoal = 100 * (values.goal as unknown as number)
         }
-        let expectedAmount: number[];
+        let expectedAmount: number;
         if (values.expectedAmount === '') {
-            expectedAmount = [0,0]
-        } else if (values.expectedAmount.includes('.')) {
-            expectedAmount = values.expectedAmount.split('.').map((value) => parseInt(value))
+            expectedAmount = 0
         } else {
-            expectedAmount = [parseInt(values.expectedAmount), 0]
+            expectedAmount = 100 * (values.expectedAmount as unknown as number)
         }
 
+
+        console.log("posting new sheska card", values);
         await setDoc(docRef,
             {
                 title: values.title,
@@ -497,7 +494,7 @@ async function postNewSheskaCard(values: { title: string, subtitle: string, goal
                 imageOrder,
                 goal: processedGoal,
                 expectedAverage: expectedAmount,
-                amountRaised: [0,0], // TODO PLACEHOLDER
+                amountRaised: 0, // TODO PLACEHOLDER
                 guestsAbsorbFees: values.guestsAbsorbFees,
                 dateCreated: new Date().toISOString(),
                 dateUpdated: new Date().toISOString(),

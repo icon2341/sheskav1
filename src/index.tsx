@@ -28,9 +28,9 @@ const appCheck = initializeAppCheck(app, {
 
 
 
-// connectAuthEmulator(auth, "http://localhost:9099")
-// connectFirestoreEmulator(db, 'localhost', 8081);
-// connectStorageEmulator(storage, "localhost", 9199);
+connectAuthEmulator(auth, "http://localhost:9099")
+connectFirestoreEmulator(db, 'localhost', 8081);
+connectStorageEmulator(storage, "localhost", 9199);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
