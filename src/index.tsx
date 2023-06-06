@@ -7,7 +7,6 @@ import App from './App';
 import { firebaseConfig, RECAPTCHA_CONFIG } from './credentials';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
-
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
@@ -20,6 +19,7 @@ export const auth = getAuth(app)
 export const db = getFirestore(app)
 // Initialize Cloud Storage and get a reference to the service
 export const storage = getStorage(app);
+
 //app check for ReCaptcha and API verification
 const appCheck = initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(RECAPTCHA_CONFIG.PRODUCTION),
@@ -28,9 +28,9 @@ const appCheck = initializeAppCheck(app, {
 
 
 
-connectAuthEmulator(auth, "http://localhost:9099")
-connectFirestoreEmulator(db, 'localhost', 8081);
-connectStorageEmulator(storage, "localhost", 9199);
+// connectAuthEmulator(auth, "http://localhost:9099")
+// connectFirestoreEmulator(db, 'localhost', 8081);
+// connectStorageEmulator(storage, "localhost", 9199);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
