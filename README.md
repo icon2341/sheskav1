@@ -43,6 +43,28 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 To start the firebase emulators you can run the following command:
 ### `firebase emulators:start --import ./emulatorData`
 
+To deploy the app to firebase DEVELOPMENT SERVER you can run the following commands:
+
+### `firebase use dev`
+
+THEN
+
+### `build:dev`
+
+
+
+To deploy the app to firebase PRODUCTION SERVER you can run the following commands:
+
+### `firebase use prod`
+
+THEN
+
+### `build:prod`
+
+
+To only Deploy functions you can run:
+
+### `firebase deploy --only functions`
 
 ## Learn More
 

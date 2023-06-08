@@ -75,7 +75,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:dev": "env-cmd -f .env.development npm run build && firebase deploy -P dev",
+    "build:prod": "env-cmd -f .env.production npm run build && firebase deploy -P prod"
   },
   "eslintConfig": {
     "extends": [
@@ -97,6 +99,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.5.16",
-    "@types/uuid": "^9.0.1"
+    "@types/uuid": "^9.0.1",
+    "env-cmd": "^10.1.0"
   }
 }

@@ -6,18 +6,27 @@ import {onRequest} from "firebase-functions/v2/https";
 import {onDocumentCreated} from "firebase-functions/v2/firestore";
 
 
+
 // The Firebase Admin SDK to access Firestore.
 const {initializeApp} = require("firebase-admin/app");
 const {getFirestore} = require("firebase-admin/firestore");
 
 initializeApp();
 
+exports.NewAccountFlow = require("./Stripe/NewAccountFlow");
+
+
 // Take the text parameter passed to this HTTP endpoint and insert it into
 // Firestore under the path /messages/:documentId/original
-exports.addMessage = onRequest(async (req: any, res : any) => {
+//http://localhost:5001/sheska-cd5cb/us-central1/addMessage
+exports.addMessage = onRequest({secrets: ["STRIPE_SECRET"]}, async (req: any, res : any) => {
     // Grab the text parameter.
     const original = req.query.text;
+    // logger.log("STRIPE SECRET: ", process.env.STRIPE_SECRET);
+    // logger.log("STRIPE TEST: ", process.env.STRIPE_SECRET_TEST_KEY);
     // Push the new message into Firestore using the Firebase Admin SDK.
+
+
     const writeResult = await getFirestore()
         .collection("messages")
         .add({original: original});
@@ -32,6 +41,8 @@ exports.makeuppercase = onDocumentCreated("/messages/{documentId}", (event : any
     // Grab the current value of what was written to Firestore.
     const original = event.data.data().original;
 
+
+
     // Access the parameter `{documentId}` with `event.params`
     logger.log("Uppercasing", event.params.documentId, original);
 
@@ -40,6 +51,7 @@ exports.makeuppercase = onDocumentCreated("/messages/{documentId}", (event : any
     // You must return a Promise when performing
     // asynchronous tasks inside a function
     // such as writing to Firestore.
+
     // Setting an 'uppercase' field in Firestore document returns a Promise.
     return event.data.ref.set({uppercase}, {merge: true});
 });

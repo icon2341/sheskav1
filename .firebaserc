@@ -1,5 +1,10 @@
 {
   "projects": {
-    "default": "sheska-cd5cb"
-  }
+    "default": "sheska-cd5cb",
+    "production": "sheska-cd5cb",
+    "dev": "sheska-d7e03",
+    "prod": "sheska-cd5cb"
+  },
+  "targets": {},
+  "etags": {}
 }
