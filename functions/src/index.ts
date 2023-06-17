@@ -13,13 +13,15 @@ const {getFirestore} = require("firebase-admin/firestore");
 
 initializeApp();
 
-exports.NewAccountFlow = require("./Stripe/NewAccountFlow");
+exports.StripeOnboarding = require("./Stripe/NewAccountFlow");
+
 
 
 // Take the text parameter passed to this HTTP endpoint and insert it into
 // Firestore under the path /messages/:documentId/original
-//http://localhost:5001/sheska-cd5cb/us-central1/addMessage
-exports.addMessage = onRequest({secrets: ["STRIPE_SECRET"]}, async (req: any, res : any) => {
+exports.addMessage = onRequest({secrets: ["STRIPE_SECRET"], cors: false, enforceAppCheck: false}, async (req: any, res : any) => {
+
+    logger.log(process.env.STRIPE_RETURN_URL, "LOGGING ENVIRONMENT VARIABLES");
     // Grab the text parameter.
     const original = req.query.text;
     // logger.log("STRIPE SECRET: ", process.env.STRIPE_SECRET);

@@ -212,7 +212,8 @@ async function sendUserOnboardingData(navigate : NavigateFunction, txtUserFirstn
         await setDoc(userRef, {
             partner_full_name: [txtPartnerFirstname, txtPartnerLastname],
             full_name: [txtUserFirstname, txtUserLastname],
-            passedOnboarding: true
+            passedOnboarding: true,
+            passed_stripe_onboarding: false,
         }, {merge: true}).then(() => {
             updateProfile(user, {
                 displayName: txtUserFirstname,

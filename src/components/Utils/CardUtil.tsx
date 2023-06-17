@@ -31,8 +31,12 @@ export async function getSheskaCardImagesUrls(cardID: string, storage: FirebaseS
         const docData = docSnap.data();
         if(docData?.imageOrder) {
             for (const imageName of docData?.imageOrder) {
-                const url = await getDownloadURL(ref(storage, pathString + imageName));
-                imageURLs.push(url);
+                try {
+                    const url = await getDownloadURL(ref(storage, pathString + imageName));
+                    imageURLs.push(url);
+                } catch (error) {
+                    console.error(`IMAGE  ${imageName} DOES NOT EXIST ON CARD ${cardID} at ${pathString}`)
+                }
             }
         } else {
             const pathReference = ref(storage, pathString);

@@ -13,6 +13,7 @@ import app from "./fbConfig"
 import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import {connectFunctionsEmulator, getFunctions} from 'firebase/functions';
 import {initializeAppCheck, ReCaptchaV3Provider} from "firebase/app-check";
 
 // Initialize Firebase
@@ -21,6 +22,8 @@ export const auth = getAuth(app)
 export const db = getFirestore(app)
 // Initialize Cloud Storage and get a reference to the service
 export const storage = getStorage(app);
+
+export const functions = getFunctions(app)
 
 export const STRIPE_PUBLISHABLE_KEY = STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY
 
@@ -32,9 +35,12 @@ const appCheck = initializeAppCheck(app, {
 
 
 
-// connectAuthEmulator(auth, "http://localhost:9099")
-// connectFirestoreEmulator(db, 'localhost', 8081);
-// connectStorageEmulator(storage, "localhost", 9199);
+if(process.env.REACT_APP_EMULATOR_ON === 'true') {
+    connectAuthEmulator(auth, "http://localhost:9099")
+    connectFirestoreEmulator(db, 'localhost', 8081);
+    connectStorageEmulator(storage, "localhost", 9199);
+    connectFunctionsEmulator(functions, 'localhost', 5001);
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

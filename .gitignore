@@ -32,3 +32,8 @@ yarn-error.log*
 
 .env.development
 .env.production
+
+/functions/.env.dev
+/functions/.env.prod
+/functions/.env.local
+```

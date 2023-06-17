@@ -3,7 +3,8 @@
     "default": "sheska-cd5cb",
     "production": "sheska-cd5cb",
     "dev": "sheska-d7e03",
-    "prod": "sheska-cd5cb"
+    "prod": "sheska-cd5cb",
+    "local": "sheska-d7e03"
   },
   "targets": {},
   "etags": {}
