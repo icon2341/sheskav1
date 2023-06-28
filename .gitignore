@@ -37,3 +37,5 @@ yarn-error.log*
 /functions/.env.prod
 /functions/.env.local
 ```
+/functions/lib/
+/functions/

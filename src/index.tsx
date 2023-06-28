@@ -33,9 +33,10 @@ const appCheck = initializeAppCheck(app, {
     isTokenAutoRefreshEnabled: true
 })
 
-
+console.log('RECAPTCHA SITE KEY', process.env.REACT_APP_RECAPTCHA_SITE_KEY)
 
 if(process.env.REACT_APP_EMULATOR_ON === 'true') {
+    console.log('EMULATOR MODE ON')
     connectAuthEmulator(auth, "http://localhost:9099")
     connectFirestoreEmulator(db, 'localhost', 8081);
     connectStorageEmulator(storage, "localhost", 9199);

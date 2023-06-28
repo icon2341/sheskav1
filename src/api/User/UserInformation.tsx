@@ -1,6 +1,13 @@
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {Auth} from "firebase/auth";
 //TODO export error codes for API instaed of manually typing them in
+
+
+/**
+ * Gets the user document from the database
+ * @param db firebase database ref
+ * @param auth firebase auth ref
+ */
 export async function getUserDocument(db: any, auth: Auth): Promise<any> {
     if (auth.currentUser === null) {
         return Promise.reject("User is not logged in.");
