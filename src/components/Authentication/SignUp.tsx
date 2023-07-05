@@ -13,6 +13,7 @@ import {InputGroup} from "react-bootstrap";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {Formik} from "formik";
 import * as Yup from 'yup';
+import LoadingScreen from "../LoadingUtils/LoadingScreen";
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
 
@@ -66,11 +67,11 @@ export function SignUp() {
     if (user) {
         navigate('/dashboard');
         return(<div>
-            <h1>REDIRECTING</h1>
+            <LoadingScreen/>
         </div>)
     } else if (loading) {
         return (<div>
-            <h1>Loading...</h1>
+            <LoadingScreen/>
         </div>)
     } else {
         return(

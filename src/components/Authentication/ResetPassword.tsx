@@ -12,6 +12,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import * as Yup from "yup";
 import {Formik} from "formik";
 import { sendPasswordResetEmail } from "firebase/auth";
+import LoadingScreen from "../LoadingUtils/LoadingScreen";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
@@ -65,11 +66,11 @@ export function ResetPassword() {
     if (user) {
         navigate('/dashboard');
         return(<div>
-            <h1>REDIRECTING</h1>
+            <LoadingScreen/>
         </div>)
     } else if (loading) {
         return (<div>
-            <h1>Loading...</h1>
+            <LoadingScreen/>
         </div>)
     } else {
         return(

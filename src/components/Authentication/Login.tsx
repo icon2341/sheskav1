@@ -15,6 +15,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { auth, db } from "../../index";
 import styles from "./SignUp.module.css";
+import LoadingScreen from "../LoadingUtils/LoadingScreen";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
@@ -78,13 +79,13 @@ export function Login() {
     };
     //if the user is logged in, redirect them to the dashboard
     if (user) {
-        // navigate('/dashboard');
+        navigate('/dashboard');
         return(<div>
-            <h1>REDIRECTING</h1>
+            <LoadingScreen/>
         </div>)
     } else if (loading) {
         return (<div>
-            <h1>Loading...</h1>
+            <LoadingScreen/>
         </div>)
     } else {
         return(

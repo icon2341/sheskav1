@@ -29,20 +29,41 @@ export async function getStripeOnboardingLink() {
  * Get the Stripe account object from stripe servers for the current user and return a promise with the account ID.
  */
 export async function getStripeAccount() {
-    let result : any;
-    const getStripeAccount = httpsCallable(functions, 'StripeOnboarding-getStripeAccount');
+    const getStripeAccount = httpsCallable(functions, 'StripeAccountUtils-getStripeAccount');
 
-    await getStripeAccount().then((response) => {
+    return getStripeAccount().then((response) => {
         if(response.data === null) {
             console.error('NO RESPONSE FROM SERVER', response);
             return Promise.reject('No response from server');
         }
 
-        result = response.data;
+        return Promise.resolve(response.data);
     }).catch((error) => {
         console.error('ERROR GETTING STRIPE ACCOUNT', error)
         return Promise.reject('Error getting Stripe account')
     });
+}
 
-    return result.result;
+/**
+ * Get the Stripe login link for the current user and return a promise with the login link.
+ * @returns Promise<string> - the promise of the login link
+ * @throws error if the user is not logged in
+ * @throws error if the user does not have a Stripe account
+ * @throws error if the user does not have a Stripe account ID
+ */
+export async  function getStripeLoginLink() {
+    const getStripeLoginLink = httpsCallable(functions, 'StripeAccountUtils-getStripeLoginLink');
+
+    return getStripeLoginLink().then((response) => {
+        if(response.data === null) {
+            console.error('NO RESPONSE FROM SERVER', response);
+            return Promise.reject('No response from server');
+        }
+
+        return Promise.resolve(response.data);
+    }).catch((error) => {
+        console.error('ERROR GETTING STRIPE LOGIN LINK', error)
+        return Promise.reject('Error getting Stripe login link')
+    });
+
 }

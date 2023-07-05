@@ -61,7 +61,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-masonry-css": "^1.0.16",
     "react-promise-tracker": "^2.1.1",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
     "sass": "^1.59.3",
     "stripe": "^12.8.0",

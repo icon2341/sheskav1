@@ -4,9 +4,12 @@ import {Auth} from "firebase/auth";
 
 
 /**
- * Gets the user document from the database
+ * Gets the user document data from the database
  * @param db firebase database ref
  * @param auth firebase auth ref
+ *
+ * @returns Promise<any> - the user document data
+ * @throws error if the user is not logged in or if the document does not exist
  */
 export async function getUserDocument(db: any, auth: Auth): Promise<any> {
     if (auth.currentUser === null) {
@@ -53,13 +56,24 @@ export async function getPartnerName(db:any, auth:Auth, uid?:string) {
     }
 }
 
+/**
+ * Sets the user data document in firestore, will merge data always
+ * @param db the firestore db reference
+ * @param auth the firebase auth reference
+ * @param newData the JSON new data that should be entered into the database
+ *
+ * @returns Promise<void> - the promise of the document being set
+ * @throws error if the user is not logged in
+ */
 export async function setUserData(db:any, auth:Auth, newData: {}) {
     if (auth.currentUser === null) {
+        console.error("User is not logged in.")
         return Promise.reject("User is not logged in.");
     }
 
     const docRef = doc(db, "users", auth.currentUser?.uid as string);
 
     await setDoc(docRef, newData, {merge: true});
-    console.log("Document successfully written!");
+
+    return Promise.resolve("Document Set!");
 }
