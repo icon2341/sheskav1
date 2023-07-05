@@ -18,8 +18,6 @@ export function StripeOnboardingRedirect() {
         navigate("/login");
     } else if(loading) {
         return <LoadingScreen/>
-    } else if (user) {
-        navigate("/accountsettings");
     } else {
         return <h1>Something went wrong</h1>
     }

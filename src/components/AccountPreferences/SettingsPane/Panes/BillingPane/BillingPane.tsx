@@ -13,12 +13,15 @@ import {StripeOnboardingButton} from "./StripeButton/StripeOnboardingButton";
 import {getStripeAccount} from "../../../../../api/User/Billing/StripeIntegration";
 import Stripe from "stripe";
 import StripeLoginButton from "./StripeButton/StripeLoginButton";
+import {red} from "@mui/material/colors";
 const area = 'billingPane';
 export function BillingPane() {
     const [user, loading, error] = useAuthState(auth)
     const [data, setData] = React.useState<any>(undefined);
     const [stripeAccount, setStripeAccount] = React.useState<Stripe.Account | undefined>(undefined);
     const { promiseInProgress } = usePromiseTracker({area, delay: 0});
+    const [errorState, setErrorState] = React.useState<any>(undefined);
+
     useEffect(() => {
         trackPromise(
             getUserDocument(db, auth).then((doc) => {
@@ -29,11 +32,17 @@ export function BillingPane() {
                             setStripeAccount(account.result);
                             console.log(account.result);
                         }
+                    ).catch(
+                        (error) => {
+                            console.error(error);
+                            setErrorState(error);
+                        }
                     )
                 }
             }), area).catch(
             (error) => {
                 console.error(error);
+                setErrorState(error)
             }
         )
     }, [user]);
@@ -65,11 +74,21 @@ export function BillingPane() {
         }
     }
 
+    const errorStyle = {
+        color: red[500],
+        paddingTop: '40px'
+    }
+
     return (
         <div className={styles.actionItemsContainer}>
-            <div className={styles.actionItemContent}>
-                {promiseInProgress ? <LoadingIndicator/> : billingContent()}
-            </div>
+            {
+                errorState ?
+                    <h3 style={errorStyle}>{errorState}</h3>
+                    :
+                    <div className={styles.actionItemContent}>
+                        {promiseInProgress ? <LoadingIndicator/> : billingContent()}
+                    </div>
+            }
 
         </div>
     )

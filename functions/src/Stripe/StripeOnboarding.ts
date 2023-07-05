@@ -17,7 +17,7 @@ exports.getStripeAccountLink = onCall({secrets: ["STRIPE_SECRET"]},  (request: C
 
     if (!request.auth) {
         // Throwing an HttpsError so that the client gets the error details.
-        error("request: ", request.instanceIdToken, " failed precondition authentication check");
+        console.error("request: ", request.instanceIdToken, " failed precondition authentication check");
         throw new HttpsError("failed-precondition", "The function must be called " + "while authenticated.");
     }
 
@@ -26,13 +26,13 @@ exports.getStripeAccountLink = onCall({secrets: ["STRIPE_SECRET"]},  (request: C
     //Check to see if the user already has a stripe account linked to the account
     return getFirestore().collection("users").doc(request.auth?.uid).get().then((doc: any) => {
         if (doc.exists) {
-            //If there already is a acount id
+            //If there already is a account id
             if (doc.data().stripe_account_id) {
                 info("request: ", request.instanceIdToken, " user already has a stripe account linked to the account");
                 return stripe.accounts.retrieve(
                     doc.data().stripe_account_id
-                ).catch((error: any) => {
-                    error("request: ", request.instanceIdToken, " Error retrieving stripe account: ", error.message, " stack: ", error.stack);
+                ).catch((errorFound: any) => {
+                    error("request: ", request.instanceIdToken, " Error retrieving stripe account: ", errorFound.message, " stack: ", errorFound.stack);
                     throw new HttpsError("internal", "There was an internal server error");
                 }).then((account: any) => {
                     return stripe.accountLinks.create({
@@ -76,12 +76,12 @@ exports.getStripeAccountLink = onCall({secrets: ["STRIPE_SECRET"]},  (request: C
                         })
 
                 }).catch((requestError: any) => {
-                    error("request: ", request.instanceIdToken, " internal error: ", requestError.message, " stack: ", requestError.stack);
+                    console.error("request: ", request.instanceIdToken, " internal error: ", requestError.message, " stack: ", requestError.stack);
                     throw new HttpsError("internal", "There was an internal server error");
                 })
             }
         } else {
-            error("request: ", request.instanceIdToken, " user does not exist");
+            console.error("request: ", request.instanceIdToken, " user does not exist");
             throw new HttpsError("not-found", "The user does not exist");
         }
     })

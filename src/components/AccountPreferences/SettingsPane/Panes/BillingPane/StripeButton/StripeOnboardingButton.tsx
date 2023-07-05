@@ -38,6 +38,7 @@ export function StripeOnboardingButton() {
                 }
             }).catch(
                 (error) => {
+                    console.error(error);
                     setErrorText(error);
                 }
             )

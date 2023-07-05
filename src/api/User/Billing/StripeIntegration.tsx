@@ -40,7 +40,7 @@ export async function getStripeAccount() {
         return Promise.resolve(response.data);
     }).catch((error) => {
         console.error('ERROR GETTING STRIPE ACCOUNT', error)
-        return Promise.reject('Error getting Stripe account')
+        return Promise.reject('Error getting Stripe account, Please Try again later.')
     });
 }
 

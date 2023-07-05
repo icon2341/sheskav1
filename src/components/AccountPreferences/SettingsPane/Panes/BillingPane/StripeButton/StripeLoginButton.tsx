@@ -32,6 +32,7 @@ export function StripeLoginButton() {
                     }).catch(
                         (error) => {
                             setErrorText(error);
+                            console.error(error)
                         }
                 )
             )
