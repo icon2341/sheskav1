@@ -1,11 +1,15 @@
+// import {
+//     createUserWithEmailAndPassword,
+//     signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence, sendEmailVerification
+// } from 'firebase/auth';
 import {
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence, sendEmailVerification
+    signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence
 } from 'firebase/auth';
 import React from 'react'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {doc, getDoc, setDoc} from "firebase/firestore";
-import {auth, db} from "../../index";
+import {auth, db, functions} from "../../index";
 import styles from "./SignUp.module.css"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -14,6 +18,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {Formik} from "formik";
 import * as Yup from 'yup';
 import LoadingScreen from "../LoadingUtils/LoadingScreen";
+import {httpsCallable} from "firebase/functions";
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
 
@@ -221,7 +226,10 @@ async function createAccount(txtEmail : string, txtPassword : string, navigate :
             console.log(cred)
             sessionStorage.setItem('Auth Token', cred.user.refreshToken)
 
-            sendEmailVerification(cred.user)
+            // sendEmailVerification(cred.user)
+            const sendEmailVerification = httpsCallable(functions, 'EmailUserUtils-sendEmailVerification');
+            sendEmailVerification()
+
 
             const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
             console.log("adding to doc...")

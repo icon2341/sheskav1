@@ -28,14 +28,13 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/src/credentials.tsx
 
 .env.development
 .env.production
 
-/functions/.env.dev
-/functions/.env.prod
-/functions/.env.local
+./functions/.env.dev
+./functions/.env.prod
+./functions/.env.local
 ```
+
 /functions/lib/
-/functions/

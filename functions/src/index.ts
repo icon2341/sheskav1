@@ -16,3 +16,5 @@ initializeApp();
 
 exports.StripeOnboarding = require("./Stripe/StripeOnboarding");
 exports.StripeAccountUtils = require("./Stripe/StripeAccountUtils");
+
+exports.EmailUserUtils = require("./SendgridAPI/EmailUserUtils");

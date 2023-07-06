@@ -5,7 +5,7 @@ import {auth} from "../../../index";
 import LoadingScreen from "../../LoadingUtils/LoadingScreen";
 import {setUserData} from "../../../api/User/UserInformation";
 
-export function StripeOnboardingRedirect() {
+export function EmailVerificationRedirect() {
     const [user, loading, error] = useAuthState(auth);
     console.log(user, loading, error);
     const navigate = useNavigate();
@@ -18,8 +18,8 @@ export function StripeOnboardingRedirect() {
         navigate("/login");
     } else if(loading) {
         return <LoadingScreen/>
-    } else if(user && !loading){
-        navigate("/dashboard")
+    } else  if(user && !loading && auth.currentUser?.emailVerified){
+        navigate("/dashboard");
     }
 
     return <h1>Something went wrong</h1>
@@ -30,4 +30,4 @@ export function StripeOnboardingRedirect() {
 }
 
 
-export default StripeOnboardingRedirect;
+export default EmailVerificationRedirect;

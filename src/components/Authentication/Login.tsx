@@ -1,7 +1,6 @@
 import {
     browserLocalPersistence,
     browserSessionPersistence,
-    sendEmailVerification,
     signInWithEmailAndPassword
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -13,9 +12,10 @@ import Form from 'react-bootstrap/Form';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { auth, db } from "../../index";
+import {auth, db, functions} from "../../index";
 import styles from "./SignUp.module.css";
 import LoadingScreen from "../LoadingUtils/LoadingScreen";
+import {httpsCallable} from "firebase/functions";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
@@ -237,7 +237,8 @@ async function loginUser(txtEmail : string, txtPassword : string, navigate : Nav
             console.log('checking if email is verified')
             if(!cred.user.emailVerified) {
                 console.log('email not verified, sending verification email')
-                sendEmailVerification(cred.user)
+                const sendEmailVerification = httpsCallable(functions, 'EmailUserUtils-sendEmailVerification');
+                sendEmailVerification()
             }
         })
         // console.log("signed in my friend")

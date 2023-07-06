@@ -5,7 +5,7 @@ import {
     setDisplayName,
     setProfilePicture
 } from "../../../../../../api/User/ProfilePicture/ProfilePicture";
-import {auth} from "../../../../../../index";
+import {auth, functions} from "../../../../../../index";
 import {Check, X, Plus} from "react-feather"
 import {useAuthState} from "react-firebase-hooks/auth";
 import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingSecondaryIndicator";
@@ -13,7 +13,6 @@ import {Formik} from "formik";
 import Form from "react-bootstrap/Form";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
-import {sendEmailVerification} from "firebase/auth";
 import {Box, Modal} from "@mui/material";
 import {FilePond} from "react-filepond";
 import {ref, uploadBytes} from "firebase/storage";
@@ -21,6 +20,7 @@ import firebase from "firebase/compat";
 import {storage} from "../../../../../../index";
 import {v4 as uuidv4} from "uuid";
 import {toast, Toaster} from "react-hot-toast";
+import {httpsCallable} from "firebase/functions";
 
 /**
  * Contains formik form to edit display name
@@ -156,7 +156,8 @@ export function UserProfileItem(props: {editMode?: boolean}) {
                             {auth.currentUser?.emailVerified ? '' : <Button className={styles.verifiedButton}
 
                                                                             onClick={() => {
-                                                                                sendEmailVerification(auth.currentUser!).then(r =>
+                                                                                const sendEmailVerification = httpsCallable(functions, 'EmailUserUtils-sendEmailVerification');
+                                                                                sendEmailVerification().then(r =>
                                                                                     setVerificationEmailSent(true));
                                                                                     toast.success("Verification Email Sent")
                                                                             }}

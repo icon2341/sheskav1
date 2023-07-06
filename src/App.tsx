@@ -20,6 +20,8 @@ import LoadingScreen from "./components/LoadingUtils/LoadingScreen";
 import ProductPage from "./components/ProductPage/ProductPage";
 import AccountPreferences from "./components/AccountPreferences/AccountPreferences";
 import StripeOnboardingRedirect from "./components/RedirectHandler/StripeOnboardingRedirect/StripeOnboardingRedirect";
+import EmailVerificationRedirect
+    from "./components/RedirectHandler/EmailVerificationRedirect/EmailVerificationRedirect";
 
 function App() {
   return (
@@ -40,6 +42,7 @@ function App() {
               <Route path={"/loading"} element={<><LoadingScreen/></>}></Route>
               <Route path={"/accountsettings"} element={<><Nav/><AccountPreferences/></>}></Route>
               <Route path={"/stripeonboardingredirect"} element={<><StripeOnboardingRedirect/></>}></Route>
+              <Route path={"/verifyemail"} element={<><StripeOnboardingRedirect/></>}></Route>
           </Routes>
       </Router>
   );
