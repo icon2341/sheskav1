@@ -161,7 +161,7 @@ export function SignUp() {
                                                     placeholder={"Confirm Password"}
                                                     isValid={touched.confirmPassword && !errors.confirmPassword}
                                                     isInvalid={!!errors.confirmPassword}
-                                                    autoComplete={"off"}
+                                                    autoComplete={"new-password"}
                                                 />
                                                 <Form.Control.Feedback  >Looks good!</Form.Control.Feedback>
                                                 <Form.Control.Feedback  type={"invalid"} >{errors.confirmPassword}</Form.Control.Feedback>

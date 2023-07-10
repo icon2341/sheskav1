@@ -28,7 +28,7 @@ exports.sendEmailVerification = onCall({secrets: ["SENDGRID_API_KEY"]},  (reques
         .then((link : string) => {
             info("request: ", request.instanceIdToken, " sending email verification to: ", email, " with verification link: ", link)
 
-            const sgMail = require('@sendgrid/mail')
+            const sgMail = require('@sendgriokd/mail')
             sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
             const msg = {
@@ -48,8 +48,8 @@ exports.sendEmailVerification = onCall({secrets: ["SENDGRID_API_KEY"]},  (reques
                 .catch((resultError: any) => {
                     error('Error sending email to ', email, ' error: ', resultError)
                 });
-        }).catch((error: any) => {
-            error('Error generating email verification link for ', email, ' error: ', error)
+        }).catch((errorResult: any) => {
+            error('Error generating email verification link for ', email, ' error: ', errorResult)
         });
     });
 

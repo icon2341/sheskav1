@@ -190,8 +190,12 @@ small {
     .presentationHeader {
         width: 60%;
         text-align: center;
-        position: center;
         display: none;
+    }
+
+    .peopleHavingFun {
+        width: 100vw;
+        height: 40vh;
     }
 
 }

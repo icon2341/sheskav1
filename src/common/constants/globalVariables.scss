@@ -4,7 +4,7 @@
 @import "/src/Butler_Webfont/stylesheet.css";
 
 $base-color: #24475b;
-$base-color-light: #2e5c71;
+$base-color-light: #24475b;
 $base-color-dark: #1e3b40;
 $base-background-color-light: #f3f3f3;
 
@@ -21,4 +21,13 @@ $content-margin-top-desktop: 5%;
   transition-duration: 0.3s;
   -webkit-transition-property: color, background-color;
   transition-property: color, background-color;
+}
+
+//LOGO SEMANTICS
+@mixin logo-long-medium {
+    font-family: 'Butler', serif;
+    font-size: 3em;
+    font-weight: 900;
+    color: $base-color;
+    margin: 0;
 }

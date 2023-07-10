@@ -1,0 +1,2 @@
+DO NOT ADD NEW FUNCTIONALITY TO THIS FOLDER, USE THE /api folder for database objects and their accessors/manipulators.
+THIS IS ALSO WHERE API ROUTES ARE DEFINED

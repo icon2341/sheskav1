@@ -75,7 +75,7 @@ export function Dashboard() {
         // console.log("FINAL PARTNERS", partners)
         return (
             <Box id={styles['box']}>
-                <h1 id={styles["email-display"]}>{user?.email} Dashboard Pre-Alpha v0.2</h1>
+                <h1 id={styles["email-display"]}>{user?.email} Dashboard Pre-Alpha v0.3</h1>
                 <Masonry columns={{md: 2, xs: 1}} spacing={2} id={styles.grid}>
                     {welcomeSpace}
                     <div className={`${styles.largeFeatureCard}`}>
@@ -124,9 +124,11 @@ export function Dashboard() {
                 <h1 id={"email-display"}>AUTH ERROR</h1>
             </div>
         )
+    } else if (!loading && (!user)) {
+        navigate('/login')
     }
 
-    return null
+    return null;
 }
 
 export default Dashboard

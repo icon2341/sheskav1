@@ -2,6 +2,37 @@ import {getFunctions, httpsCallable} from "firebase/functions";
 import {functions} from "../../../index";
 
 /**
+ * This file contains all the functions that interact with the Stripe API.
+ */
+
+
+/**
+ * Get the Stripe onboarding link and account ID and return a promise the accountOnboardingLink.
+ * @returns Promise<{accountOnboardingLink: string, accountId: string}> - the promise of the accountOnboardingLink and accountId
+ */
+export async function createStripeAccount() {
+    const createLinkStripeAccount = httpsCallable(functions, 'StripeOnboarding-createLinkStripeAccount');
+    let result : any;
+
+    await createLinkStripeAccount().then((response) => {
+        if(response.data === null) {
+            console.error('NO RESPONSE FROM SERVER', response);
+            return Promise.reject('No response from server');
+        }
+
+        result = response.data;
+
+        return response.data;
+    }).catch((error) => {
+        console.error('ERROR CREATING STRIPE ACCOUNT', error)
+        return Promise.reject('Error creating Stripe account, please try again later. Support has been alerted.')
+
+    });
+
+    return result.result;
+}
+
+/**
  * Get the Stripe onboarding link and account ID and return a promise the accountOnboardingLink. This function will also
  * create a Stripe account if one does not exist and link it to the user.
  */
@@ -37,7 +68,7 @@ export async function getStripeAccount() {
             return Promise.reject('No response from server');
         }
 
-        return Promise.resolve(response.data);
+        return response.data;
     }).catch((error) => {
         console.error('ERROR GETTING STRIPE ACCOUNT', error)
         return Promise.reject('Error getting Stripe account, Please Try again later.')
@@ -60,7 +91,7 @@ export async  function getStripeLoginLink() {
             return Promise.reject('No response from server');
         }
 
-        return Promise.resolve(response.data);
+        return response.data;
     }).catch((error) => {
         console.error('ERROR GETTING STRIPE LOGIN LINK', error)
         return Promise.reject('Error getting Stripe login link')

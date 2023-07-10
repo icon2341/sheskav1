@@ -10,7 +10,7 @@ import {getUserDocument} from "../../../../../api/User/UserInformation";
 import {LoadingIndicator} from "../../../../LoadingUtils/LoadingIndicator";
 import Button from "react-bootstrap/Button";
 import {StripeOnboardingButton} from "./StripeButton/StripeOnboardingButton";
-import {getStripeAccount} from "../../../../../api/User/Billing/StripeIntegration";
+import {createStripeAccount, getStripeAccount} from "../../../../../api/User/Billing/StripeIntegration";
 import Stripe from "stripe";
 import StripeLoginButton from "./StripeButton/StripeLoginButton";
 import {red} from "@mui/material/colors";
@@ -26,6 +26,7 @@ export function BillingPane() {
         trackPromise(
             getUserDocument(db, auth).then((doc) => {
                 setData(doc);
+                console.log(doc)
                 if(doc.stripe_account_id) {
                     getStripeAccount().then(
                         (account : any) => {
@@ -38,31 +39,45 @@ export function BillingPane() {
                             setErrorState(error);
                         }
                     )
+                } else {
+                    console.log("Creating stripe account, SINCE THERE IS NOT ONE")
+                    createStripeAccount().then(
+                        (response : any) => {
+                            console.log("CREATED STRIPE ACCOUNT: " + response.result);
+                            getStripeAccount().then(
+                                (response : any) => {
+                                    setStripeAccount(response.result);
+                                    console.log(response.result);
+                                }
+                            )
+                        })
+                        .catch(
+                            (responseError) => {
+                                console.log("ERROR CREATING STRIPE ACCOUNT: " + responseError);
+                                setErrorState(responseError);
+                            }
+                        )
                 }
-            }), area).catch(
-            (error) => {
-                console.error(error);
-                setErrorState(error)
-            }
-        )
+            }).catch(
+                (error) => {
+                    console.error(error);
+                    setErrorState(error)
+                }
+            )
+            , area)
     }, [user]);
 
     const billingContent = () => {
-        if(!data?.stripe_account_id) {
-            return (
-                <div>
-                    <h3>Link your account with stripe to receive and manage payments in Sheska</h3>
-                    <StripeOnboardingButton/>
-                </div>
-            )
-        } else if(stripeAccount?.details_submitted) {
+        if(!stripeAccount) return <LoadingIndicator/>;
+
+        if(stripeAccount?.details_submitted) {
             return (
                 <div>
                     <h3>Manage your Stripe account</h3>
                     <StripeLoginButton/>
                 </div>
             )
-        } else if(stripeAccount?.details_submitted === false) {
+        } else if(!stripeAccount?.details_submitted) {
             return (
                 <div>
                     <h3>Continue Onboarding</h3>

@@ -22,10 +22,10 @@ import AccountPreferences from "./components/AccountPreferences/AccountPreferenc
 import StripeOnboardingRedirect from "./components/RedirectHandler/StripeOnboardingRedirect/StripeOnboardingRedirect";
 import EmailVerificationRedirect
     from "./components/RedirectHandler/EmailVerificationRedirect/EmailVerificationRedirect";
+import PageNotFound from "./PageNotFound/PageNotFound";
 
 function App() {
   return (
-
       <Router>
           <Routes>
               <Route path={"/editcard"} element={<><Nav/><EditItem/></>}></Route>
@@ -42,7 +42,8 @@ function App() {
               <Route path={"/loading"} element={<><LoadingScreen/></>}></Route>
               <Route path={"/accountsettings"} element={<><Nav/><AccountPreferences/></>}></Route>
               <Route path={"/stripeonboardingredirect"} element={<><StripeOnboardingRedirect/></>}></Route>
-              <Route path={"/verifyemail"} element={<><StripeOnboardingRedirect/></>}></Route>
+              <Route path={"/verifyemail"} element={<><EmailVerificationRedirect/></>}></Route>
+              <Route path="*" element={<PageNotFound/>}></Route>
           </Routes>
       </Router>
   );
