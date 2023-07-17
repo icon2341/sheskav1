@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, db, storage } from "../../index";
 import { deleteCard, deleteCardImages, getSheskaCardImagesUrls } from "../Utils/CardUtil";
 import miniCardStyles from "./MiniCard.module.css";
-import sheskaListStyles from "./SheskaList.module.css";
+import sheskaListStyles from "./SheskaList.module.scss";
 import {toast} from "react-hot-toast";
 
 const area = 'miniCard';
