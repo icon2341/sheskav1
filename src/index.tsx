@@ -4,7 +4,6 @@ import 'font-awesome/css/font-awesome.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { firebaseConfig, RECAPTCHA_CONFIG, STRIPE_CONFIG } from './credentials';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
 import app from "./fbConfig"
@@ -25,7 +24,7 @@ export const storage = getStorage(app);
 
 export const functions = getFunctions(app)
 
-export const STRIPE_PUBLISHABLE_KEY = STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY
+export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
 
 // //app check for ReCaptcha and API verification
 const appCheck = initializeAppCheck(app, {
