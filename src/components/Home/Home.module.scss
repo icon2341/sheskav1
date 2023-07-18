@@ -1,0 +1,354 @@
+@import "src/common/constants/globalVariables.scss";
+
+body {
+    background: #F9F9F9;
+}
+
+#email-display {
+    font-size: 2vw;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+}
+
+#grid {
+    max-width: 50%;
+    margin: 0 auto;
+    margin-top: $content-margin-top-desktop;
+}
+
+#features-grid > div{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.welcomeSpaceSpinner {
+    margin: auto auto;
+    text-align: center;
+    max-width: 550px;
+    display: block;
+    min-height: 200px;
+    padding-top: 100px;
+}
+
+.welcomeSpace {
+    display: block;
+    max-width: 550px;
+    margin: 0 auto 20px;
+}
+
+.welcomeSpace > *{
+    margin-left: 15px;
+}
+
+#hello-message {
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    font-size: 2.9vw;
+}
+
+#start-here-message {
+    font-family: Inter, sans-serif;
+    font-size: 2.6vw;
+    font-weight: 300;
+    margin-top: 10px;
+}
+
+.largeFeatureCard {
+    background: #FDFDFD;
+    border-radius: 10px;
+    border: #E2E2E2 solid 1px;
+    max-width: 550px;
+    position: relative;
+    margin: 0 auto;
+    padding-bottom: 30%;
+    cursor: pointer;
+}
+
+.largeFeatureCard {
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    overflow: hidden;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+.largeFeatureCard:hover, .largeFeatureCard:focus, .largeFeatureCard:active{
+    background-color: #2F5D7A;
+    color: white;
+}
+
+.largeFeatureCard > h2{
+    font-family: Pavanam, serif;
+    font-size: 2.6vw;
+    padding-left: 7%;
+    padding-top:3%;
+    margin: 0;
+    display: block;
+}
+
+.largeFeatureCard > p {
+    font-family: Pavanam, serif;
+    font-size: 1.3vw;
+    margin: 0;
+    padding-left: 7%;
+    padding-right: 2%;
+    padding-bottom: 20px;
+}
+
+#feature-card-image-sheska {
+    width: auto;
+    height: 60%;
+    border: none;
+    border-radius: 100px 0px 10px 0px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    max-height: 50%;
+}
+
+#feature-card-image-guest {
+    width: auto;
+    height: 60%;
+    border: none;
+    border-radius: 0px 100px 0px 10px;
+    margin-top: 10%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    max-height: 50%;
+}
+
+.smallFeatureCard {
+    background-color: #24475B;
+    border-radius: 10px;
+    color: white;
+    border: #E2E2E2 solid 1px;
+    max-width: 550px;
+    margin: 0 auto;
+    padding-bottom: 5vh;
+    min-height: 125px;
+    position: relative;
+    width: 40%;
+    cursor: pointer;
+}
+.smallFeatureCard {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    overflow: hidden;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+.smallFeatureCard:hover, .smallFeatureCard:focus, .smallFeatureCard:active {
+    background-color: #2F5D7A;
+    color: white;
+}
+
+
+.smallFeatureCard > * {
+    margin-left: 7%;
+    font-family: Pavanam, sans-serif;
+    color: white;
+}
+
+.smallFeatureCard > h2 {
+    font-size: 2.6vw;
+    display: block;
+    padding-top: 3%;
+}
+
+.smallFeatureCard > p {
+    font-size: 1.3vw;
+    margin-top: 1%;
+}
+
+.simpleFeatureCard {
+    background-color: #FDFDFD;
+    border-radius: 10px;
+    border: #E2E2E2 solid 1px;
+    max-width: 550px;
+    margin: 0 auto;
+    padding-bottom: 5vh;
+    min-height: 100px;
+    position: relative;
+    cursor: pointer;
+}
+
+.simpleFeatureCard {
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    overflow: hidden;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
+}
+.simpleFeatureCard:hover, .simpleFeatureCard:focus, .simpleFeatureCard:active {
+    background-color: #2F5D7A;
+    color: white;
+}
+
+.simpleFeatureCard > * {
+    margin-left: 7%;
+    font-family: Pavanam, sans-serif;
+    max-width: 85%;
+}
+
+.simpleFeatureCard > h2 {
+    font-size: 2.6vw;
+    display: block;
+    padding-top: 3%;
+}
+
+.simpleFeatureCard > p {
+    font-size: 1.3vw;
+    margin-top: 1%;
+}
+
+.arrow {
+    color: white;
+    position: absolute;
+    bottom: 3px;
+    right: 10px;
+}
+
+
+@media screen and (max-width: 600px){
+
+    #grid {
+        max-width: 65%;
+    }
+
+    .largeFeatureCard > h2 {
+        font-size: 5vw;
+    }
+
+    .largeFeatureCard > p {
+        font-size: 2.9vw;
+        max-width: 60%;
+    }
+
+    .smallFeatureCard > h2 {
+        font-size: 5vw;
+    }
+
+    .smallFeatureCard > p {
+        font-size: 2.9vw;
+    }
+
+    .simpleFeatureCard > h2 {
+        font-size: 5vw;
+    }
+
+    .simpleFeatureCard > p {
+        font-size: 2.9vw;
+    }
+
+    #hello-message {
+        font-family: Inter, sans-serif;
+        font-weight: 400;
+        font-size: 30px;
+    }
+
+    #start-here-message {
+        font-family: Inter, sans-serif;
+        font-size: 13px;
+        font-weight: 300;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 900px){
+    #box {
+        margin-top: 40px;
+    }
+
+    .largeFeatureCard > h2 {
+        font-size: 5vw;
+    }
+
+    .largeFeatureCard > p {
+        font-size: 2.9vw;
+        max-width: 60%;
+    }
+
+    .smallFeatureCard > h2 {
+        font-size: 25px;
+    }
+
+    .smallFeatureCard > p {
+        font-size: 13px;
+    }
+
+    .simpleFeatureCard > h2 {
+        font-size: 25px;
+    }
+
+    .simpleFeatureCard > p {
+        font-size: 13px;
+    }
+
+    #feature-card-image-guest {
+        width: auto;
+        height: 65%;
+        border: none;
+        border-radius: 100px 0px 10px 0px;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: auto;
+    }
+}
+
+
+@media screen and (min-width: 1600px) {
+    .largeFeatureCard {
+        min-width: 200px;
+    }
+    .largeFeatureCard > a{
+        font-size: 40px;
+    }
+    .largeFeatureCard > p {
+        font-size: 25px;
+
+    }
+    .smallFeatureCard > a {
+        font-size: 40px;
+    }
+
+    .smallFeatureCard > p {
+        font-size: 25px;
+    }
+
+    .simpleFeatureCard > a {
+        font-size: 40px;
+    }
+
+    .simpleFeatureCard > p {
+        font-size: 25px;
+    }
+
+    #hello-message {
+        font-family: Inter, sans-serif;
+        font-weight: 400;
+        font-size: 50px;
+    }
+
+    #start-here-message {
+        font-family: Inter, sans-serif;
+        font-size: 35px;
+        font-weight: 300;
+        margin-top: 10px;
+    }
+}
+

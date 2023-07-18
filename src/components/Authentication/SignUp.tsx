@@ -10,7 +10,7 @@ import React from 'react'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {auth, db, functions} from "../../index";
-import styles from "./SignUp.module.css"
+import styles from "./AuthStyles.module.scss"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {InputGroup} from "react-bootstrap";
@@ -18,6 +18,8 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {Formik} from "formik";
 import * as Yup from 'yup';
 import LoadingScreen from "../LoadingUtils/LoadingScreen";
+import {createAccount} from "../../api/User/Auth/AuthUtils";
+
 import {httpsCallable} from "firebase/functions";
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
@@ -178,6 +180,7 @@ export function SignUp() {
                                         </Form>
                                         )}
                                 </Formik>
+
                                 <div className={styles.loginWidgetFooter}>
                                     <h2 className={`${styles.passwordFooter} ${'text-muted'}`}>Passwords must be at least 8 characters long, contain upper and lowercase letters, numbers, and at least one special character</h2>
                                     <br/>
@@ -200,79 +203,6 @@ export function SignUp() {
 }
 
 export default SignUp
-
-/**
- * Creates a new user account with the given email and password. Also adds them to Firestore
- * //TODO MAKE THE user sign in redirection way better
- * @param txtEmail users email
- * @param txtPassword user's password
- * @param navigate navigate function
- * @param rememberMe if user has selected remember me
- */
-async function createAccount(txtEmail : string, txtPassword : string, navigate : NavigateFunction, rememberMe : boolean) {
-    // checks if user has selected remember me, sets auth state persistence naturally.
-    if(rememberMe) {
-        await auth.setPersistence(browserLocalPersistence)
-    } else {
-        await auth.setPersistence(browserSessionPersistence)
-    }
-
-    console.log(`Signup Attempted on ${txtEmail}`)
-
-    const email : string = txtEmail
-    const password : string = txtPassword
-    try {
-        await createUserWithEmailAndPassword(auth, email, password).then((cred) => {
-            console.log(cred)
-            sessionStorage.setItem('Auth Token', cred.user.refreshToken)
-
-            // sendEmailVerification(cred.user)
-            const sendEmailVerification = httpsCallable(functions, 'EmailUserUtils-sendEmailVerification');
-            sendEmailVerification()
-
-
-            const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
-            console.log("adding to doc...")
-            return (
-                setDoc(userRef, {email: email, passedOnboarding: false}, {merge: true})
-            ).then(() => {
-                console.log("signing up completed for: ", auth?.currentUser?.uid ?? "ERROR NULL USER")
-                navigate('/onboarding')
-                return;
-            }).catch((error) => {
-                console.log(error)
-                return new Promise((resolve, reject) => {
-                    reject("Error adding user to database")
-
-                });
-            })
-        })
-    }
-    catch(error : any) {
-        console.log(error)
-        //handle various errors
-        console.log(`There was an error: ${error}`)
-
-        switch (error.code) {
-            case 'auth/email-already-in-use':
-                console.log('email already in use')
-                return new Promise((resolve, reject) => {
-                    reject("Email in Use")
-                });
-            case 'auth/network-request-failed':
-                console.log('network request failed')
-                return new Promise((resolve, reject) => {
-                    reject("Server Refused Connection")
-                });
-
-        }
-    }
-
-    return new Promise((resolve, reject) => {
-        resolve("Success");
-    });
-
-}
 
 
 

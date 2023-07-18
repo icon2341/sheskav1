@@ -3,9 +3,9 @@ import styles from './Sidebar.module.scss';
 import ToggleNavSize from "./ToggleNavSize";
 import {CSS} from "@dnd-kit/utilities";
 import {NavButton} from "./NavButton";
-import {Home, List, AlertCircle, LogOut, Settings} from "react-feather";
+import {Home, List, Layout, LogOut, Settings, } from "react-feather";
 import {NavigateFunction, useNavigate} from "react-router-dom";
-import {signOutUser} from "../../Authentication/Utils/AuthUtils";
+import {signOutUser} from "../../../api/User/Auth/AuthUtils";
 import AuthBar from "../AuthBar/AuthBar";
 import {auth} from "../../../index";
 import {LoadingIndicator} from "../../LoadingUtils/LoadingSecondaryIndicator";
@@ -24,7 +24,8 @@ export function Sidebar(props: { navigateFunction: NavigateFunction }) {
             <div className={`${styles.navbarContainer} ${isOpen ? styles.navbarExtended : ''}`} onMouseEnter={() => {setIsOpen(true)}} onMouseLeave={() => {if(!manuallyLocked){setIsOpen(false)}}}>
                 <h1 className={styles.navbarLogo}>S{isOpen ? 'heska' : ''}</h1>
                 <div className={styles.navigationGroup}>
-                    <NavButton icon={Home} text={'Dashboard'} location={'/dashboard'} selected={'/dashboard' === currentRelPath} isSidebarOpen={isOpen}/>
+                    <NavButton icon={Home} text={'Home'} location={'/home'} selected={'/home' === currentRelPath} isSidebarOpen={isOpen}/>
+                    <NavButton icon={Layout} text={'Dashboard'} location={'/dashboard?page=snapshot'} selected={'/dashboard' === currentRelPath} isSidebarOpen={isOpen}/>
                     <NavButton icon={List} text={'Sheska List'} location={'/sheskalist'} selected={'/sheskalist' === currentRelPath} isSidebarOpen={isOpen}/>
                 </div>
                 <div className={styles.settingGroup}>

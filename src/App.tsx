@@ -9,7 +9,7 @@ import Welcome from "./components/Welcome";
 import InProgress from "./components/InProgress";
 import SignUp from "./components/Authentication/SignUp";
 import Nav from "./components/Nav";
-import Dashboard from "./components/Dashboard/Dashboard";
+import Home from "./components/Home/Home";
 import {Onboarding} from "./components/Newuserflow/Onboarding";
 import SheskaList from "./components/SheskaList/SheskaList";
 import NewItem from "./components/SheskaList/NewItem";
@@ -23,6 +23,7 @@ import StripeOnboardingRedirect from "./components/RedirectHandler/StripeOnboard
 import EmailVerificationRedirect
     from "./components/RedirectHandler/EmailVerificationRedirect/EmailVerificationRedirect";
 import PageNotFound from "./PageNotFound/PageNotFound";
+import Dashboard from "./components/Dashboard/Dashboard"
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               <Route path={"/about"} element={<><InProgress /></>}></Route>
               <Route path={"/login"} element={<><Login/></>}></Route>
               <Route path={"/signup"} element={<><SignUp/></>}></Route>
+              <Route path={"/home"} element={<><Nav/> <Home/></>}></Route>
               <Route path={"/dashboard"} element={<><Nav/> <Dashboard/></>}></Route>
               <Route path={"/sheskalist"} element={<><Nav/> <SheskaList/></>}></Route>
               <Route path={"/onboarding"} element={<><Onboarding/></>}></Route>

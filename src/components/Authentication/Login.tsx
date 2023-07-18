@@ -13,9 +13,10 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {auth, db, functions} from "../../index";
-import styles from "./SignUp.module.css";
+import styles from "./AuthStyles.module.scss";
 import LoadingScreen from "../LoadingUtils/LoadingScreen";
 import {httpsCallable} from "firebase/functions";
+import {loginUser} from "../../api/User/Auth/AuthUtils";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
 //TODO ADD NEW PASSWORD SYSTEM
@@ -92,23 +93,11 @@ export function Login() {
             <div>
                 <style> @import url('https://fonts.googleapis.com/css2?family=Pavanam&display=swap');</style>
                 <div className={styles.pageContainer}>
-                    <div className={styles.presentationContainer}>
+                    <div className={styles.presentationSection}>
                         <img src={require("../../images/peopleHavingFun.jpg")} className={styles.peopleHavingFun} alt={'people having fun'}/>
                         <h1 className={styles.presentationHeader}>Give guests one of a kind experiences, find amazing vendors, allow guests to support you, make memories together.</h1>
                     </div>
-                    <div className={styles.formContainer}>
-                        {/*<ToastContainer className={styles.toastContainer}>*/}
-                        {/*    <Toast show={showA} onClose={() => setShowA(false)}>*/}
-                        {/*        <Toast.Header>*/}
-                        {/*            <strong className="me-auto">ERROR</strong>*/}
-                        {/*            <small>just now</small>*/}
-                        {/*        </Toast.Header>*/}
-                        {/*        <Toast.Body>*/}
-                        {/*            Incorrect Password!*/}
-                        {/*        </Toast.Body>*/}
-                        {/*    </Toast>*/}
-                        {/*</ToastContainer>*/}
-                        {/*LOGIN WIDGET*/}
+                    <div className={styles.formSection}>
                         <div className={styles.loginWidget}>
                             <div className={styles.loginWidgetHeader}>
                                 <h1 className={styles.loginLogo}>Sheska</h1>
@@ -210,86 +199,6 @@ export function Login() {
 
 export default Login
 
-//TODO ADD OVERLOAD FUNCTIONS FOR DIFFERENT SORTS OF AUTHENTICATION
-/**
- * This function will attempt to login a user with the given email and password and will redirect them, it will also
- * return promises that denote the errors observed.
- * @param txtEmail email of user as string
- * @param txtPassword passowrd of user as string
- * @param navigate navigate object to redirect user
- * @param rememberMe remember me checkbox to change browser session details
- */
-async function loginUser(txtEmail : string, txtPassword : string, navigate : NavigateFunction, rememberMe : boolean){
-    // checks if user has selected remember me, sets auth state persistence naturally.
-    if(rememberMe) {
-        await auth.setPersistence(browserLocalPersistence)
-    } else {
-        await auth.setPersistence(browserSessionPersistence)
-    }
-
-    console.log('Login Attempted on ' + txtEmail);
-    const email : string = txtEmail;
-    const password : string = txtPassword;
-
-    try {
-        // tries to sign in user with email and password auth
-        await signInWithEmailAndPassword(auth, email, password).then((cred)=> {
-            console.log('checking if email is verified')
-            if(!cred.user.emailVerified) {
-                console.log('email not verified, sending verification email')
-                const sendEmailVerification = httpsCallable(functions, 'EmailUserUtils-sendEmailVerification');
-                sendEmailVerification()
-            }
-        })
-        // console.log("signed in my friend")
-        const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
-        //determines where to redirect user
-        await getDoc(userRef).then(doc => {
-            if (doc.exists()) {
-                console.log("doc exists, check onboarding", doc.data())
-                // make sure user has passed onboarding, redirects them accordingly
-                if(doc.data()?.passedOnboarding === false ||
-                    doc.data()?.passedOnboarding === undefined) {
-                    console.log("user has not passed onboarding")
-                    navigate('/onboarding')
-                    return;
-                } else {
-                    navigate('/dashboard')
-                }
-            } else {
-                throw new Error("User does not exist")
-
-            }
-        })
-    } catch (e: any) {
-        //handle various errors
-        console.log(`There was an error: ${e}`)
-        switch (e.code) {
-            case 'auth/wrong-password':
-                console.log('wrong password')
-                return new Promise((resolve, reject) => {
-                    reject("Incorrect Password")
-                });
-            case 'auth/user-not-found':
-                console.log('user not found')
-                return new Promise((resolve, reject) => {
-                    reject("User Not Found")
-                });
-            case 'auth/too-many-requests':
-                console.log('too many requests, account is temporarily locked out')
-                return new Promise((resolve, reject) => {
-                    reject("Too Many Requests")
-                });
-
-        }
-    }
-
-    //Returns a promise that denotes that the user has signed in
-    return new Promise((resolve, reject) => {
-        resolve("User Signed In");
-    });
-
-}
 
 
 

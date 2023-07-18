@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import {updateProfile} from "@firebase/auth";
 import firebase from "firebase/compat";
-import {checkIfUserHasPassedOnboarding} from "../Authentication/Utils/AuthUtils";
+import {checkIfUserHasPassedOnboarding} from "../../api/User/Auth/AuthUtils";
 import {setProfilePicture} from "../../api/User/ProfilePicture/ProfilePicture";
 // Core modules imports are same as usual
 // Direct React component imports
@@ -222,6 +222,6 @@ async function sendUserOnboardingData(navigate : NavigateFunction, txtUserFirstn
 
         })
 
-        navigate('/dashboard')
+        navigate('/home')
     }
 }
