@@ -1,4 +1,4 @@
-@import '../common/constants/globalVariables.scss';
+@import 'src/common/constants/globals';
 
 .bg {
     background: gradient($base-color, $base-color-light);

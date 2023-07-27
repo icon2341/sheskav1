@@ -1,7 +1,3 @@
-import React from "react";
-import MiniCard from "../SheskaList/MiniCard";
-import {number} from "yup";
-
 /**
  * SheskaCard is a class that defines a card object.
  * It contains all the information needed to display a card on the SheskaList page
@@ -30,11 +26,12 @@ class SheskaCard {
     private _guestsAbsorbFees?: boolean;
     private _dateCreated?: string;
     private _dateUpdated?: string;
+    private _published? : boolean;
 
 
 
     constructor(cardID: string, title: string, subtitle: string, description?: string, imageOrder?: string[], expectedAverage? : number | string,
-                goal?: number | string, amountRaised?: number | string, guestsAbsorbFees?: boolean, dateCreated?: string, dateUpdated?: string) {
+                goal?: number | string, amountRaised?: number | string, guestsAbsorbFees?: boolean, dateCreated?: string, dateUpdated?: string, published?: boolean) {
         this._cardID = cardID;
         this._title = title;
         this._subtitle = subtitle;
@@ -46,21 +43,8 @@ class SheskaCard {
         this._guestsAbsorbFees = guestsAbsorbFees || false;
         this._dateCreated = dateCreated || '';
         this._dateUpdated = dateUpdated || '';
+        this._published = published || false;
     }
-
-
-    get miniCard(): JSX.Element {
-
-        return (
-            <div className={``}>
-                <MiniCard
-                    title={this._title}
-                    cardID={this._cardID}
-                />
-            </div>
-        )
-    }
-
 
     get cardID(): string {
         return this._cardID;
@@ -148,6 +132,14 @@ class SheskaCard {
 
     set dateUpdated(value: string | undefined) {
         this._dateUpdated = value;
+    }
+
+    get published(): boolean | undefined{
+        return this._published;
+    }
+
+    set published(value: boolean | undefined) {
+        this._published = value;
     }
 }
 

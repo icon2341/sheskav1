@@ -74,7 +74,6 @@ export async function createAccount(txtEmail : string, txtPassword : string, nav
             ).then(() => {
                 console.log("signing up completed for: ", auth?.currentUser?.uid ?? "ERROR NULL USER")
                 navigate('/onboarding')
-                return;
             }).catch((error: any) => {
                 console.log(error)
                 return new Promise((resolve, reject) => {
@@ -181,6 +180,9 @@ export async function loginUser(txtEmail : string, txtPassword : string, navigat
                 return new Promise((resolve, reject) => {
                     reject("Too Many Requests")
                 });
+                case 'auth/network-request-failed':
+                console.log('server refused connection')
+                return Promise.reject("Server Refused Connection")
 
         }
     }

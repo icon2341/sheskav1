@@ -2,9 +2,7 @@
 import Masonry from '@mui/lab/Masonry';
 import { Box } from "@mui/material";
 import { doc, getDoc } from 'firebase/firestore';
-import { data } from "jquery";
 import { useEffect, useState } from "react";
-import Spinner from 'react-bootstrap/Spinner';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../index";
@@ -12,8 +10,6 @@ import { LoadingIndicator } from '../LoadingUtils/LoadingIndicator';
 import LoadingScreen from "../LoadingUtils/LoadingScreen";
 import styles from './Home.module.scss';
 import {checkIfUserHasPassedOnboarding} from "../../api/User/Auth/AuthUtils";
-import {sendEmailVerification} from "firebase/auth";
-
 export function Home() {
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
@@ -26,15 +22,13 @@ export function Home() {
         //docSnapShopt
         await getDoc(docRef).then(doc => {
             if(doc.exists()) {
-                // console.log("Document data:", doc.data());
                 if(doc.data().partner_full_name !== undefined) {
                     setPartners(doc.data().partner_full_name)
                 } else {
-                    // console.log("No partners found");
                     setPartners(partners => [...partners, doc.data().name])
                 }
             } else {
-                // console.log("No such document!");
+                console.log("No such document!");
             }
         })
     }

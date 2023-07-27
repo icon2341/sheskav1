@@ -10,14 +10,14 @@ import app from "./fbConfig"
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { connectAuthEmulator, getAuth } from "firebase/auth";
+import {Auth, connectAuthEmulator, getAuth} from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import {connectFunctionsEmulator, getFunctions} from 'firebase/functions';
 import {initializeAppCheck, ReCaptchaV3Provider} from "firebase/app-check";
 
 // Initialize Firebase
 // export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app)
+export const auth : Auth = getAuth(app)
 export const db = getFirestore(app)
 // Initialize Cloud Storage and get a reference to the service
 export const storage = getStorage(app);

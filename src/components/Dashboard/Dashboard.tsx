@@ -3,8 +3,9 @@ import {auth} from "../../index";
 import {useAuthState} from "react-firebase-hooks/auth";
 import LoadingScreen from "../LoadingUtils/LoadingScreen";
 import styles from './Dashboard.module.scss';
-import {string} from "yup";
 import {useEffect} from "react";
+import EventSnapshot from "./EventSnapshot/EventSnapshot";
+import LiveSheskaList from "./LiveSheskaList/LiveSheskaList";
 
 
 export function Dashboard() {
@@ -50,7 +51,13 @@ export function Dashboard() {
 
 
     if (user) {
-        return (<div className={styles.pageContainer}>{navBar(page || 'snapshot')}</div>)
+        return (
+            <div className={styles.pageContainer}>
+                {navBar(page ?? 'snapshot')}
+                {page === 'snapshot' && (<EventSnapshot/>)}
+                {page === 'livelist' && (<LiveSheskaList user={user}/>)}
+            </div>
+        )
     } else if(loading) {
         return <LoadingScreen/>
     } else if (error) {
@@ -58,8 +65,6 @@ export function Dashboard() {
     } else {
         return <LoadingScreen/>
     }
-
-
 }
 
 

@@ -1,21 +1,14 @@
-import {
-    browserLocalPersistence,
-    browserSessionPersistence,
-    signInWithEmailAndPassword
-} from 'firebase/auth';
-import { doc, getDoc, setDoc } from "firebase/firestore";
 import { Formik } from "formik";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { InputGroup } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import {auth, db, functions} from "../../index";
+import {auth} from "../../index";
 import styles from "./AuthStyles.module.scss";
 import LoadingScreen from "../LoadingUtils/LoadingScreen";
-import {httpsCallable} from "firebase/functions";
 import {loginUser} from "../../api/User/Auth/AuthUtils";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
@@ -36,10 +29,6 @@ export function Login() {
      */
     const navigate = useNavigate();
     /**
-     * Allows for showing a toast (deprecated)
-     */
-    // const [showA, setShowA] = useState(false);
-    /**
      * determines whether 'remember me' is checked
      */
     const [rememberChecked,setRememberRememberChecked] = React.useState(false);
@@ -48,7 +37,7 @@ export function Login() {
 
     useEffect(() => {
         if (user)
-            navigate('/dashboard');
+            navigate('/home');
     }, [user, navigate]);
 
     //Allows for calling the toast whenever showA is changed (DEPRECATED)
@@ -74,13 +63,15 @@ export function Login() {
             } else if (reason === "User Not Found") {
                 setErrors({email: 'User does not exist'})
             } else if (reason === "Too Many Requests") {
-                setErrors({password: 'Too many requests, try again later or reset password.'})
+                setErrors({email: 'Too many requests, try again later or reset password.'})
+            } else if (reason === "Server Refused Connection") {
+                setErrors({email: 'Server Refused Connection, try again later. Or Visit www.sheska.co/support for help.'})
             }
         });
     };
     //if the user is logged in, redirect them to the dashboard
     if (user) {
-        navigate('/dashboard');
+        navigate('/home');
         return(<div>
             <LoadingScreen/>
         </div>)
@@ -88,6 +79,10 @@ export function Login() {
         return (<div>
             <LoadingScreen/>
         </div>)
+    } else if (error) {
+        return (<div>
+                <LoadingScreen/>
+            </div>)
     } else {
         return(
             <div>

@@ -28,7 +28,7 @@ exports.sendEmailVerification = onCall({secrets: ["SENDGRID_API_KEY"]},  (reques
         .then((link : string) => {
             info("request: ", request.instanceIdToken, " sending email verification to: ", email, " with verification link: ", link)
 
-            const sgMail = require('@sendgriokd/mail')
+            const sgMail = require('@sendgrid/mail')
             sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
             const msg = {

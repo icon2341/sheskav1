@@ -24,9 +24,19 @@ export function Sidebar(props: { navigateFunction: NavigateFunction }) {
             <div className={`${styles.navbarContainer} ${isOpen ? styles.navbarExtended : ''}`} onMouseEnter={() => {setIsOpen(true)}} onMouseLeave={() => {if(!manuallyLocked){setIsOpen(false)}}}>
                 <h1 className={styles.navbarLogo}>S{isOpen ? 'heska' : ''}</h1>
                 <div className={styles.navigationGroup}>
-                    <NavButton icon={Home} text={'Home'} location={'/home'} selected={'/home' === currentRelPath} isSidebarOpen={isOpen}/>
-                    <NavButton icon={Layout} text={'Dashboard'} location={'/dashboard?page=snapshot'} selected={'/dashboard' === currentRelPath} isSidebarOpen={isOpen}/>
-                    <NavButton icon={List} text={'Sheska List'} location={'/sheskalist'} selected={'/sheskalist' === currentRelPath} isSidebarOpen={isOpen}/>
+                    <ul>
+                        <li>
+                            <NavButton icon={Home} text={'Home'} location={'/home'} selected={'/home' === currentRelPath} isSidebarOpen={isOpen}/>
+
+                        </li>
+                        <li>
+                            <NavButton icon={Layout} text={'Dashboard'} location={'/dashboard?page=snapshot'} selected={'/dashboard' === currentRelPath} isSidebarOpen={isOpen}/>
+
+                        </li>
+                        <li>
+                            <NavButton icon={List} text={'Sheska List'} location={'/sheskalist'} selected={'/sheskalist' === currentRelPath} isSidebarOpen={isOpen}/>
+                        </li>
+                    </ul>
                 </div>
                 <div className={styles.settingGroup}>
                     <NavButton icon={Settings} text={"Account"} location={'/accountsettings'} selected={'/accountsettings' === currentRelPath} isSidebarOpen={isOpen}/>

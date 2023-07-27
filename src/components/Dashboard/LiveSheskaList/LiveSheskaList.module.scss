@@ -1,0 +1,13 @@
+.publishedSheskaListGrid {
+	display: grid;
+	grid-template-columns: auto auto;
+	justify-content: flex-start;
+}
+
+@media screen and (max-width: 900px) {
+	.publishedSheskaListGrid {
+		grid-template-columns: auto;
+		margin: 0 auto;
+	}
+	
+}

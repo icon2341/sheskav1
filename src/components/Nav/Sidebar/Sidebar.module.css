@@ -1,63 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-@import "/src/Butler_Webfont/stylesheet.css";
-.navbarContainer {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 65px;
-  background-color: rgb(247, 249, 255);
-  color: #fff;
-  padding: 0 0.5rem;
-  position: fixed;
-  top: 0;
-  left: 0;
-  align-items: center;
-  transition: width 0.1s ease-in-out;
-  -webkit-transition: width 0.1s ease-in-out;
-  -moz-transition: width 0.1s ease-in-out;
-  -o-transition: width 0.1s ease-in-out;
-  z-index: 10;
-  box-shadow: rgba(0, 0, 0, 0.18) 0px 0px 15px 0px;
-  transition: left 0.1s ease-in-out;
-}
+/* Error: Can't find stylesheet to import.
+ *   ,
+ * 1 | @import 'src/common/constants/globals';
+ *   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ *   '
+ *   Sidebar.module.scss 1:9  root stylesheet */
 
-.navbarExtended {
-  width: 175px;
-  transition: width 0.1s ease-in-out;
-  transition: left 0.1s ease-in-out;
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @import 'src/common/constants/globals';\d\a   \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   Sidebar.module.scss 1:9  root stylesheet";
 }
-
-.navbarLogo {
-  font-family: "Butler", sans-serif;
-  font-size: 3rem;
-  font-weight: 900;
-  border-bottom: #a9a9a9 1px solid;
-  color: #24475b;
-}
-
-.navbarButtonsContainer {
-  display: flex;
-  flex-direction: column;
-  transition: 0.3s ease-in-out;
-  z-index: 1;
-}
-
-.navigationGroup {
-  border-bottom: #a9a9a9 1px solid;
-}
-
-.navButtonIcon {
-  font-size: 2rem;
-  padding: 10px 0;
-}
-
-@media screen and (max-width: 768px) {
-  .navbarContainer {
-    left: -65px;
-  }
-  .navbarExtended {
-    left: 0;
-  }
-}
-
-/*# sourceMappingURL=Sidebar.module.css.map */

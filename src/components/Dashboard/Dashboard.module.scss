@@ -1,4 +1,4 @@
-@import "../../common/constants/globalVariables.scss";
+@import '../../common/constants/globals';
 
 //NAV BAR CSS
 .navBar {
@@ -30,8 +30,9 @@
 }
 
 .navBarItem:hover {
-  background-color: #e8e8e8;
+  background-color: $base-color-light;
   cursor: pointer;
+  color: white;
 }
 
 

@@ -16,7 +16,7 @@ $base-color-hover: #2F5D7A;
 
 
 //IDEAL SPACINGS
-$content-margin-top-desktop: 5%;
+$content-margin-top-desktop: 7%;
 $content-margin-top-mobile: 10%;
 $content-margin-left-desktop: 10%;
 $content-margin-left-mobile: 5%;
@@ -39,3 +39,8 @@ $content-margin-left-mobile: 5%;
     color: $base-color;
     margin: 0;
 }
+
+//TAILWIND BOILERPLATE
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

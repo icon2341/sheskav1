@@ -56,7 +56,7 @@ export function SignUp() {
             } else if (reason === "Error adding user to database") {
                 setErrors({email: 'Error adding user to database, contact support at www.sheska.co/support'})
             } else if (reason === "Server Refused Connection") {
-                setErrors({email: 'Server Refused Connection, contact support at www.sheska.co/support'})
+                setErrors({email: 'Server Refused Connection, try again later. Or Visit www.sheska.co/support for help.'})
             }
         });
 
@@ -72,7 +72,7 @@ export function SignUp() {
 
     const [user, loading, error] = useAuthState(auth);
     if (user) {
-        navigate('/dashboard');
+        navigate('/home');
         return(<div>
             <LoadingScreen/>
         </div>)

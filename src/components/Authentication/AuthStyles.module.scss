@@ -1,4 +1,4 @@
-@import "../../common/constants/globalVariables.scss";
+@import 'src/common/constants/globals';
 
 .pageContainer {
 	display: flex;
@@ -50,7 +50,7 @@
 }
 
 .loginLogo {
-	font-family: Butler, "Open Sans";
+	font-family: Butler, "Open Sans", "Times New Roman";
 	font-weight: 900;
 	font-size: 6em;
 	color: black;
@@ -125,6 +125,13 @@
 
 .signInButt:hover {
 	color: #2F5D7A;
+}
+
+.resetPassword:hover {
+	color: #2ce0bf;
+	text-decoration: white;
+	cursor: pointer;
+
 }
 
 
