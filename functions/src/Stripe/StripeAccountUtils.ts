@@ -21,7 +21,7 @@ exports.getStripeAccount = onCall({secrets: ["STRIPE_SECRET"]},  (request: Calla
     return getFirestore().collection("users").doc(request.auth?.uid).get().then((doc: any) => {
         if (doc.exists) {
             if (doc.data().stripe_account_id) {
-                info('STRIPE ACCOUNT LINKED, GETTING ACCOUNT', doc.data().stripe_account_id)
+                // info('STRIPE ACCOUNT LINKED, GETTING ACCOUNT', doc.data().stripe_account_id)
                 return stripe.accounts.retrieve(
                     doc.data().stripe_account_id
                 ).then((account: any) => {
