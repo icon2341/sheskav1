@@ -16,7 +16,7 @@ import { collection, doc, DocumentReference, setDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { Formik, validateYupSchema, yupToFormErrors } from "formik";
 import React, { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
+import { Button } from "src/components/ui/button";
 import Form from "react-bootstrap/Form";
 import CurrencyInput from 'react-currency-input-field';
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -441,9 +441,9 @@ export function NewItem() {
                             </div>
 
                             <div className={styles.submitButtonContainer}>
-                                <Button type={'submit'}  disabled={!dirty || promiseInProgress || submitDisabled} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
+                                <Button type={'submit'}  disabled={!dirty || promiseInProgress || submitDisabled} id={"button-signup"} className={`${"d-block w-75 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
-                                <Button type={'button'}  disabled={!dirty || promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
+                                <Button type={'button'}  disabled={!dirty || promiseInProgress || submitDisabled} variant="outline" id={"button-preview"} className={`${"d-block w-25 text-center"}
                                         ${styles.loginButton}`} onClick={() => {setPreviewCard(true); }}> Preview</Button>
                             </div>
                             {/*<DisplayFormikState {...props} />*/}
