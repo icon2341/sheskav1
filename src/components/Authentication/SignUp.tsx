@@ -11,7 +11,7 @@ import {NavigateFunction, useNavigate} from "react-router-dom";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {auth, db, functions} from "../../index";
 import styles from "./AuthStyles.module.scss"
-import Button from 'react-bootstrap/Button';
+import { Button } from "src/components/ui/button";
 import Form from 'react-bootstrap/Form';
 import {InputGroup} from "react-bootstrap";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -171,7 +171,7 @@ export function SignUp() {
                                             </Form.Group>
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                                 <div className={"d-flex justify-content-center"}>
-                                                    <Button disabled={!!errors.email || !!errors.password || !!errors.confirmPassword} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
+                                                    <Button disabled={!!errors.email || !!errors.password || !!errors.confirmPassword} type={"submit"} id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
                                                     ${styles.loginButton}`}>
                                                         Submit
                                                     </Button>

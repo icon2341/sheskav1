@@ -6,7 +6,7 @@ import {NavigateFunction, useNavigate} from "react-router-dom";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import {auth, db} from "../../index";
 import styles from "./SignUp.module.css";
-import Button from 'react-bootstrap/Button';
+import { Button } from "src/components/ui/button";
 import Form from 'react-bootstrap/Form';
 import {useAuthState} from "react-firebase-hooks/auth";
 import * as Yup from "yup";
@@ -131,7 +131,7 @@ export function ResetPassword() {
                                             </Form.Group>
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                             <div className={"d-flex justify-content-center"}>
-                                                <Button disabled={!!errors.email} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
+                                                <Button disabled={!!errors.email} type={"submit"} id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"} 
                                                     ${styles.loginButton}`}>
                                                     Submit
                                                 </Button>

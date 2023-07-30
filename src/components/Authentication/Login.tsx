@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React, { useEffect } from 'react';
 import { InputGroup } from "react-bootstrap";
-import Button from 'react-bootstrap/Button';
+import { Button } from "src/components/ui/button";
 import Form from 'react-bootstrap/Form';
 import { useAuthState } from "react-firebase-hooks/auth";
 import {useNavigate } from "react-router-dom";
@@ -165,7 +165,7 @@ export function Login() {
                                             </Form.Group>
                                             {/*<button className="btn btn-primary" type="submit">Submit form</button>*/}
                                             <div className={"d-flex justify-content-center"}>
-                                                <Button disabled={!!errors.email || !!errors.password} type={"submit"} variant="primary" id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"}
+                                                <Button disabled={!!errors.email || !!errors.password} type={"submit"} id={"button-signup"} className={`${"d-block w-50 mx-auto text-center"}
                                                     ${styles.loginButton}`}>
                                                     Submit
                                                 </Button>
