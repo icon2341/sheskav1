@@ -1,7 +1,7 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, getDownloadURL, listAll, ref } from "firebase/storage";
 import { MouseEvent, MouseEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button } from "src/components/ui/button";
 import { AiFillDelete as DeleteIcon } from "react-icons/ai";
 import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 import { useNavigate } from "react-router-dom";
@@ -10,12 +10,14 @@ import { deleteCard, deleteCardImages, getSheskaCardImagesUrls } from "../Utils/
 import miniCardStyles from "./MiniCard.module.css";
 import sheskaListStyles from "./SheskaList.module.scss";
 import {toast} from "react-hot-toast";
+import {publishSheskaCard} from "src/api/SheskaCard/SheskaCard";
 
 const area = 'miniCard';
 export function MiniCard(props: any) {
     const [slideImages, setSlideImages] = useState([] as string[]);
     const navigate = useNavigate();
     const { promiseInProgress } = usePromiseTracker({ area, delay: 0 })
+    const [showPublishButton, setShowPublishButton] = useState(true);
     const toEditPage = () => {
         if (promiseInProgress)
             return;
@@ -58,12 +60,28 @@ export function MiniCard(props: any) {
         </button>
     )
 
+    const handlePublishCard = () => {
+        publishSheskaCard(props.cardID).then(() => {
+            toast.success('Card Published! Check Dashboard.');
+        }).catch(
+            (error) => {
+                toast.error('Error Publishing Card, contact support if problem persists.');
+            }
+        );
+    }
+
     if(slideImages.length > 0) {
         return (
-            <div className={miniCardStyles.cardContainer}>
+            <div className={miniCardStyles.cardContainer} onMouseEnter={() => {setShowPublishButton(true)}} onMouseLeave={event => setShowPublishButton(false)}>
                 {deleteButton}
                 <img src={slideImages[0]} alt='Slide' className={miniCardStyles.cardImage} onClick={toEditPage}/>
                 <h1 className={miniCardStyles.cardTitle}>{props.title}</h1>
+                <Button className={`absolute bottom-5 left-3 z-10 ${showPublishButton ? 'opacity-100' : 'opacity-0'} transition-opacity`}
+                        disabled={!showPublishButton}
+                        onClick={() => {
+                            handlePublishCard();
+
+                        }}>Publish</Button>
             </div>
         );
     }

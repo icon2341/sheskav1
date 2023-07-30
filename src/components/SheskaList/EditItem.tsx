@@ -12,7 +12,7 @@ import { addDoc, collection, doc, DocumentReference, setDoc } from "firebase/fir
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import {Formik, validateYupSchema, yupToFormErrors} from "formik";
 import React, {ChangeEvent, ReactNode, SetStateAction, useEffect, useRef, useState} from "react";
-import { Button } from "react-bootstrap";
+import { Button } from "../ui/button";
 import Form from "react-bootstrap/Form";
 import { FilePond, registerPlugin } from "react-filepond";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -490,9 +490,10 @@ export function EditItem() {
                                 </div>
 
                                 <div className={styles.submitButtonContainer}>
-                                    <Button type={'submit'}  disabled={promiseInProgress || submitDisabled || !!errors.expectedAverage} variant="primary" id={"button-signup"} className={`${"d-block w-75 text-center"}
+                                    <Button type={'submit'}  disabled={promiseInProgress || submitDisabled || !!errors.expectedAverage} id={"button-signup"} className={`${"d-block w-75 text-center"}
                                         ${styles.loginButton}`}> Submit</Button>
-                                    <Button type={'button'}  disabled={promiseInProgress || submitDisabled} variant="secondary" id={"button-preview"} className={`${"d-block w-25 text-center"}
+
+                                    <Button type={'button'}  disabled={promiseInProgress || submitDisabled} variant="outline" id={"button-preview"} className={`${"d-block w-25 text-center"}
                                         ${styles.loginButton}`} onClick={() => {setPreviewCard(true); console.log('PREVIEW CARD TRUE', previewCard) }}> Preview</Button>
                                 </div>
 

@@ -6,7 +6,9 @@ import {
     CardHeader,
     CardTitle,
 } from '../../../ui/card'
+import {useEffect} from "react";
 export function SimpleValueCard(props: {title: string, value: string, change: string}) {
+
     return (
         <div >
             <Card className={"hover:scale-110 transition-all hover:bg-primary hover:text-white md:m-2 md:w-52 w-96 mx-auto"}>
@@ -28,7 +30,7 @@ export function SimpleValueCard(props: {title: string, value: string, change: st
                     </svg>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{props.value}</div>
+                    <div id={props.title} className="text-2xl font-bold">{props.value}</div>
                     <p className="text-xs text-muted-foreground">
                         {props.change}
                     </p>

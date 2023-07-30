@@ -12,7 +12,7 @@ import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingSecondaryIndi
 import {Formik} from "formik";
 import Form from "react-bootstrap/Form";
 import * as Yup from "yup";
-import Button from "react-bootstrap/Button";
+import {Button} from "src/components/ui/button";
 import {Box, Modal} from "@mui/material";
 import {FilePond} from "react-filepond";
 import {ref, uploadBytes} from "firebase/storage";

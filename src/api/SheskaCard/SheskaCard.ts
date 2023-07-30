@@ -1,4 +1,4 @@
-import {collection, getDocs} from "firebase/firestore";
+import {collection, doc, getDocs, setDoc} from "firebase/firestore";
 import {db, auth} from "src/index";
 import SheskaCardDef from "../../components/Utils/SheskaCardDef";
 
@@ -36,4 +36,24 @@ export async function getSheskaCards(query? : queryType.PUBLISHED) {
     }
     console.log("RETURNING FUNCTION, ", sheskaCards)
     return sheskaCards;
+}
+
+/**
+ * publish a single Sheska Card from the database for the currrently authenticated user.
+ * @param cardID the ID of the card to publish
+ * @requires auth to be authenticated
+ * @returns Promise
+ * @throws Error if user is not authenticated
+ */
+export async function publishSheskaCard(cardID : string) {
+    if(!auth.currentUser) return Promise.reject("User not authenticated");
+
+    const docRef = doc(db, "users/" + auth.currentUser?.uid + "/sheska_list/" + cardID);
+    setDoc(docRef, {
+        published: true
+    }, {merge: true}).then(() => {
+        return Promise.resolve("Document successfully updated!");
+    }).catch((error) => {
+        console.error("Error updating document: ", error);
+    });
 }

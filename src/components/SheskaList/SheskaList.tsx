@@ -31,8 +31,11 @@ export function SheskaList() {
                 // TODO might just want to export the querySnapshot instead of mapping it to lama and then looping through lama to send to listItems
                 const data = doc.data();
                 console.log(data)
-                sheskaCards[doc.id] = new SheskaCardDef(doc.id, data.title, data.subtitle, data.description, data.imageOrder,
-                    data.expectedAverage, data.goal,  data.amountRaised, data.guestsAbsorbFees, data.dateCreated, data.dateUpdated);
+                if(!data.published) {
+                    sheskaCards[doc.id] = new SheskaCardDef(doc.id, data.title, data.subtitle, data.description, data.imageOrder,
+                        data.expectedAverage, data.goal,  data.amountRaised, data.guestsAbsorbFees, data.dateCreated, data.dateUpdated);
+                }
+
             });
             setCardDefs(sheskaCards)
         } catch (error) {

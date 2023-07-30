@@ -16,7 +16,11 @@
     "@iconscout/react-unicons": "^2.0.2",
     "@mui/lab": "^5.0.0-alpha.87",
     "@mui/material": "^5.8.6",
+    "@radix-ui/react-context-menu": "^2.1.4",
+    "@radix-ui/react-progress": "^1.0.3",
+    "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
+    "@radix-ui/react-tooltip": "^1.0.6",
     "@react-spring/web": "^9.7.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
@@ -116,6 +120,7 @@
     "@types/jquery": "^3.5.16",
     "@types/uuid": "^9.0.1",
     "env-cmd": "^10.1.0",
+    "prettier": "^3.0.0",
     "tailwindcss": "^3.3.3"
   }
 }
