@@ -24,6 +24,7 @@ import EmailVerificationRedirect
     from "./components/RedirectHandler/EmailVerificationRedirect/EmailVerificationRedirect";
 import PageNotFound from "./PageNotFound/PageNotFound";
 import Dashboard from "./components/Dashboard/Dashboard"
+import ResetPasswordRedirect from "src/components/RedirectHandler/ResetPasswordRedirect/ResetPasswordRedirect";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path={"/accountsettings"} element={<><Nav/><AccountPreferences/></>}></Route>
               <Route path={"/stripeonboardingredirect"} element={<><StripeOnboardingRedirect/></>}></Route>
               <Route path={"/verifyemail"} element={<><EmailVerificationRedirect/></>}></Route>
+              <Route path={"/resetpasswordredirect"} element={<><ResetPasswordRedirect/></>}></Route>
               <Route path="*" element={<PageNotFound/>}></Route>
           </Routes>
       </Router>

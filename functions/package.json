@@ -18,6 +18,7 @@
     "@sendgrid/mail": "^7.7.0",
     "firebase-admin": "^11.8.0",
     "firebase-functions": "^4.3.1",
+    "jsonwebtoken": "^9.0.1",
     "stripe": "^12.10.0"
   },
   "devDependencies": {

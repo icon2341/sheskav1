@@ -4,6 +4,7 @@ import {CallableRequest, HttpsError, onCall} from "firebase-functions/v2/https";
 import {getAuth} from "firebase-admin/auth";
 import {auth} from "firebase-admin";
 import UserRecord = auth.UserRecord;
+import {createCustomToken} from "../Utils/Authentication/TokenSystem";
 
 exports.sendEmailVerification = onCall({secrets: ["SENDGRID_API_KEY"]},  (request: CallableRequest ) => {
     info("Executing sendEmailVerification with request: ", request.instanceIdToken);
@@ -72,8 +73,9 @@ exports.sendPasswordResetEmail = onCall({secrets: ["SENDGRID_API_KEY"]},    asyn
         throw new HttpsError("failed-precondition", "The function must be called with a valid email.");
     } else {
         //GENERATE USER TOKEN
-        getAuth().createCustomToken(user.uid).then(
+        createCustomToken(user.uid).then(
             (customToken: string) => {
+
                 //SEND EMAIL
                 info("request: ", request.instanceIdToken, " sending password reset email to: ", user.email)
 

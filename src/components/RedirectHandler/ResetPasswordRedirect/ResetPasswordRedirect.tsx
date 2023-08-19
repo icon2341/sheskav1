@@ -4,6 +4,8 @@ import {redirect, useNavigate, useSearchParams} from "react-router-dom";
 import {auth} from "../../../index";
 import LoadingScreen from "../../LoadingUtils/LoadingScreen";
 import {setUserData} from "../../../api/User/UserInformation";
+import {validateToken} from "src/api/Utils/Authentication/TokenSystem";
+import { signInWithCustomToken } from "firebase/auth";
 
 
 
@@ -13,27 +15,42 @@ import {setUserData} from "../../../api/User/UserInformation";
 
 export function ResetPasswordRedirect() {
     const [user, loading, error] = useAuthState(auth);
-    console.log(user, loading, error);
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    let [searchParams, setSearchParams] = useSearchParams();
+    const [stateError, setStateError] = useState("")
+    // const [token, setToken] = useState<string | null>(null)
+    const token = searchParams.get('token')
 
 
+    useEffect(() => {
+        if(token === null) {
+            console.log('NO TOKEN')
+        }else {
+            signInWithCustomToken(auth, token).then(
+                ()=> {
+                    console.log('SIGNED IN')
+                }
+            )
+            .catch(
+                (error) => {
+                    setStateError(error.message)
+                }
+            )
+        }
+    }, [])
 
-    // if there is no user, and it is not loading anything then redirect to the login page
-    if (user === null && !loading) {
-        navigate("/login");
-    } else if(loading) {
+    if(user) {
+        return <div>SUGMA</div>
+    } else if (loading) {
         return <LoadingScreen/>
-    } else  if(user && !loading && auth.currentUser?.emailVerified){
-        navigate("/dashboard");
+    } else if (stateError || error) {
+        return <div>{stateError}</div>
+    } else {
+        return <LoadingScreen/>
     }
-
-    return <h1>Something went wrong</h1>
-
-
-
-
 }
+
+
 
 
 export default ResetPasswordRedirect;
