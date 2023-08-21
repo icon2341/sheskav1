@@ -27,7 +27,7 @@ exports.sendEmailVerification = onCall({secrets: ["SENDGRID_API_KEY"]},  (reques
         handleCodeInApp: true,
     }
 
-    getAuth().generateEmailVerificationLink(email, actionCodeSettings)
+    return getAuth().generateEmailVerificationLink(email, actionCodeSettings)
         .then((link : string) => {
             info("request: ", request.instanceIdToken, " sending email verification to: ", email, " with verification link: ", link)
 
@@ -73,7 +73,7 @@ exports.sendPasswordResetEmail = onCall({secrets: ["SENDGRID_API_KEY"]},    asyn
         throw new HttpsError("failed-precondition", "The function must be called with a valid email.");
     } else {
         //GENERATE USER TOKEN
-        createCustomToken(user.uid).then(
+        return createCustomToken(user.uid).then(
             (customToken: string) => {
 
                 //SEND EMAIL
@@ -115,11 +115,5 @@ exports.sendPasswordResetEmail = onCall({secrets: ["SENDGRID_API_KEY"]},    asyn
 
 
     }
-
-
-
-
-
-
 })
 

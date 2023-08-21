@@ -1,7 +1,7 @@
 //@ts-ignore
 import {log, info, debug, warn, error, write} from "firebase-functions/logger";
 import {CallableRequest, HttpsError, onCall} from "firebase-functions/v2/https";
-const {getFirestore} = require("firebase-admin/firestore");
+import {getFirestore} from "firebase-admin/firestore";
 /**
  * getStripeAccount: Gets the stripe account for the user
  * @requires request.auth.uid

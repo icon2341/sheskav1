@@ -1,8 +1,7 @@
 //@ts-ignore
 import {log, info, debug, warn, error, write} from "firebase-functions/logger";
 import {CallableRequest, HttpsError, onCall} from "firebase-functions/v2/https";
-const {getFirestore} = require("firebase-admin/firestore");
-
+import {getFirestore} from "firebase-admin/firestore";
 require("firebase-functions/logger/compat");
 
 /**
@@ -88,7 +87,7 @@ exports.createLinkStripeAccount = onCall({secrets: ["STRIPE_SECRET"]},  (request
                     }).then((account: any) => {
                         return getFirestore()
                             .collection("users")
-                            .doc(request.auth?.uid)
+                            .doc(<string>request.auth?.uid)
                             .update({
                                 stripe_account_id: account.id
                             }).then(() => {
