@@ -55,8 +55,4 @@ export function ResetPasswordRedirect() {
         return <LoadingScreen/>
     }
 }
-
-
-
-
 export default ResetPasswordRedirect;
