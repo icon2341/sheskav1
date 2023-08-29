@@ -15,7 +15,7 @@
     border-radius: 10px;
     color: black;
 
-    font-family: Butler;
+    font-family: Butler, serif;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
 
     font-size: 3vw;
@@ -32,7 +32,7 @@
 
 .initCardLogo {
     font-weight: 900;
-    font-family: Butler;
+    font-family: Butler, serif;
     position: absolute;
     left: 6%;
     top: 4%;
@@ -171,7 +171,7 @@
     }
 
     .pageTitle {
-        font-family: Inter;
+        font-family: Inter,sans-serif;
         padding-left: 10px;
         font-size: 4vw;
 
@@ -185,7 +185,7 @@
 @media screen  and (max-width: 670px){
 
     .pageTitle {
-        font-family: Inter;
+        font-family: Inter, sans-serif;
         padding-left: 10px;
         font-size: 6vw;
 
