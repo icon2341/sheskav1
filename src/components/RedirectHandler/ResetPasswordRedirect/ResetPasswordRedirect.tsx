@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
 import {validateToken} from "src/api/Utils/Authentication/TokenSystem";
@@ -8,12 +8,11 @@ import ResetPasswordForm from "src/components/Authentication/components/ResetPas
 
 const area = 'ResetPasswordRedirect'
 export function ResetPasswordRedirect() {
-    let [searchParams, setSearchParams] = useSearchParams();
+    let [searchParams] = useSearchParams();
     const [stateError, setStateError] = useState("")
     // const [token, setToken] = useState<string | null>(null)
     const token = searchParams.get('token')
     const { promiseInProgress } = usePromiseTracker({area, delay: 0});
-    const [isTokenValid, setIsTokenValid] = useState(false)
 
 
     useEffect(() => {
@@ -27,7 +26,6 @@ export function ResetPasswordRedirect() {
                     if(response.result.uid) {
                         // token has been validated, so we can now send a password with a new token and the server will be able to change the password
                         console.log('TOKEN VALIDATED, ALLOW USER TO SUBMIT PASSWORD')
-                        setIsTokenValid(true)
                     }
                 }
             }).catch((error) => {

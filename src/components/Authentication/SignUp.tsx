@@ -1,14 +1,5 @@
-// import {
-//     createUserWithEmailAndPassword,
-//     signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence, sendEmailVerification
-// } from 'firebase/auth';
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, browserSessionPersistence, browserLocalPersistence
-} from 'firebase/auth';
 import React from 'react'
-import {NavigateFunction, useNavigate} from "react-router-dom";
-import {doc, getDoc, setDoc} from "firebase/firestore";
+import {useNavigate} from "react-router-dom";
 import {auth, db, functions} from "../../index";
 import styles from "./AuthStyles.module.scss"
 import { Button } from "src/components/ui/button";
@@ -20,11 +11,6 @@ import * as Yup from 'yup';
 import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
 import {createAccount} from "../../api/User/Auth/AuthUtils";
 
-import {httpsCallable} from "firebase/functions";
-//TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
-//TODO ADD NEW PASSWORD SYSTEM
-
-let showToast: any;
 export function SignUp() {
 
 
@@ -61,14 +47,6 @@ export function SignUp() {
         });
 
     };
-
-
-    //Allows for calling the toast whenever showA is changed (DEPRECATED)
-    // useEffect(() => {
-    //     /* Assign update to outside variable */
-    //     showToast = setShowA
-    //     /* Unassign when component unmounts */
-    // }, [])
 
     const [user, loading, error] = useAuthState(auth);
     if (user) {

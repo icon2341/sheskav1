@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "src/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "src/components/ui/tabs"
 export function DashboardNavigation() {
     return (
         <Tabs>

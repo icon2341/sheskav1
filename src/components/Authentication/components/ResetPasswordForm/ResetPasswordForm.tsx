@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as Yup from "yup";
 import {useNavigate} from "react-router-dom";
 import Form from "react-bootstrap/Form";
@@ -18,7 +18,7 @@ export  default  function ResetPasswordForm( props: {token: string}) {
     const validationSchema = Yup.object({
         password: Yup.string().required('Required')
             .min(8, 'Password is too short - should be 8 chars minimum.')
-            .matches(/[0-9]/, 'Password requires a number')
+            .matches(/\d/, 'Password requires a number')
             .matches(/[a-z]/, 'Password requires a lowercase letter')
             .matches(/[A-Z]/, 'Password requires an uppercase letter')
             .matches(/[^\w]/, 'Password requires a symbol'),

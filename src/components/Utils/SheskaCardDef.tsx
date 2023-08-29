@@ -43,7 +43,7 @@ class SheskaCard {
         this._guestsAbsorbFees = guestsAbsorbFees || false;
         this._dateCreated = dateCreated || '';
         this._dateUpdated = dateUpdated || '';
-        this._published = published || false;
+        this._published = published ?? false;
     }
 
     get cardID(): string {

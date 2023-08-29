@@ -1,12 +1,9 @@
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '../../../ui/card'
-import {useEffect} from "react";
 export function SimpleValueCard(props: {title: string, value: string, change: string}) {
 
     return (

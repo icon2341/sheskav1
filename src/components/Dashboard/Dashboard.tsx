@@ -1,4 +1,4 @@
-import {useNavigate, useSearchParams} from "react-router-dom";
+import { useSearchParams} from "react-router-dom";
 import {auth} from "../../index";
 import {useAuthState} from "react-firebase-hooks/auth";
 import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
@@ -9,7 +9,6 @@ import LiveSheskaList from "./LiveSheskaList/LiveSheskaList";
 
 
 export function Dashboard() {
-    const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
     const [searchParams, setSearchParams] = useSearchParams();
     let page = searchParams.get('page')

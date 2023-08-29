@@ -56,8 +56,8 @@ export function Login() {
     const handleSubmit = async (values: any, { setErrors } : any) => {
         //login the user and return a promise that can do two things on error (for now, here is where you add error handling)
 
-        loginUser(values.email,values.password, navigate, rememberChecked).catch((reason) => {
-            console.log("LOL", reason)
+        loginUser(values.email,values.password, navigate, rememberChecked).catch((response) => {
+            const reason = response.message
             if (reason === "Incorrect Password") {
                 setErrors({password: 'Incorrect Password'})
             } else if (reason === "User Not Found") {

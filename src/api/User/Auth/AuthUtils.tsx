@@ -77,7 +77,7 @@ export async function createAccount(txtEmail : string, txtPassword : string, nav
             }).catch((error: any) => {
                 console.log(error)
                 return new Promise((resolve, reject) => {
-                    reject("Error adding user to database")
+                    reject(new Error("Error adding user to database"))
 
                 });
             })
@@ -92,12 +92,12 @@ export async function createAccount(txtEmail : string, txtPassword : string, nav
             case 'auth/email-already-in-use':
                 console.log('email already in use')
                 return new Promise((resolve, reject) => {
-                    reject("Email in Use")
+                    reject(new Error("Email in Use"))
                 });
             case 'auth/network-request-failed':
                 console.log('network request failed')
                 return new Promise((resolve, reject) => {
-                    reject("Server Refused Connection")
+                    reject(new Error("Server Refused Connection"))
                 });
 
         }
@@ -168,21 +168,21 @@ export async function loginUser(txtEmail : string, txtPassword : string, navigat
             case 'auth/wrong-password':
                 console.log('wrong password')
                 return new Promise((resolve, reject) => {
-                    reject("Incorrect Password")
+                    reject(new Error("Incorrect Password"))
                 });
             case 'auth/user-not-found':
                 console.log('user not found')
                 return new Promise((resolve, reject) => {
-                    reject("User Not Found")
+                    reject(new Error("User Not Found"))
                 });
             case 'auth/too-many-requests':
                 console.log('too many requests, account is temporarily locked out')
                 return new Promise((resolve, reject) => {
-                    reject("Too Many Requests")
+                    reject(new Error("Too Many Requests"))
                 });
                 case 'auth/network-request-failed':
                 console.log('server refused connection')
-                return Promise.reject("Server Refused Connection")
+                return Promise.reject(new Error("Server Refused Connection"))
 
         }
     }
@@ -198,7 +198,7 @@ export async function sendPasswordResetEmail(email : string) {
     const sendPasswordResetEmail = httpsCallable(functions, 'EmailUserUtils-sendPasswordResetEmail');
     return sendPasswordResetEmail({email: email})
         .catch((error : any) => {
-            return Promise.reject("error")
+            return Promise.reject(error)
         })
         .then(() => {
             return Promise.resolve("success")

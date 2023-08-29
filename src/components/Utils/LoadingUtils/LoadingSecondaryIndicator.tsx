@@ -1,4 +1,4 @@
-import {InfinitySpin, LineWave} from 'react-loader-spinner';
+import {LineWave} from 'react-loader-spinner';
 
 export const LoadingIndicator = () => {
     const style = {

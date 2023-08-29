@@ -8,9 +8,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "src/components/ui/alert-dialog"
-import { Button } from "src/components/ui/button"
 import {useNavigate} from "react-router-dom";
 
 //TOOD make this a generic error screen that can be used anywhere, pass two functions as props to handle the buttons and show the buttons conditionally if functions are passed

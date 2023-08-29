@@ -25,16 +25,6 @@ import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
-import SheskaCard from "../Utils/SheskaCardDef";
-import Toast from "react-bootstrap/Toast";
-import Paragraph from '@tiptap/extension-paragraph';
-import { Placeholder } from "@tiptap/extension-placeholder";
-import Text from '@tiptap/extension-text';
-import { Carousel, ToastContainer } from "react-bootstrap";
-import Document from '@tiptap/extension-document';
-import globalStyles from "../../App.module.css";
-import imageManagerStyles from "./ImageManager/ImageManager.module.css";
-import { DisplayFormikState } from "../Utils/DisplayFormikState";
 import { auth, db, storage } from "../../index";
 import SheskaCardGuestView from "../GuestView/SheskaCardGuestView/SheskaCardGuestView";
 import TipTapMenuBar from "./EditorUtil";
@@ -504,6 +494,6 @@ async function postNewSheskaCard(values: { title: string, subtitle: string, goal
         });
     } catch (e) {
         console.log(e);
-        return Promise.reject(`failure: ${e}`);
+        return Promise.reject(e);
     }
 }

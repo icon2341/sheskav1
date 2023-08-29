@@ -18,8 +18,6 @@ export function Home() {
     //TODO replace with new api
     async function getPartners(uid: string | undefined) {
         const docRef = doc(db, "users", uid + "" );
-        // console.log('getting partners')
-        //docSnapShopt
         await getDoc(docRef).then(doc => {
             if(doc.exists()) {
                 if(doc.data().partner_full_name !== undefined) {
@@ -38,9 +36,7 @@ export function Home() {
 
             checkIfUserHasPassedOnboarding(navigate).then(
                 () => {
-                    // console.log('Attempt to get partners ' + user)
                     getPartners(user?.uid).then(r => {
-                        // console.log('partner data: ' + r);
                     });
                 }
             )

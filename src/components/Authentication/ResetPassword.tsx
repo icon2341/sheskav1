@@ -146,66 +146,6 @@ export function ResetPassword() {
 
 export default ResetPassword
 
-/**
- * @deprecated
- */
-async function loginUser(txtEmail : string, txtPassword : string, navigate : NavigateFunction, rememberMe : boolean){
-    // checks if user has selected remember me, sets auth state persistence naturally.
-    if(rememberMe) {
-        await auth.setPersistence(browserLocalPersistence)
-    } else {
-        await auth.setPersistence(browserSessionPersistence)
-    }
-
-    console.log('Login Attempted on ' + txtEmail);
-    const email : string = txtEmail;
-    const password : string = txtPassword;
-
-    try {
-        await signInWithEmailAndPassword(auth, email, password)
-        console.log("signed in my friend")
-        const userRef = doc(db, 'users', auth?.currentUser?.uid ?? "")
-        await getDoc(userRef).then(doc => {
-            if (doc.exists()) {
-                console.log("doc exists, check onboarding", doc.data())
-                if(doc.data()?.passedOnboarding === false ||
-                    doc.data()?.passedOnboarding === undefined) {
-                    console.log("user has not passed onboarding")
-                    navigate('/onboarding')
-                    return;
-                } else {
-                    navigate('/dashboard')
-                }
-            } else {
-                throw new Error("User does not exist")
-
-            }
-        })
-    } catch (e: any) {
-        console.log(`There was an error: ${e}`)
-        switch (e.code) {
-            case 'auth/wrong-password':
-                console.log('wrong password')
-                showToast(true)
-                return new Promise((resolve, reject) => {
-                    reject("Incorrect Password")
-                });
-            case 'auth/user-not-found':
-                console.log('user not found')
-                showToast(true)
-                return new Promise((resolve, reject) => {
-                    reject("User Not Found")
-                });
-
-        }
-    }
-
-    return new Promise((resolve, reject) => {
-        resolve("User Signed In");
-    });
-
-}
-
 
 
 
