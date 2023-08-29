@@ -3,9 +3,10 @@ import {info} from "firebase-functions/logger";
 import {validateTokenUtil} from "./TokenSystem";
 import {getAuth} from "firebase-admin/auth";
 import {CallableRequest} from "firebase-functions/lib/v2/providers/https";
+import {getFirestore} from "firebase-admin/firestore";
 
 /**
- * resetPassword: Resets the password for the user
+ * resetPassword: Resets the password for the user and retires the token used
  * @requires request.data.newPassword the new password to set
  * @requires request.data.idToken the idToken to validate and decode
  */
@@ -27,6 +28,8 @@ exports.resetPassword = onCall( {}, async (request: CallableRequest) => {
     let decodedToken;
     try {
         decodedToken = await validateTokenUtil(idToken);
+        // set the token to used and create the document entry
+        await getFirestore().collection('tokens').doc(idToken).set({used: true});
     } catch (error) {
         console.error(`Error validating token: ${error} on resetPassword function for request ${request.instanceIdToken}`);
         return Promise.reject(error);

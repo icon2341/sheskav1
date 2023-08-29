@@ -1,6 +1,7 @@
 import {HttpsError, onCall} from "firebase-functions/v2/https";
 import {CallableRequest} from "firebase-functions/lib/v2/providers/https";
 import {error, info} from "firebase-functions/logger";
+import {getFirestore} from "firebase-admin/firestore";
 
 /**
  * validateToken: Validates the token from the client
@@ -16,6 +17,8 @@ exports.validateToken = onCall( {}, async (request: CallableRequest) => {
         throw new HttpsError("invalid-argument", "the function must be called with a JWT.")
     }
 
+    // check to see if this document has already been used
+
     try {
         return {result: await validateTokenUtil(request.data.idToken)}
     } catch (error) {
@@ -27,7 +30,7 @@ exports.validateToken = onCall( {}, async (request: CallableRequest) => {
 });
 
 /**
- * validateTokenUtil: Validates the token and returns the decoded value based on the global private key
+ * validateTokenUtil: Validates the token and returns the decoded value based on the global private key also checks if the token has already been used before.
  * @param idToken the idToken to validate and decode
  */
 export async function validateTokenUtil (idToken: string) {
@@ -35,6 +38,15 @@ export async function validateTokenUtil (idToken: string) {
     const admin = require('firebase-admin');
     const appDefaultCred = admin.credential.applicationDefault();
     const privateKey = appDefaultCred.privateKey;
+
+
+    await getFirestore().collection('tokens').doc(idToken).get().then((doc) => {
+        if (doc.exists) {
+            error(`Error validating token on validateToken function. Token has already been used`);
+            throw new HttpsError("invalid-argument", "The token has already been used");
+        }
+    });
+
 
     return jwt.verify(
         idToken,
@@ -82,7 +94,7 @@ export async function  createCustomToken (uid: string) {
         const jwt = require('jsonwebtoken');
         return jwt.sign({uid: uid}, privateKey, {
             algorithm: 'RS256',
-            expiresIn: '1h',
+            expiresIn: '15m',
             issuer: appDefaultCred.clientEmail as string,
             audience: '', subject: appDefaultCred.clientEmail as string
         });
