@@ -15,6 +15,9 @@ import {updateProfile} from "@firebase/auth";
 import firebase from "firebase/compat";
 import {checkIfUserHasPassedOnboarding} from "../../api/User/Auth/AuthUtils";
 import {setProfilePicture} from "../../api/User/ProfilePicture/ProfilePicture";
+import { Button } from "src/components/ui/button";
+
+
 // Core modules imports are same as usual
 // Direct React component imports
 //TODO add email verification or phone number protocol
@@ -22,15 +25,18 @@ import {setProfilePicture} from "../../api/User/ProfilePicture/ProfilePicture";
 function SlideNextButton(props: { disability: boolean;} ) {
     const swiper = useSwiper();
     return (
-        <button type={'button'} disabled={props.disability} className={styles.navigationButton} onClick={() => {swiper.slideNext()
-                                                                            console.log('NEXT PRESSED')}}>Next</button>
+        <Button disabled={props.disability} type={"button"} className={'w-1/3 m-2'} onClick={() => {swiper.slideNext()}}>
+            Next
+        </Button>
     );
 }
 
 function SlidePreviousButton() {
     const swiper = useSwiper();
     return (
-        <button type={'button'} className={styles.navigationButton} onClick={() => swiper.slidePrev()}>Prev</button>
+        <Button type={"button"} id={"button-signup"} className={'w-1/3 m-2'} onClick={() => {swiper.slidePrev()}}>
+            Previous
+        </Button>
     );
 }
 
@@ -180,8 +186,14 @@ export function Onboarding() {
                                 </Form>
                                 <div className={styles.navigationButtonsContainer}>
                                     <SlidePreviousButton/>
-                                    <button className={styles.navigationButton} onClick={() => {sendUserOnboardingData(navigate,
-                                        txtUserFirstname, txtUserLastname, txtPartnerFirstname, txtPartnerLastname)}}>Submit</button>
+                                    <Button className={`m-2`} onClick={() => {sendUserOnboardingData(navigate,
+                                        txtUserFirstname, txtUserLastname, txtPartnerFirstname, txtPartnerLastname)}}>
+                                        Submit
+                                    </Button>
+                                </div>
+
+                                <div className={'flex justify-center align-middle w-full'}>
+                                    <h4 className={'text-gray-400 mt-12'}> This section is optional</h4>
                                 </div>
                             </div>
                         </SwiperSlide>

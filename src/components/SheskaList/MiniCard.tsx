@@ -76,7 +76,7 @@ export function MiniCard(props: any) {
                 {deleteButton}
                 <img src={slideImages[0]} alt='Slide' className={miniCardStyles.cardImage} onClick={toEditPage}/>
                 <h1 className={miniCardStyles.cardTitle}>{props.title}</h1>
-                <Button className={`absolute bottom-5 left-3 z-10 ${showPublishButton ? 'opacity-100' : 'opacity-0'} transition-opacity`}
+                <Button className={`absolute bottom-5 left-3 z-3 ${showPublishButton ? 'opacity-100' : 'opacity-0'} transition-opacity`}
                         disabled={!showPublishButton}
                         onClick={() => {
                             handlePublishCard();
