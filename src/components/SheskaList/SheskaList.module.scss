@@ -55,7 +55,7 @@
     background-color: $base-color-dark;
     border-radius: 10px;
     color: white;
-    font-family: Pavanam;
+    font-family: Pavanam, sans-serif;
     font-size: 1.5vw;
     aspect-ratio: 3 / 1;
     position: relative;
@@ -125,7 +125,7 @@
 }
 
 .pageTitle {
-    font-family: Inter;
+    font-family: Inter, sans-serif;
     font-size: 2.8vw;
     font-weight: 400;
     margin: 0;
