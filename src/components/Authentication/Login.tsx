@@ -8,7 +8,7 @@ import {useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {auth} from "../../index";
 import styles from "./AuthStyles.module.scss";
-import LoadingScreen from "../LoadingUtils/LoadingScreen";
+import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
 import {loginUser} from "../../api/User/Auth/AuthUtils";
 
 //TODO add firestore, store password and username functionality as well as next steps to proper profile creation.

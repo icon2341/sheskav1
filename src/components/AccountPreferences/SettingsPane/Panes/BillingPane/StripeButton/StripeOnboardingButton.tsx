@@ -3,7 +3,7 @@ import {string} from "yup";
 import React, {useEffect, useState} from "react";
 import {getStripeAccount, getStripeOnboardingLink} from "../../../../../../api/User/Billing/StripeIntegration";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
-import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingIndicator";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "../../../../../../index";
 import {red} from "@mui/material/colors";

@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../index";
-import { LoadingIndicator } from '../LoadingUtils/LoadingIndicator';
-import LoadingScreen from "../LoadingUtils/LoadingScreen";
+import { LoadingIndicator } from 'src/components/Utils/LoadingUtils/LoadingIndicator';
+import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
 import styles from './Home.module.scss';
 import {checkIfUserHasPassedOnboarding} from "../../api/User/Auth/AuthUtils";
 export function Home() {

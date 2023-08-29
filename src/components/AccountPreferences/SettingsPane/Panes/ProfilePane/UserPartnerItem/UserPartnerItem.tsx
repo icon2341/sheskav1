@@ -7,7 +7,7 @@ import {
 import {auth, db} from "../../../../../../index";
 import {Check, X, Plus} from "react-feather"
 import {useAuthState} from "react-firebase-hooks/auth";
-import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingSecondaryIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingSecondaryIndicator";
 import {storage} from "../../../../../../index";
 import {v4 as uuidv4} from "uuid";
 import {getPartnerName, setUserData} from "../../../../../../api/User/UserInformation";

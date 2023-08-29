@@ -2,7 +2,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {redirect, useNavigate, useSearchParams} from "react-router-dom";
 import {auth} from "../../../index";
-import LoadingScreen from "../../LoadingUtils/LoadingScreen";
+import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
 import {setUserData} from "../../../api/User/UserInformation";
 
 export function EmailVerificationRedirect() {

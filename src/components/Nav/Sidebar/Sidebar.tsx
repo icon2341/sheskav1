@@ -8,7 +8,7 @@ import {NavigateFunction, useNavigate} from "react-router-dom";
 import {signOutUser} from "../../../api/User/Auth/AuthUtils";
 import AuthBar from "../AuthBar/AuthBar";
 import {auth} from "../../../index";
-import {LoadingIndicator} from "../../LoadingUtils/LoadingSecondaryIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingSecondaryIndicator";
 import {useAuthState} from "react-firebase-hooks/auth";
 
 export function Sidebar(props: { navigateFunction: NavigateFunction }) {

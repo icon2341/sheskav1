@@ -7,7 +7,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "../../../../../index";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 import {getUserDocument} from "../../../../../api/User/UserInformation";
-import {LoadingIndicator} from "../../../../LoadingUtils/LoadingIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingIndicator";
 import Button from "react-bootstrap/Button";
 import {StripeOnboardingButton} from "./StripeButton/StripeOnboardingButton";
 import {createStripeAccount, getStripeAccount} from "../../../../../api/User/Billing/StripeIntegration";

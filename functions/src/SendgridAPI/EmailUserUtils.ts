@@ -102,9 +102,6 @@ exports.sendPasswordResetEmail = onCall({secrets: ["SENDGRID_API_KEY"]},    asyn
                         error('Error sending email to ', user.uid, ' error: ', resultError)
                         throw new HttpsError("internal", "Internal");
                     });
-
-
-
             }
         ).catch(
             (errorResult: any) => {

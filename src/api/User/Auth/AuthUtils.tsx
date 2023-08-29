@@ -196,7 +196,7 @@ export async function loginUser(txtEmail : string, txtPassword : string, navigat
 
 export async function sendPasswordResetEmail(email : string) {
     const sendPasswordResetEmail = httpsCallable(functions, 'EmailUserUtils-sendPasswordResetEmail');
-    sendPasswordResetEmail({email: email})
+    return sendPasswordResetEmail({email: email})
         .catch((error : any) => {
             return Promise.reject("error")
         })

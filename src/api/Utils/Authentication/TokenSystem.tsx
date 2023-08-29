@@ -8,7 +8,6 @@ import {functions} from "src/index";
  */
 export async function validateToken(idToken:string) {
     const validateToken = httpsCallable(functions, 'TokenSystem-validateToken');
-    console.log('SENDING TOKEN VALIDATION REQUEST TO SERVER: ', idToken)
     return validateToken({idToken: idToken}).then(
             (response) => {
                 console.log('RESPONSE FROM SERVER: ', response.data)
@@ -16,10 +15,7 @@ export async function validateToken(idToken:string) {
             }
         )
         .catch((error) => {
-            if(error.message === "internal") {
-                return Promise.reject("Internal Error")
-            } else {
-                return Promise.reject("Invalid Token")
-            }
+            console.error('ERROR FROM SERVER: ', error.message)
+            return Promise.reject(error.message);
         })
 }

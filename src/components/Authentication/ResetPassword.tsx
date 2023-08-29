@@ -13,11 +13,8 @@ import Form from 'react-bootstrap/Form';
 import {useAuthState} from "react-firebase-hooks/auth";
 import * as Yup from "yup";
 import {Formik} from "formik";
-import LoadingScreen from "../LoadingUtils/LoadingScreen";
+import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
 import {sendPasswordResetEmail} from "src/api/User/Auth/AuthUtils";
-
-//TODO add firestore, store password and username functionality as well as next steps to proper profile creation.
-//TODO ADD NEW PASSWORD SYSTEM
 
 let showToast: any;
 export function ResetPassword() {
@@ -56,10 +53,11 @@ export function ResetPassword() {
      */
     const handleSubmit = async (values: any, { setErrors } : any) => {
         //login the user and return a promise that can do two things on error (for now, here is where you add error handling)
-        sendPasswordResetEmail(values.email).catch(
+        sendPasswordResetEmail(values.email)
+        .catch(
             (error) => {
-                //TODO add error handling because this does not work right
-                console.log(error)
+                console.error("There was an issue sending the password reset email, please contact support or try again later.")
+                setErrors({email: "There was an issue sending the password reset email, please contact support or try again later."})
             }
         ).then(() => {
             console.log("email sent")
@@ -148,7 +146,9 @@ export function ResetPassword() {
 
 export default ResetPassword
 
-
+/**
+ * @deprecated
+ */
 async function loginUser(txtEmail : string, txtPassword : string, navigate : NavigateFunction, rememberMe : boolean){
     // checks if user has selected remember me, sets auth state persistence naturally.
     if(rememberMe) {

@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import {ReactNode, useState} from 'react';
 import { BsFillPlusSquareFill as AddButton } from 'react-icons/bs';
 import { useNavigate } from 'react-router';
-import { LoadingIndicator } from '../LoadingUtils/LoadingIndicator';
+import { LoadingIndicator } from 'src/components/Utils/LoadingUtils/LoadingIndicator';
 import { BackButton } from './BackButton';
 import styles from './SheskaList.module.scss';
 import {Toaster} from "react-hot-toast";

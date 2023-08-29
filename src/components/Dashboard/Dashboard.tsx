@@ -1,7 +1,7 @@
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {auth} from "../../index";
 import {useAuthState} from "react-firebase-hooks/auth";
-import LoadingScreen from "../LoadingUtils/LoadingScreen";
+import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
 import styles from './Dashboard.module.scss';
 import {useEffect} from "react";
 import EventSnapshot from "./EventSnapshot/EventSnapshot";

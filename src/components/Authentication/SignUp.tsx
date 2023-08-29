@@ -17,7 +17,7 @@ import {InputGroup} from "react-bootstrap";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {Formik} from "formik";
 import * as Yup from 'yup';
-import LoadingScreen from "../LoadingUtils/LoadingScreen";
+import LoadingScreen from "src/components/Utils/LoadingUtils/LoadingScreen";
 import {createAccount} from "../../api/User/Auth/AuthUtils";
 
 import {httpsCallable} from "firebase/functions";
@@ -102,8 +102,7 @@ export function SignUp() {
                                         initialValues={{
                                             email: '',
                                             password: '',
-                                            confirmPassword: ''
-                                        }}>
+                                            confirmPassword: ''}}>
                                     {({
                                             handleSubmit,
                                             handleChange,

@@ -1,7 +1,7 @@
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../../../../../../index";
 import {useEffect, useState} from "react";
-import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingSecondaryIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingSecondaryIndicator";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 import {getStripeLoginLink} from "../../../../../../api/User/Billing/StripeIntegration";
 import React from "react";

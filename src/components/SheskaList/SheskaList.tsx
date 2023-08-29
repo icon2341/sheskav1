@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { string } from 'yup';
 import { auth, db, storage } from '../../index';
-import { LoadingIndicator } from '../LoadingUtils/LoadingIndicator';
+import { LoadingIndicator } from 'src/components/Utils/LoadingUtils/LoadingIndicator';
 import SheskaCardDef from '../Utils/SheskaCardDef';
 import { BackButton } from './BackButton';
 import MiniCard from './MiniCard';
