@@ -1,7 +1,7 @@
 //@ts-ignore
 import {log, info, debug, warn, error, write} from "firebase-functions/logger";
 import {CallableRequest, HttpsError, onCall} from "firebase-functions/v2/https";
-const {getFirestore} = require("firebase-admin/firestore");
+import {getFirestore} from "firebase-admin/firestore";
 /**
  * getStripeAccount: Gets the stripe account for the user
  * @requires request.auth.uid
@@ -21,7 +21,7 @@ exports.getStripeAccount = onCall({secrets: ["STRIPE_SECRET"]},  (request: Calla
     return getFirestore().collection("users").doc(request.auth?.uid).get().then((doc: any) => {
         if (doc.exists) {
             if (doc.data().stripe_account_id) {
-                info('STRIPE ACCOUNT LINKED, GETTING ACCOUNT', doc.data().stripe_account_id)
+                // info('STRIPE ACCOUNT LINKED, GETTING ACCOUNT', doc.data().stripe_account_id)
                 return stripe.accounts.retrieve(
                     doc.data().stripe_account_id
                 ).then((account: any) => {

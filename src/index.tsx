@@ -4,28 +4,27 @@ import 'font-awesome/css/font-awesome.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { firebaseConfig, RECAPTCHA_CONFIG, STRIPE_CONFIG } from './credentials';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
 import app from "./fbConfig"
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { connectAuthEmulator, getAuth } from "firebase/auth";
+import {Auth, connectAuthEmulator, getAuth} from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import {connectFunctionsEmulator, getFunctions} from 'firebase/functions';
 import {initializeAppCheck, ReCaptchaV3Provider} from "firebase/app-check";
 
 // Initialize Firebase
 // export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app)
+export const auth : Auth = getAuth(app)
 export const db = getFirestore(app)
 // Initialize Cloud Storage and get a reference to the service
 export const storage = getStorage(app);
 
 export const functions = getFunctions(app)
 
-export const STRIPE_PUBLISHABLE_KEY = STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY
+export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
 
 // //app check for ReCaptcha and API verification
 const appCheck = initializeAppCheck(app, {

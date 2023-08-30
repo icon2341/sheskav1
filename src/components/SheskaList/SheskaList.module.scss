@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pavanam&display=swap');
+@import "src/common/constants/globals";
 
 .gridContainer {
     display: flex;
@@ -14,7 +15,7 @@
     border-radius: 10px;
     color: black;
 
-    font-family: Butler;
+    font-family: Butler, serif;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
 
     font-size: 3vw;
@@ -31,12 +32,12 @@
 
 .initCardLogo {
     font-weight: 900;
-    font-family: Butler;
+    font-family: Butler, serif;
     position: absolute;
     left: 6%;
     top: 4%;
     font-size: 8vw;
-    color: #0e2431;
+    color: $base-color-dark;
 }
 
 .initCardHeader {
@@ -51,10 +52,10 @@
 }
 
 .miniCardButton {
-    background-color: #24475B;
+    background-color: $base-color-dark;
     border-radius: 10px;
     color: white;
-    font-family: Pavanam;
+    font-family: Pavanam, sans-serif;
     font-size: 1.5vw;
     aspect-ratio: 3 / 1;
     position: relative;
@@ -69,7 +70,7 @@
 }
 
 .miniCardButton:hover {
-    background-color: #2F5D7A;
+    background-color: $base-color-hover;
 }
 
 
@@ -90,7 +91,9 @@
     width: 45%;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
+    align-content: center;
+    align-items: center;
 }
 
 .cardContainer {
@@ -112,17 +115,27 @@
     width: 30vw;
 }
 
+.triangle {
+    margin: auto 0;
+    width: 32px;
+    height: 32px;
+    fill: black;
+    stroke: none;
+
+}
+
 .pageTitle {
-    font-family: Inter;
-    padding-left: 10px;
+    font-family: Inter, sans-serif;
     font-size: 2.8vw;
     font-weight: 400;
+    margin: 0;
+    margin-left: 10px;
 }
 
 .addCardButton {
     color: #24475B;
     margin: auto 0;
-    margin-right: 10px;
+    margin-left: auto;
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
     -webkit-transition-property: color, background-color;
@@ -142,6 +155,7 @@
     cursor: pointer;
 }
 
+
 @media screen and (max-width: 900px) {
     #grid {
         max-width: 65%;
@@ -157,7 +171,7 @@
     }
 
     .pageTitle {
-        font-family: Inter;
+        font-family: Inter,sans-serif;
         padding-left: 10px;
         font-size: 4vw;
 
@@ -171,7 +185,7 @@
 @media screen  and (max-width: 670px){
 
     .pageTitle {
-        font-family: Inter;
+        font-family: Inter, sans-serif;
         padding-left: 10px;
         font-size: 6vw;
 

@@ -1,14 +1,15 @@
-import Button from "react-bootstrap/Button";
+import { Button } from "src/components/ui/button";
 import {string} from "yup";
 import React, {useEffect, useState} from "react";
 import {getStripeAccount, getStripeOnboardingLink} from "../../../../../../api/User/Billing/StripeIntegration";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
-import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingIndicator";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "../../../../../../index";
 import {red} from "@mui/material/colors";
 import {getUserDocument, setUserData} from "../../../../../../api/User/UserInformation";
 import * as stripe from "stripe";
+import {Link} from "react-router-dom";
 const area = "stripeOnboardingButton";
 
 /**
@@ -48,10 +49,12 @@ export function StripeOnboardingButton() {
     if(!promiseInProgress && !errorText && stripeOnboardingLink) {
         return (
             <Button
-                color="primary"
-                href={stripeOnboardingLink}
+                asChild
             >
-                Connect with Stripe
+                <Link to={stripeOnboardingLink ?? ''}>
+                    Connect with Stripe
+                </Link>
+
             </Button>
         )
     } else if (errorText) {

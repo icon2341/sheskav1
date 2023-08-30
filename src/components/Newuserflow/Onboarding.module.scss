@@ -1,4 +1,4 @@
-@import "src/common/constants/globalVariables.scss";
+@import 'src/common/constants/globals';
 .onboardingContainer {
     margin-top: 10%;
 }
@@ -6,7 +6,7 @@
 .questionPane {
     display: block;
     padding-bottom: 30px;
-    max-width: 40%;
+    max-width: 50%;
     margin: 0 auto;
 }
 
@@ -65,4 +65,10 @@
     width: 100%;
     height: 100%;
 
+}
+
+@media screen and (max-width: 768px) {
+    .questionPane {
+        max-width: 80%;
+    }
 }

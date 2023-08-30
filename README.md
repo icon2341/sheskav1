@@ -66,6 +66,19 @@ To only Deploy functions you can run:
 
 ### `firebase deploy --only functions`
 
+To set the environment variable for local testing of SERVICE ACCOUNT related systems such as token creation.
+
+Set the environment variable GOOGLE_APPLICATION_CREDENTIALS to the file path of the JSON file that contains your service account key. This variable only applies to your current shell session, so if you open a new session, set the variable again.
+
+On Mac:
+### `export GOOGLE_APPLICATION_CREDENTIALS="/home/user/Downloads/service-account-file.json"`
+
+On Windows:
+
+### `$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\username\Downloads\service-account-file.json"`
+
+
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

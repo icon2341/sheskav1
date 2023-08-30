@@ -1,11 +1,12 @@
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../../../../../../index";
 import {useEffect, useState} from "react";
-import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingSecondaryIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingSecondaryIndicator";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 import {getStripeLoginLink} from "../../../../../../api/User/Billing/StripeIntegration";
 import React from "react";
-import Button from "react-bootstrap/Button";
+import { Button } from "src/components/ui/button";
+import {Link} from "react-router-dom";
 
 const area = 'stripeLoginButton';
 
@@ -44,10 +45,11 @@ export function StripeLoginButton() {
     if(user && !loading && !error && !errorText && !promiseInProgress) {
         return (
             <Button
-                color="primary"
-                href={stripeLoginLink}
+                 asChild
             >
-                Login to manage your account
+                <Link to={stripeLoginLink as any}>
+                    Login to manage your account
+                </Link>
             </Button>
         )
     } else {

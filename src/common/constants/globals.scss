@@ -4,15 +4,23 @@
 @import "/src/Butler_Webfont/stylesheet.css";
 
 $base-color: #24475b;
-$base-color-light: #24475b;
+$base-color-light: #294357;
 $base-color-dark: #1e3b40;
 $base-background-color-light: #f3f3f3;
+
+//HOVERS
+$base-color-hover: #2F5D7A;
+
 
 //Font sizes, color, font names, sizing of certain elements
 
 
 //IDEAL SPACINGS
-$content-margin-top-desktop: 5%;
+$content-margin-top-desktop: 7%;
+$content-margin-top-mobile: 10%;
+$content-margin-left-desktop: 10%;
+$content-margin-left-mobile: 5%;
+
 
 
 //BUTTON TRANSITION CRUVES
@@ -31,3 +39,8 @@ $content-margin-top-desktop: 5%;
     color: $base-color;
     margin: 0;
 }
+
+//TAILWIND BOILERPLATE
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

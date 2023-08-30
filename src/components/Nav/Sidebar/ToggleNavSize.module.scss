@@ -1,4 +1,4 @@
-@import "src/common/constants/globalVariables.scss";
+@import 'src/common/constants/globals';
 @import '../common/localNavStyles.scss';
 
 .navigationToggle {
@@ -27,6 +27,7 @@
 @media screen and (max-width: 768px) {
     .navigationToggle {
         left: 10px;
+        top: 10px;
     }
 
     .extended {

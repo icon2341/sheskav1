@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './AuthBar.module.scss';
 import {ChevronDown} from "react-feather";
 import NotifNumber from "./NotifNumber";
-import {LoadingIndicator} from "../../LoadingUtils/LoadingSecondaryIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingSecondaryIndicator";
 
 export function AuthBar(props: {isOpen:boolean, username:string}) {
     return (

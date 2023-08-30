@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 import { string } from 'yup';
 import { auth, db, storage } from '../../index';
-import { LoadingIndicator } from '../LoadingUtils/LoadingIndicator';
+import { LoadingIndicator } from 'src/components/Utils/LoadingUtils/LoadingIndicator';
 import SheskaCardDef from '../Utils/SheskaCardDef';
 import { BackButton } from './BackButton';
 import MiniCard from './MiniCard';
@@ -31,8 +31,11 @@ export function SheskaList() {
                 // TODO might just want to export the querySnapshot instead of mapping it to lama and then looping through lama to send to listItems
                 const data = doc.data();
                 console.log(data)
-                sheskaCards[doc.id] = new SheskaCardDef(doc.id, data.title, data.subtitle, data.description, data.imageOrder,
-                    data.expectedAverage, data.goal,  data.amountRaised, data.guestsAbsorbFees, data.dateCreated, data.dateUpdated);
+                if(!data.published) {
+                    sheskaCards[doc.id] = new SheskaCardDef(doc.id, data.title, data.subtitle, data.description, data.imageOrder,
+                        data.expectedAverage, data.goal,  data.amountRaised, data.guestsAbsorbFees, data.dateCreated, data.dateUpdated);
+                }
+
             });
             setCardDefs(sheskaCards)
         } catch (error) {

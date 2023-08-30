@@ -8,11 +8,11 @@ import {
 import {auth, functions} from "../../../../../../index";
 import {Check, X, Plus} from "react-feather"
 import {useAuthState} from "react-firebase-hooks/auth";
-import {LoadingIndicator} from "../../../../../LoadingUtils/LoadingSecondaryIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingSecondaryIndicator";
 import {Formik} from "formik";
 import Form from "react-bootstrap/Form";
 import * as Yup from "yup";
-import Button from "react-bootstrap/Button";
+import {Button} from "src/components/ui/button";
 import {Box, Modal} from "@mui/material";
 import {FilePond} from "react-filepond";
 import {ref, uploadBytes} from "firebase/storage";

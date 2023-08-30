@@ -1,4 +1,4 @@
-import {LoadingIndicator} from "../components/LoadingUtils/LoadingIndicator";
+import {LoadingIndicator} from "src/components/Utils/LoadingUtils/LoadingIndicator";
 import React, {useEffect} from "react";
 import styles from "./PageNotFound.module.scss";
 import Button from "react-bootstrap/Button";

@@ -1,4 +1,4 @@
-@import "../../../common/constants/globalVariables.scss";
+@import 'src/common/constants/globals';
 
 .navButton {
   padding: 10px;
@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box;    /* Firefox, other Gecko */
   box-sizing: border-box;         /* Opera/IE 8+ */
@@ -39,9 +38,4 @@
   margin-bottom: 0;
   font-size: 1rem;
   white-space: nowrap;
-  margin: auto;
-}
-
-.iconContainer{
-  margin: auto;
 }

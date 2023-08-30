@@ -1,0 +1,189 @@
+@import 'src/common/constants/globals';
+
+.pageContainer {
+	display: flex;
+	flex-direction: row;
+	background-color: #FEFEFE;
+	height: 100vh;
+	width: 100vw;
+}
+
+.presentationSection {
+	width: 60vw;
+	position: relative;
+}
+
+.presentationHeader {
+	font-family: Butler, serif;
+	color: white;
+	width: 45%;
+	position: absolute;
+	left: 25px;
+	bottom: 10%;
+}
+
+.peopleHavingFun {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.formSection {
+	width: 40vw;
+	min-width: 800px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.loginWidget {
+
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	border-radius: 5px;
+	padding: 2% 0;
+	display: flex;
+	flex-direction: column;
+	background: white;
+	width: 70%;
+	margin: auto;
+
+}
+
+.loginLogo {
+	font-family: Butler, "Open Sans", "Times New Roman" , serif;
+	font-weight: 900;
+	font-size: 6em;
+	color: black;
+	margin: 0 auto;
+	display: block;
+	text-decoration: none;
+	text-align: center;
+}
+
+.loginSubText {
+	display: block;
+	font-family: Roboto, sans-serif;
+	color: #3a3a3a;
+	margin-top: -12px;
+	text-align: center;
+	font-size:1.1rem;
+	text-underline-mode: none;
+	text-decoration: none;
+}
+
+.loginSubSubText {
+	display: block;
+	margin: 0 auto;
+	padding-top: 30px;
+	padding-bottom: 15px;
+	font-family: Pavanam, sans-serif;
+	text-align: center;
+	font-size: 20px;
+	text-decoration: none;
+	color: black;
+}
+
+.formContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.loginWidgetForm {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.loginWidgetFooter {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+	width: 100%;
+}
+
+.passwordFooter {
+	font-family: Roboto, sans-serif;
+	font-weight: 300;
+	font-size: 1rem;
+	width: 50%;
+}
+
+.signInButt {
+
+	font-family: Pavanam, Roboto, sans-serif;
+	font-size: 20px;
+	text-decoration: none;
+	color: #24475B;
+	border: none;
+	margin: 0 auto;
+	background: none;
+
+}
+
+.signInButt:hover {
+	color: #2F5D7A;
+}
+
+.resetPassword:hover {
+	color: #2ce0bf;
+	text-decoration: white;
+	cursor: pointer;
+
+}
+
+
+@media screen and (max-width: 1200px) {
+	.presentationContainer {
+		display: none;
+	}
+
+	.presentationSection {
+		display: none;
+	}
+
+	.formContainer {
+		width: 100vw;
+		height: 100vh;
+	}
+
+	.formSection {
+		width: 100vw;
+		height: 100vw;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: auto;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	.loginWidget {
+		width: 90%;
+		height: 95%;
+	}
+
+	.loginLogo {
+			font-size:4em;
+	}
+
+	.loginSubText {
+		font-size: 1rem;
+	}
+
+	.formSection {
+		min-height: 800px;
+	}
+	.passwordFooter {
+		font-size: 1rem;
+		width: 80%;
+		text-align: center;
+	}
+	.footerBreak {
+		display: none;
+	}
+}
+
+
