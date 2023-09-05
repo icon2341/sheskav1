@@ -1,8 +1,6 @@
 const { initializeApp } = require('firebase-admin/app');
 // The Firebase Admin SDK to access Firestore.
-initializeApp({
-    credential: require('firebase-admin').credential.applicationDefault(),
-});
+initializeApp();
 
 exports.StripeOnboarding = require("./Stripe/StripeOnboarding");
 exports.StripeAccountUtils = require("./Stripe/StripeAccountUtils");

@@ -4,13 +4,13 @@ import {validateTokenUtil} from "./TokenSystem";
 import {getAuth} from "firebase-admin/auth";
 import {CallableRequest} from "firebase-functions/lib/v2/providers/https";
 import {getFirestore} from "firebase-admin/firestore";
-
+import {error} from "firebase-functions/logger";
 /**
  * resetPassword: Resets the password for the user and retires the token used
  * @requires request.data.newPassword the new password to set
  * @requires request.data.idToken the idToken to validate and decode
  */
-exports.resetPassword = onCall( {}, async (request: CallableRequest) => {
+exports.resetPassword = onCall( {secrets: ["SERVICE_WORKER_PRIVATE_KEY"]}, async (request: CallableRequest) => {
     info("Executing resetPassword with request: ", request.instanceIdToken)
 
     const newPassword = request.data.newPassword;
@@ -24,10 +24,18 @@ exports.resetPassword = onCall( {}, async (request: CallableRequest) => {
         throw new HttpsError("invalid-argument", "The function must be called with a JWT");
     }
 
+    const privateKey = process.env.SERVICE_WORKER_PRIVATE_KEY
+
+    // check to see if this document has already been used
+    if(!privateKey) {
+        error("request: ", request.instanceIdToken, "sendPasswordResetEmail failed precondition private key check");
+        throw new HttpsError("failed-precondition", "The function must be called with a valid private key.");
+    }
+
     // Validate the token, if validateTokenUtilFails then the function will throw an error and the password will not be changed
     let decodedToken;
     try {
-        decodedToken = await validateTokenUtil(idToken);
+        decodedToken = await validateTokenUtil(idToken, privateKey);
         // set the token to used and create the document entry
         await getFirestore().collection('tokens').doc(idToken).set({used: true});
     } catch (error) {

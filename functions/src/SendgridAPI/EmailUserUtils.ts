@@ -59,7 +59,7 @@ exports.sendEmailVerification = onCall({secrets: ["SENDGRID_API_KEY"]},  (reques
         });
     });
 
-exports.sendPasswordResetEmail = onCall({secrets: ["SENDGRID_API_KEY"]},    async (request: CallableRequest ) => {
+exports.sendPasswordResetEmail = onCall({secrets: ["SENDGRID_API_KEY", "SERVICE_WORKER_PRIVATE_KEY"]},    async (request: CallableRequest ) => {
     info("Executing sendPasswordResetEmail with request: ", request.instanceIdToken);
     if (!request.data.email) {
         // Throwing an HttpsError so that the client gets the error details.
@@ -72,10 +72,16 @@ exports.sendPasswordResetEmail = onCall({secrets: ["SENDGRID_API_KEY"]},    asyn
         error("request: ", request.instanceIdToken, "sendPasswordResetEmail failed precondition user check");
         throw new HttpsError("failed-precondition", "The function must be called with a valid email.");
     } else {
-        //GENERATE USER TOKEN
-        return createCustomToken(user.uid).then(
-            (customToken: string) => {
+        const privateKey = process.env.SERVICE_WORKER_PRIVATE_KEY
 
+        if(!privateKey) {
+            error("request: ", request.instanceIdToken, "sendPasswordResetEmail failed precondition private key check");
+            throw new HttpsError("failed-precondition", "The function must be called with a valid private key.");
+        }
+
+        //GENERATE USER TOKEN
+        return createCustomToken(user.uid, privateKey).then(
+            (customToken: string) => {
                 //SEND EMAIL
                 info("request: ", request.instanceIdToken, " sending password reset email to: ", user.email)
 

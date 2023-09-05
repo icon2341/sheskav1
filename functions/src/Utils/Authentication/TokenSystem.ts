@@ -8,7 +8,7 @@ import {getFirestore} from "firebase-admin/firestore";
  * @requires request.data.idToken
  * @returns {Promise<{result: string}>}
  */
-exports.validateToken = onCall( {}, async (request: CallableRequest) => {
+exports.validateToken = onCall( {secrets: ["SERVICE_WORKER_PRIVATE_KEY"]}, async (request: CallableRequest) => {
     info("Executing validateToken with request: ", request.instanceIdToken)
 
 
@@ -17,10 +17,16 @@ exports.validateToken = onCall( {}, async (request: CallableRequest) => {
         throw new HttpsError("invalid-argument", "the function must be called with a JWT.")
     }
 
+    const privateKey = process.env.SERVICE_WORKER_PRIVATE_KEY
+
     // check to see if this document has already been used
+    if(!privateKey) {
+        error("request: ", request.instanceIdToken, "sendPasswordResetEmail failed precondition private key check");
+        throw new HttpsError("failed-precondition", "The function must be called with a valid private key.");
+    }
 
     try {
-        return {result: await validateTokenUtil(request.data.idToken)}
+        return {result: await validateTokenUtil(request.data.idToken, privateKey)}
     } catch (error) {
         console.error(`Error validating token: ${error} on validateToken function for request ${request.instanceIdToken}`);
         return Promise.reject(error);
@@ -32,13 +38,10 @@ exports.validateToken = onCall( {}, async (request: CallableRequest) => {
 /**
  * validateTokenUtil: Validates the token and returns the decoded value based on the global private key also checks if the token has already been used before.
  * @param idToken the idToken to validate and decode
+ * @param privateKey the private key to use to decode the token
  */
-export async function validateTokenUtil (idToken: string) {
+export async function validateTokenUtil (idToken: string, privateKey: string) {
     const jwt = require('jsonwebtoken');
-    const admin = require('firebase-admin');
-    const appDefaultCred = admin.credential.applicationDefault();
-    const privateKey = appDefaultCred.privateKey;
-
 
     await getFirestore().collection('tokens').doc(idToken).get().then((doc) => {
         if (doc.exists) {
@@ -80,23 +83,23 @@ export async function validateTokenUtil (idToken: string) {
 /**
  * createCustomToken will create a custom token for the user with the uid passed in. JWT is signed with the private key from the service worker in the dev environment.
  * @param uid the uid of the user to create the token for
+ * @param privateKey key to sign the JWT with
  */
-export async function  createCustomToken (uid: string) {
+export async function  createCustomToken (uid: string, privateKey: string) {
 
     const admin = require('firebase-admin');
 
 
     try {
         const appDefaultCred = admin.credential.applicationDefault();
-        const privateKey = appDefaultCred.privateKey;
         console.log(appDefaultCred, privateKey, admin.credential, 'THIS IS ADMIN CRED')
         console.log('THIS IS PRIVATE KEY', privateKey)
         const jwt = require('jsonwebtoken');
         return jwt.sign({uid: uid}, privateKey, {
             algorithm: 'RS256',
             expiresIn: '15m',
-            issuer: appDefaultCred.clientEmail as string,
-            audience: '', subject: appDefaultCred.clientEmail as string
+            issuer: "google secret manager",
+            audience: 'authenticated user', subject: "firebase custom token"
         });
     } catch (errorResult) {
         error(errorResult);
