@@ -89,7 +89,7 @@ export async function  createCustomToken (uid: string) {
     try {
         const appDefaultCred = admin.credential.applicationDefault();
         const privateKey = appDefaultCred.privateKey;
-        console.log(appDefaultCred, privateKey, 'THIS IS ADMIN CRED')
+        console.log(appDefaultCred, privateKey, admin.credential, 'THIS IS ADMIN CRED')
         console.log('THIS IS PRIVATE KEY', privateKey)
         const jwt = require('jsonwebtoken');
         return jwt.sign({uid: uid}, privateKey, {
