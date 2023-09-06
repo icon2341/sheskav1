@@ -186,7 +186,7 @@ export function Onboarding() {
                                 </Form>
                                 <div className={styles.navigationButtonsContainer}>
                                     <SlidePreviousButton/>
-                                    <Button className={`m-2`} onClick={() => {sendUserOnboardingData(navigate,
+                                    <Button className={`m-2`} type={'submit'} onClick={() => {sendUserOnboardingData(navigate,
                                         txtUserFirstname, txtUserLastname, txtPartnerFirstname, txtPartnerLastname)}}>
                                         Submit
                                     </Button>
@@ -232,8 +232,8 @@ async function sendUserOnboardingData(navigate : NavigateFunction, txtUserFirstn
             });
             auth.currentUser?.getIdToken(true)
 
+        }).then(() => {
+            navigate('/home')
         })
-
-        navigate('/home')
     }
 }
