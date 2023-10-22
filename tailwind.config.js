@@ -12,6 +12,7 @@ module.exports = {
     fontFamily: {
       sans: ["Pavanam", "Inter", "sans-serif"],
       serif: ["Butler", "serif"],
+      mono: ["Inter", "ui-monospace", "SFMono-Regular"],
     },
     container: {
       center: true,
