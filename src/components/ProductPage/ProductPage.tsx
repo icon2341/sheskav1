@@ -13,7 +13,7 @@ export function ProductPage() {
             config: { mass: 5, tension: 2000, friction: 200 },
             opacity: open ? 1 : 0,
             x: open ? 0 : 20,
-            height: open ? 68 : 0,
+            height: open ? 130 : 0,
             from: { opacity: 0, x: 20, height: 0 },
             delay: 200
         })
@@ -46,13 +46,15 @@ export function ProductPage() {
             </div>
 
             {/*Hero*/}
-            <div className={"flex flex-col justify-center items-center"} style={{height: '50vh'}}>
-                <div className={"flex flex-col items-center w-50"}>
-                    <Trail open={true}>
-                        <h1 className={"font-mono font-black text-6xl text-center text-black"}>Supercharge Event</h1>
-                        <h1 className={"font-mono font-black text-6xl text-center text-black"}>Funding.</h1>
-                    </Trail>
-                    <h2 className={"text-center font-sans text-4xl w-75 mb-10"}>
+            <div className={"flex flex-col justify-center items-center"}>
+                <div className={"flex flex-col items-center w-11/12 md:w-50"}>
+                    <div className={"hidden md:block mt-64"}>
+                        <Trail open={true}>
+                            <h1 className={"font-mono font-black text-xl md:text-4xl lg:text-5xl xl:text-6xl text-center text-black"}>Supercharge Event<br/>Funding.</h1>
+                        </Trail>
+                    </div>
+                    <h1 className={" md:hidden pt-10 mb-5 font-mono font-black text-xl md:text-4xl lg:text-5xl xl:text-6xl text-center text-black"}>Supercharge Event<br/>Funding.</h1>
+                    <h2 className={"text-center font-sans text-xl md:text-2xl lg:text-3xl xl:text-4xl w-75 mb-10"}>
                         A comprehensive platform designed to seamlessly connect with your guests, from financial transactions to open communication.
                     </h2>
 
@@ -66,10 +68,18 @@ export function ProductPage() {
             {/*Features*/}
 
             <section>
-                <div className={"flex flex-row p-10 bg-slate-900"}>
-
-
-
+                <div className={"flex flex-col p-10"}>
+                    <div className={"flex flex-row align-middle"}>
+                        <div className={"bg-slate-900"}>
+                            <div className={"flex flex-row mx-30"}>
+                                <img></img>
+                                <div className={"flex flex-col"}>
+                                    <h1 className={"text-2xl"}>Feature 1</h1>
+                                    <h2 className={"text-xl"}>Feature 1 Description</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
