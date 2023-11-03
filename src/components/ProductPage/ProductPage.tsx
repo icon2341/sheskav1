@@ -3,6 +3,7 @@ import React, {useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import {useTrail, a} from "react-spring";
 import { Button } from "src/components/ui/button";
+import CrowdImage from '../../images/Crowdsourcing.png'
 
 export function ProductPage() {
     const navigate = useNavigate();
@@ -10,12 +11,12 @@ export function ProductPage() {
     const Trail: React.FC<{ open: boolean, children: any }> = ({ open, children }) => {
         const items = React.Children.toArray(children)
         const trail = useTrail(items.length, {
-            config: { mass: 5, tension: 2000, friction: 200 },
+            config: { mass: 5, tension: 2000, friction: 200},
             opacity: open ? 1 : 0,
             x: open ? 0 : 20,
             height: open ? 130 : 0,
             from: { opacity: 0, x: 20, height: 0 },
-            delay: 200
+            delay: 400
         })
         return (
             <div>
@@ -50,11 +51,11 @@ export function ProductPage() {
                 <div className={"flex flex-col items-center w-11/12 md:w-50"}>
                     <div className={"hidden md:block mt-64"}>
                         <Trail open={true}>
-                            <h1 className={"font-mono font-black text-xl md:text-4xl lg:text-5xl xl:text-6xl text-center text-black"}>Supercharge Event<br/>Funding.</h1>
+                            <h1 className={`${styles.textGradient} font-mono font-black text-xl md:text-4xl lg:text-5xl xl:text-6xl text-center text-black`}>Supercharge Event<br/>Funding.</h1>
                         </Trail>
                     </div>
-                    <h1 className={" md:hidden pt-10 mb-5 font-mono font-black text-xl md:text-4xl lg:text-5xl xl:text-6xl text-center text-black"}>Supercharge Event<br/>Funding.</h1>
-                    <h2 className={"text-center font-sans text-xl md:text-2xl lg:text-3xl xl:text-4xl w-75 mb-10"}>
+                    <h1 className={`${styles.textGradient} md:hidden pt-10 mb-5 font-mono font-black text-xl md:text-4xl lg:text-5xl xl:text-6xl text-center text-black`}>Supercharge Event<br/>Funding.</h1>
+                    <h2 className={"text-center font-sans text-xl md:text-2xl lg:text-3xl xl:text-4xl w-75 mb-10 max-w-3xl"}>
                         A comprehensive platform designed to seamlessly connect with your guests, from financial transactions to open communication.
                     </h2>
 
@@ -67,15 +68,18 @@ export function ProductPage() {
 
             {/*Features*/}
 
-            <section>
-                <div className={"flex flex-col p-10"}>
-                    <div className={"flex flex-row align-middle"}>
-                        <div className={"bg-slate-900"}>
-                            <div className={"flex flex-row mx-30"}>
-                                <img></img>
-                                <div className={"flex flex-col"}>
-                                    <h1 className={"text-2xl"}>Feature 1</h1>
-                                    <h2 className={"text-xl"}>Feature 1 Description</h2>
+            <section className={"md:mt-96"}>
+                <div className={"flex flex-col md:p-10 p-5"}>
+                    <div className={"flex flex-col md:flex-row align-middle justify-center radi"}>
+                        <div className={"bg-slate-900 rounded-lg px-10 py-20"}>
+                            <div className={"flex flex-col md:flex-row grow mx-30 justify-center md:align-middle"}>
+                                <div className={"md:w-1/4"}>
+                                    <img src={CrowdImage} alt={"Many doors with glowing balls exiting them"}></img>
+                                </div>
+                                <div className={"flex flex-col md:ml-20 md:mt-0 mt-10 justify-center"}>
+                                    <h1 className={"text-3xl text-white font-mono font-black max-w-sm"}>Guest Crowdsourced
+                                        Funding.</h1>
+                                    <h2 className={"text-xl text-white max-w-md mt-3 text-serif"}>Sheska offers hosts a seamless way to raise funds while enabling guests to fulfill their desires for gift giving, philanthropy, or community-driven event participation</h2>
                                 </div>
                             </div>
                         </div>
